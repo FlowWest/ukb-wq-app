@@ -27,11 +27,6 @@ const Layout = ({ children, pageInfo }) => (
     render={data => (
       <>
         <Container fluid className="px-0 main">
-          <Row noGutters className="justify-content-center">
-            <Col>
-              <Header siteTitle={data.site.siteMetadata.title} />
-            </Col>
-          </Row>
           <Navbar pageInfo={pageInfo} />
           <Row noGutters>
             <Col>
@@ -46,9 +41,9 @@ const Layout = ({ children, pageInfo }) => (
             <Col className="footer-col">
               <footer>
                 <span>
-                  © {new Date().getFullYear()}, Built with
+                  © The Klamath Tribes {new Date().getFullYear()}, Built with
                   {` `}
-                  <a href="https://www.gatsbyjs.org">Gatsby</a>
+                  <a href="https://www.gatsbyjs.org">Gatsby</a> by <a href="https://flowwest.com">FlowWest</a>
                 </span>
               </footer>
             </Col>
