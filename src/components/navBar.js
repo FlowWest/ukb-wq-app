@@ -21,20 +21,6 @@ const CustomNavbar = ({ pageInfo }) => {
               </Nav.Link>
             </Link>
           </Nav>
-          <Nav className="mr-auto" activeKey={pageInfo && pageInfo.pageName}>
-            <Link to="/page-2" className="link-no-style">
-              <Nav.Link as="span" eventKey="page-2">
-                Page 2
-              </Nav.Link>
-            </Link>
-          </Nav>
-          <Nav className="mr-auto" activeKey={pageInfo && pageInfo.pageName}>
-            <Link to="/page-2" className="link-no-style">
-              <Nav.Link as="span" eventKey="page-2">
-                Page 2
-              </Nav.Link>
-            </Link>
-          </Nav>
         </Navbar.Collapse>
         {/* </Container> */}
       </Navbar>
