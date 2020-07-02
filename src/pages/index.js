@@ -12,14 +12,16 @@ const IndexPage = ({ data }) => (
     <Container fluid>
       <Row>
         <Col>
+        <a href="https://klamathtribes.org/" target="_blank" rel="noreferrer">
           <Img
             fluid={data.file.childImageSharp.fluid}
             alt="The Klamath Tribes (Klamath-Modoc-Yahooskin) Logo"
           />
+        </a>
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col xs={12} md={6}>
           <h1>Welcome!</h1>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
@@ -47,7 +49,7 @@ const IndexPage = ({ data }) => (
             orci nibh placerat arcu, in luctus neque massa in ante.
           </p>
         </Col>
-        <Col>
+        <Col xs={12} md={6}>
           <p>
             Integer et eleifend libero. Ut in malesuada nisl. Sed et est eu
             lorem congue dapibus. Nulla facilisi. Etiam nisi erat, euismod sed
@@ -72,7 +74,7 @@ export const query = graphql`
     file(relativePath: { eq: "klamathtribes1200.png" }) {
       childImageSharp {
         fluid {
-          ...GatsbyImageSharpFluid
+          ...GatsbyImageSharpFluid_tracedSVG
         }
       }
     }
