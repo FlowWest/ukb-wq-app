@@ -41,9 +41,7 @@ const Layout = ({ children, pageInfo }) => (
             <Col className="footer-col">
               <footer>
                 <span>
-                  © The Klamath Tribes {new Date().getFullYear()}, Built with
-                  {` `}
-                  <a href="https://www.gatsbyjs.org">Gatsby</a> by <a href="https://flowwest.com">FlowWest</a>
+                  © The Klamath Tribes {new Date().getFullYear()}, Built by <a href="https://flowwest.com">FlowWest</a>
                 </span>
               </footer>
             </Col>
