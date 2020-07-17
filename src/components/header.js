@@ -3,9 +3,9 @@ import PropTypes from "prop-types"
 import React from "react"
 
 const Header = ({ siteTitle }) => (
-  <header
+  <header id="site-header" 
     style={{
-      background: `#20232a`,
+      // background: `#20232a`,
     }}
   >
     <div

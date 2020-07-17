@@ -3,63 +3,63 @@ import { Row, Col, Container, ListGroup } from "react-bootstrap"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Img from "gatsby-image"
+import { graphql } from "gatsby"
 
-const IndexPage = () => (
+const IndexPage = ({ data }) => (
   <Layout pageInfo={{ pageName: "index" }}>
     <SEO title="Home" keywords={[`gatsby`, `react`, `bootstrap`]} />
-    <Container className="text-center">
+    <Container fluid>
       <Row>
         <Col>
-          <p>
-            This is a Gatsby Starter that I frequently use to get jump started
-            on quick website builds. It includes the following packages:
-          </p>
-        </Col>
-      </Row>
-      <Row className="justify-content-center my-3">
-        <Col md="6">
-          <ListGroup>
-            <ListGroup.Item
-              action
-              href="https://getbootstrap.com"
-              target="_blank"
-            >
-              Bootstrap
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              href="https://react-bootstrap.github.io/"
-              target="_blank"
-            >
-              react-bootstrap
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              href="https://react-icons.netlify.com"
-              target="_blank"
-            >
-              react-icons
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              href="https://www.gatsbyjs.org/packages/gatsby-plugin-sass/"
-              target="_blank"
-            >
-              gatsby-plugin-sass
-            </ListGroup.Item>
-          </ListGroup>
+        <a href="https://klamathtribes.org/" target="_blank" rel="noreferrer">
+          <Img
+            fluid={data.file.childImageSharp.fluid}
+            alt="The Klamath Tribes (Klamath-Modoc-Yahooskin) Logo"
+          />
+        </a>
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col xs={12} md={6}>
+          <h1>Welcome!</h1>
           <p>
-            This starter also includes a navbar that sticks to the top of the
-            screen when the user scrolls past it, and a footer that stays at the
-            bottom of the screen.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+            suscipit justo lectus, eu imperdiet leo lacinia volutpat. Aenean eu
+            lectus sodales, aliquam velit non, porta massa. Fusce quis quam ac
+            risus rhoncus facilisis. Aenean vitae sodales neque, id venenatis
+            sapien. Interdum et malesuada fames ac ante ipsum primis in
+            faucibus. Aliquam eget fermentum mi. Pellentesque id dolor sapien.
+            Nulla enim turpis, consequat dapibus blandit at, rutrum in metus.
+            Vivamus molestie posuere porttitor. Vivamus mollis magna justo, in
+            hendrerit nibh porttitor vel. Vestibulum sed libero purus.
+            Vestibulum feugiat bibendum mi, vitae eleifend lectus rutrum vitae.
+            Curabitur elementum congue nulla, ac accumsan massa imperdiet id.
+            Praesent vitae sapien sit amet nulla aliquet placerat vitae quis
+            ipsum. Donec mattis justo sit amet dignissim dictum.
           </p>
           <p>
-            For more documentation on these packages and how they work, please
-            refer to the pages linked in the list above.
+            Vivamus sed est posuere, aliquam nunc vel, suscipit nibh. Sed purus
+            tellus, accumsan vitae felis ut, semper porta magna. Mauris
+            vestibulum sed ligula nec porttitor. Nam justo ipsum, vulputate quis
+            ante eu, gravida tincidunt dolor. Vivamus suscipit, orci ut accumsan
+            mollis, urna massa bibendum erat, nec vestibulum sem velit a sapien.
+            Phasellus a consequat velit. Sed imperdiet maximus libero, blandit
+            mollis dui consequat ut. Aenean finibus, metus id porta placerat,
+            orci nibh placerat arcu, in luctus neque massa in ante.
+          </p>
+        </Col>
+        <Col xs={12} md={6}>
+          <p>
+            Integer et eleifend libero. Ut in malesuada nisl. Sed et est eu
+            lorem congue dapibus. Nulla facilisi. Etiam nisi erat, euismod sed
+            maximus sed, cursus vel elit. Nam scelerisque congue mi, at commodo
+            sem volutpat tempor. Cras nisl neque, efficitur in suscipit sed,
+            vulputate id tellus. Vivamus cursus ut libero eu suscipit. Nulla
+            congue velit ut elit gravida feugiat. Vivamus fringilla nunc nec
+            mollis condimentum. Phasellus ultrices consequat nulla, sit amet
+            hendrerit nisl mollis ac. Quisque euismod vestibulum semper. Morbi
+            egestas a diam at euismod.
           </p>
         </Col>
       </Row>
@@ -68,3 +68,15 @@ const IndexPage = () => (
 )
 
 export default IndexPage
+
+export const query = graphql`
+  query {
+    file(relativePath: { eq: "klamathtribes1200.png" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid_tracedSVG
+        }
+      }
+    }
+  }
+`
