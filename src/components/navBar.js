@@ -20,6 +20,11 @@ const CustomNavbar = ({ pageInfo }) => {
                 Data Repository
               </Nav.Link>
             </Link>
+            <Link to="/reports" className="link-no-style">
+              <Nav.Link as="span" eventKey="reports">
+                Reports
+              </Nav.Link>
+            </Link>
           </Nav>
         </Navbar.Collapse>
         {/* </Container> */}
