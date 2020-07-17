@@ -8,9 +8,9 @@ const DataDownload = () => {
       <Card.Body>
         <Card.Text>Parameter descriptions</Card.Text>
         <DropdownButton id="dropdown-basic-button" title="Download">
-          <Dropdown.Item>csv</Dropdown.Item>
-          <Dropdown.Item>excel</Dropdown.Item>
-          <Dropdown.Item>json</Dropdown.Item>
+          <Dropdown.Item href="#">csv</Dropdown.Item>
+          <Dropdown.Item href="#">excel</Dropdown.Item>
+          <Dropdown.Item href="#">json</Dropdown.Item>
         </DropdownButton>
       </Card.Body>
     </Card>

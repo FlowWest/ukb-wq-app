@@ -18,6 +18,14 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `data`,
+        path: `${__dirname}/src/data/`,
+      },
+    },
+    `gatsby-transformer-csv`,
+    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `gatsby-starter-react-bootstrap`,
@@ -26,7 +34,7 @@ module.exports = {
         background_color: `#20232a`,
         theme_color: `#20232a`,
         display: `minimal-ui`,
-        icon: `src/images/klamath-icon.png`
+        icon: `src/images/klamath-icon.png`,
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

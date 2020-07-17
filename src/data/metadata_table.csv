@@ -1,0 +1,8 @@
+dataset_name,start_year,end_year,geographic_extent,sampling_type,parameters,sampling_sites_count
+Lake,1990,2018,Upper Klamath Lake & Agency Lake,Water Quality,"Max. depth, Secchi depth, profile depth, photosynthetically active radiation, temp., conductivity, DO, pH, % DO saturation, oxidation-reduction potential, total phosphorus, phosphate as soluble reactive phosphorus, ammonium nitrogen, nitrate nitrogen, nitrate+nitrite nitrogen, total nitrogen, silica, chlorophyll a, phaeophytin",11
+Tributary,2001,2018,Tributaries to Upper Klamath Lake,Water Quality,"Discharge, depth, temp., conductivity, DO, pH, % DO saturation, total phosphorus, phosphate as soluble reactive phosphorus, ammonium nitrogen, nitrate nitrogen, nitrate+nitrite nitrogen, total nitrogen, silica, total suspended solids, turbidity",6
+Sprague River,2001,2018,"Sprague, 
+Sycan, 
+Whiskey Creek",Water Quality,"Discharge, depth, temp., conductivity, DO, pH, % DO saturation, total phosphorus, phosphate as soluble reactive phosphorus, ammonium nitrogen, nitrate nitrogen, nitrate+nitrite nitrogen, total nitrogen, chloride, silica, total suspended solids, turbidity ",9
+Phytoplankton,1990,2018,Upper Klamath Lake & Agency Lake,Phytoplankton,"Genus, species, biovolume std, percent biovolume standardized, cell density std, % cell density std, natural unit density, % natural unit density",11
+Zooplankton,1990,2018,Upper Klamath Lake & Agency Lake,Zooplankton,"Genus, species, biomass, percent biomass, abundance, percent abundance",11
