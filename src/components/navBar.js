@@ -15,6 +15,11 @@ const CustomNavbar = ({ pageInfo }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto" activeKey={pageInfo && pageInfo.pageName}>
+            <Link to="/dashboard" className="link-no-style">
+              <Nav.Link as="span" eventKey="dashboard">
+                Dashboard
+              </Nav.Link>
+            </Link>
             <Link to="/data-repository" className="link-no-style">
               <Nav.Link as="span" eventKey="data-repository">
                 Data Repository
