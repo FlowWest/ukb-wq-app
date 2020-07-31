@@ -10,10 +10,10 @@ import { StaticQuery, graphql } from "gatsby"
 
 import { Container, Row, Col } from "react-bootstrap"
 
-import Header from "./header"
 import Navbar from "./navBar"
 
-const Layout = ({ children, pageInfo }) => (
+
+const Layout = ({ children, pageInfo}) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -41,7 +41,8 @@ const Layout = ({ children, pageInfo }) => (
             <Col className="footer-col">
               <footer>
                 <span>
-                  © The Klamath Tribes {new Date().getFullYear()}, Built by <a href="https://flowwest.com">FlowWest</a>
+                  © The Klamath Tribes {new Date().getFullYear()}, Built by{" "}
+                  <a href="https://flowwest.com">FlowWest</a>
                 </span>
               </footer>
             </Col>
