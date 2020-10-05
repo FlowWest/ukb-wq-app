@@ -13,7 +13,7 @@ import { Container, Row, Col } from "react-bootstrap"
 import Header from "./header"
 import Navbar from "./navBar"
 
-const Layout = ({ children, pageInfo }) => (
+const Layout = ({ children, pageInfo, data: propsData }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -27,7 +27,7 @@ const Layout = ({ children, pageInfo }) => (
     render={data => (
       <>
         <Container fluid className="px-0 main">
-          <Navbar pageInfo={pageInfo} />
+          <Navbar pageInfo={pageInfo} data={propsData} />
           <Row noGutters>
             <Col>
               <Container className="mt-5">
@@ -41,7 +41,8 @@ const Layout = ({ children, pageInfo }) => (
             <Col className="footer-col">
               <footer>
                 <span>
-                  © The Klamath Tribes {new Date().getFullYear()}, Built by <a href="https://flowwest.com">FlowWest</a>
+                  © The Klamath Tribes {new Date().getFullYear()}, Built by{" "}
+                  <a href="https://flowwest.com">FlowWest</a>
                 </span>
               </footer>
             </Col>

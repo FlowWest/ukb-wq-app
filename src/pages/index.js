@@ -3,21 +3,18 @@ import { Row, Col, Container, ListGroup } from "react-bootstrap"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import Img from "gatsby-image"
 import { graphql } from "gatsby"
+import KlamathLogo from "../components/klamathLogo"
 
 const IndexPage = ({ data }) => (
-  <Layout pageInfo={{ pageName: "index" }}>
+  <Layout pageInfo={{ pageName: "index" }} data={data}>
     <SEO title="Home" keywords={[`gatsby`, `react`, `bootstrap`]} />
     <Container fluid>
       <Row>
         <Col>
-        <a href="https://klamathtribes.org/" target="_blank" rel="noreferrer">
-          <Img
-            fluid={data.file.childImageSharp.fluid}
-            alt="The Klamath Tribes (Klamath-Modoc-Yahooskin) Logo"
-          />
-        </a>
+          <a href="https://klamathtribes.org/" target="_blank" rel="noreferrer">
+            <KlamathLogo data={data} />
+          </a>
         </Col>
       </Row>
       <Row>
@@ -71,7 +68,7 @@ export default IndexPage
 
 export const query = graphql`
   query {
-    file(relativePath: { eq: "klamathtribes1200.png" }) {
+    file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid_tracedSVG
