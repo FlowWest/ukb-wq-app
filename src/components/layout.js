@@ -13,7 +13,7 @@ import { Container, Row, Col } from "react-bootstrap"
 import Header from "./header"
 import Navbar from "./navBar"
 
-const Layout = ({ children, pageInfo, data: propsData }) => (
+const Layout = ({ children, pageInfo }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -22,12 +22,19 @@ const Layout = ({ children, pageInfo, data: propsData }) => (
             title
           }
         }
+        file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
+          childImageSharp {
+            fluid {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
       }
     `}
     render={data => (
       <>
         <Container fluid className="px-0 main">
-          <Navbar pageInfo={pageInfo} data={propsData} />
+          <Navbar pageInfo={pageInfo} data={data} />
           <Row noGutters>
             <Col>
               <Container className="mt-5">

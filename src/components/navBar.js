@@ -5,10 +5,14 @@ import { Navbar, Nav } from "react-bootstrap"
 
 const CustomNavbar = ({ pageInfo, data }) => {
   console.log("pi", pageInfo)
-  console.log("data", data)
   return (
     <>
-      <Navbar variant="dark" expand="lg" id="site-navbar">
+      <Navbar
+        variant="dark"
+        expand="lg"
+        fixed="top"
+        id={pageInfo.pageName === "index" ? "index-navbar" : "site-navbar"}
+      >
         {/* <Container> */}
         <Link to="/" className="link-no-style">
           <Navbar.Brand as="span">
@@ -19,20 +23,25 @@ const CustomNavbar = ({ pageInfo, data }) => {
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto" activeKey={pageInfo && pageInfo.pageName}>
+          <Nav className="m-auto" activeKey={pageInfo && pageInfo.pageName}>
             <Link to="/dashboard" className="link-no-style">
               <Nav.Link as="span" eventKey="dashboard">
-                Dashboard
+                dashboard
               </Nav.Link>
             </Link>
             <Link to="/data-repository" className="link-no-style">
               <Nav.Link as="span" eventKey="data-repository">
-                Data Repository
+                downloads
               </Nav.Link>
             </Link>
             <Link to="/reports" className="link-no-style">
               <Nav.Link as="span" eventKey="reports">
-                Reports
+                reports
+              </Nav.Link>
+            </Link>
+            <Link to="/reports" className="link-no-style">
+              <Nav.Link as="span" eventKey="reports">
+                about
               </Nav.Link>
             </Link>
           </Nav>

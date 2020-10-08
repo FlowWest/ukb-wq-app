@@ -1,3 +1,22 @@
 #site-header {
   background-color: $color-primary;
 }
+
+.header-image-container {
+  height: 600px;
+  .header-background-image {
+    text-align: center;
+    .header-text-container {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $color-white;
+      .header-text {
+        width: 400px;
+        margin: auto;
+      }
+    }
+  }
+}
