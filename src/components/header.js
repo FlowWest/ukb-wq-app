@@ -1,11 +1,11 @@
 import React from "react"
 import BackgroundImage from "gatsby-background-image"
 
-const Header = data => {
-  console.log("daddddta", data)
+const Header = ({ suckerPhotoNode }) => {
+  console.log("daddddta", suckerPhotoNode)
   const backgroundImage = [
     `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7))`,
-    data.data.file.childImageSharp.fluid,
+    suckerPhotoNode.childImageSharp.fluid,
   ]
   return (
     <div className="header-image-container">
@@ -32,15 +32,4 @@ const Header = data => {
   )
 }
 
-export const query = graphql`
-  query {
-    file(relativePath: { eq: "sucker_photo.jpg" }) {
-      childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid_tracedSVG
-        }
-      }
-    }
-  }
-`
 export default Header

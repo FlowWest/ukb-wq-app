@@ -37,7 +37,9 @@ const Layout = ({ children, pageInfo }) => (
           <Navbar pageInfo={pageInfo} data={data} />
           <Row noGutters>
             <Col>
-              <Container className="mt-5">
+              <Container
+                className={pageInfo.pageName !== "index" ? "mt-5" : ""}
+              >
                 <main>{children}</main>
               </Container>
             </Col>
