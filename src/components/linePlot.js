@@ -1,11 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import Plot from "react-plotly.js"
 import { useStaticQuery, graphql } from "gatsby"
 import { Dropdown } from "semantic-ui-react"
 
-const WQPlot = () => {
-  const characteristicName = "pH" // TODO move to state
+const LinePlot = () => {
+  const [characteristicName, setCharacteristicName] = useState('pH')  
 
+  const handleSelectCharacteristic = (e, data) => setCharacteristicName(data.value)
+  
   const data = useStaticQuery(
     graphql`
       query {
@@ -54,7 +56,8 @@ const WQPlot = () => {
         placeholder="Select Analyte"
         fluid
         selection
-        options={characteristicOptions} //TODO update characteristicName state based on selection 
+        options={characteristicOptions}
+        onChange={handleSelectCharacteristic}
       />
       <Plot
         data={[
@@ -77,4 +80,4 @@ const WQPlot = () => {
   )
 }
 
-export default WQPlot
+export default LinePlot
