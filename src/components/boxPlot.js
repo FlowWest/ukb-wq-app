@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import Plot from "react-plotly.js"
-import { useStaticQuery, graphql } from "gatsby"
 
 const BoxPlot = ({ selectedCharacteristicName, data, monitoringLocations }) => {
   let allLocationData = {}
