@@ -1,17 +1,8 @@
-/**
- * Layout component that queries for data
- * with Gatsby's StaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/static-query/
- */
-
 import React from "react"
 import { StaticQuery, graphql } from "gatsby"
-
-import { Container, Row, Col } from "react-bootstrap"
-
-import Header from "./header"
+import { Grid } from "semantic-ui-react"
 import Navbar from "./navBar"
+import Footer from "./footer"
 
 const Layout = ({ children, pageInfo }) => (
   <StaticQuery
@@ -32,32 +23,18 @@ const Layout = ({ children, pageInfo }) => (
       }
     `}
     render={data => (
-      <>
-        <Container fluid className="px-0 main">
-          <Navbar pageInfo={pageInfo} data={data} />
-          <Row noGutters>
-            <Col>
-              <Container
-                className={pageInfo.pageName !== "index" ? "mt-5" : ""}
-              >
-                <main>{children}</main>
-              </Container>
-            </Col>
-          </Row>
-        </Container>
-        <Container fluid className="px-0">
-          <Row noGutters>
-            <Col className="footer-col">
-              <footer>
-                <span>
-                  © The Klamath Tribes {new Date().getFullYear()}, Built by{" "}
-                  <a href="https://flowwest.com">FlowWest</a>
-                </span>
-              </footer>
-            </Col>
-          </Row>
-        </Container>
-      </>
+      <Grid container columns={1}>
+        <Navbar pageInfo={pageInfo} data={data} />
+        <Grid.Row
+          columns={1}
+          className={pageInfo.pageName !== "index" ? "mt-5" : ""}
+        >
+          <main>{children}</main>
+        </Grid.Row>
+        <Grid.Row columns={1}>
+          <Footer />
+        </Grid.Row>
+      </Grid>
     )}
   />
 )

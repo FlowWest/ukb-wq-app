@@ -2,7 +2,7 @@ import React from "react"
 import BackgroundImage from "gatsby-background-image"
 import { Grid } from "semantic-ui-react"
 
-const Header = ({ suckerPhotoNode }) => {
+const HomeBanner = ({ suckerPhotoNode }) => {
   console.log("daddddta", suckerPhotoNode)
   const backgroundImage = [
     `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7))`,
@@ -20,10 +20,6 @@ const Header = ({ suckerPhotoNode }) => {
           backgroundImage: "linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5))",
         }}
       >
-        {/* <Grid>
-          <Grid.Row>
-          </Grid.Row>
-        </Grid> */}
         <div className="header-text-container">
           <h2 className="header-title">
             The Klamath Tribes Water Quality Monitoring
@@ -40,4 +36,4 @@ const Header = ({ suckerPhotoNode }) => {
   )
 }
 
-export default Header
+export default HomeBanner
