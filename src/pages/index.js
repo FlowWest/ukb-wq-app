@@ -5,7 +5,7 @@ import Header from "../components/header"
 import SEO from "../components/seo"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
-import 'semantic-ui-css/semantic.min.css'
+import "semantic-ui-css/semantic.min.css"
 
 const IndexPage = ({ data }) => {
   console.log("data", data.allFile.edges)
@@ -129,7 +129,7 @@ export const query = graphql`
           relativePath
           name
           childImageSharp {
-            fluid(maxWidth: 500) {
+            fluid(quality: 100) {
               ...GatsbyImageSharpFluid
             }
           }
