@@ -1,6 +1,5 @@
 import React from "react"
-import { Row, Col, Container } from "react-bootstrap"
-import { Grid } from "semantic-ui-react"
+import { Grid, Card, Header } from "semantic-ui-react"
 import Layout from "../components/layout"
 import HomeBanner from "../components/homeBanner"
 import HomeImageGallery from "../components/homeImageGallery"
@@ -28,7 +27,28 @@ const IndexPage = ({ data }) => {
         />
         <Grid container>
           <Grid.Row>
-            <Grid.Column width={6}></Grid.Column>
+            <Grid.Column width={6}>
+              <Grid.Row>
+                <Card href="#">
+                  <Card.Content header="Download Our Data" />
+                  <Img
+                    fluid={imagesObject["beaker"].childImageSharp.fluid}
+                    alt="black line drawing of half full glass beaker"
+                    className="index-icon-image"
+                  />
+                </Card>
+              </Grid.Row>
+              <Grid.Row>
+                <Card href="#">
+                  <Card.Content header="View Water Quality Reports" />
+                  <Img
+                    fluid={imagesObject["report"].childImageSharp.fluid}
+                    alt="black line drawing of report document with pie and bar chart"
+                    className="index-icon-image"
+                  />
+                </Card>
+              </Grid.Row>
+            </Grid.Column>
             <Grid.Column width={10}>
               <p>
                 The monitoring program includes sampling water nutrients, water
@@ -51,8 +71,8 @@ const IndexPage = ({ data }) => {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={7}>
-              <h6>Sprague River Water Quality Lab (SRWQL)</h6>
+            <Grid.Column width={6}>
+              <Header as="h3">Sprague River Water Quality Lab (SRWQL)</Header>
               <p>
                 Since 2006 the Sprague River Water Quality Lab (SRWQL) has
                 allowed the Klamath Tribes to analyze all water nutrients, water
@@ -68,19 +88,9 @@ const IndexPage = ({ data }) => {
                 environment.
               </p>
             </Grid.Column>
-            <Grid.Column width={9}>
-              <HomeImageGallery
-                imagesArray={imagesArray}
-                imagesObject={imagesObject}
-              />
-            </Grid.Column>
+            <Grid.Column width={10}></Grid.Column>
           </Grid.Row>
         </Grid>
-        {/* <Img
-          fluid={imagesObject["beaker"].childImageSharp.fluid}
-          alt="FlowWest Logo"
-          className="index-icon-image"
-        /> */}
       </Layout>
     </div>
   )

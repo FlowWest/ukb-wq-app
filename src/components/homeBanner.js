@@ -1,6 +1,6 @@
 import React from "react"
 import BackgroundImage from "gatsby-background-image"
-import { Grid } from "semantic-ui-react"
+import { Header } from "semantic-ui-react"
 
 const HomeBanner = ({ suckerPhotoNode }) => {
   console.log("daddddta", suckerPhotoNode)
@@ -21,15 +21,19 @@ const HomeBanner = ({ suckerPhotoNode }) => {
         }}
       >
         <div className="header-text-container">
-          <h2 className="header-title">
-            The Klamath Tribes Water Quality Monitoring
-          </h2>
-          <div className="header-text">
-            The largest water quality data collection entity in the Upper
+          <Header
+            as="h1"
+            inverted
+            content="The Klamath Tribes Water Quality Monitoring"
+          />
+          <Header
+            as="h2"
+            inverted
+            content="The largest water quality data collection entity in the Upper
             Klamath Basin, monitoring water quality conditions in Upper Klamath
             Lake since 1990 and major tributaries including the Sprague,
-            Williamson, and Wood Rivers since 2001.
-          </div>
+            Williamson, and Wood Rivers since 2001."
+          />
         </div>
       </BackgroundImage>
     </div>
