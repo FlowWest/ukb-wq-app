@@ -3,6 +3,7 @@ import { Row, Col, Container } from "react-bootstrap"
 import { Grid } from "semantic-ui-react"
 import Layout from "../components/layout"
 import HomeBanner from "../components/homeBanner"
+import HomeImageGallery from "../components/homeImageGallery"
 import SEO from "../components/seo"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
@@ -47,6 +48,28 @@ const IndexPage = ({ data }) => {
                 support restoration actions that achieve water quality, native
                 fish populations, and other ecosystem goals for the basin.
               </p>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={7}>
+              <h6>Sprague River Water Quality Lab (SRWQL)</h6>
+              <p>
+                Since 2006 the Sprague River Water Quality Lab (SRWQL) has
+                allowed the Klamath Tribes to analyze all water nutrients, water
+                chemistry, and algal toxin samples in-house. The lab worked
+                closely with the U.S. Geological Survey’s National Water Quality
+                Lab to complete a laboratory evaluation project comparing the
+                data split between the two labs. The lab has been accredited
+                through the National Environmental Lab Accreditation Program and
+                Oregon Environmental Lab Accreditation Program. The SRWQL
+                utilizes state-of-the-art automated discrete analyzer technology
+                with the Thermo Fisher Aquakem 250. The lab also uses E-friendly
+                methods that employ chemicals that are less toxic to the
+                environment.
+              </p>
+            </Grid.Column>
+            <Grid.Column width={9}>
+              <HomeImageGallery />
             </Grid.Column>
           </Grid.Row>
         </Grid>
