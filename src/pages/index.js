@@ -69,7 +69,10 @@ const IndexPage = ({ data }) => {
               </p>
             </Grid.Column>
             <Grid.Column width={9}>
-              <HomeImageGallery />
+              <HomeImageGallery
+                imagesArray={imagesArray}
+                imagesObject={imagesObject}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -85,7 +88,7 @@ const IndexPage = ({ data }) => {
 
 export const query = graphql`
   query artImages {
-    allFile(filter: { relativePath: { regex: ".png/" } }) {
+    allFile(filter: { relativePath: { regex: "images/" } }) {
       edges {
         node {
           relativePath
