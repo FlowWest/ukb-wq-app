@@ -1,18 +1,11 @@
 import React, { useState } from "react"
 import { createMedia } from "@artsy/fresnel"
-import { Menu, Visibility, Segment, Container } from "semantic-ui-react"
+import { Menu, Visibility, Segment, Container, Grid } from "semantic-ui-react"
 import KlamathLogo from "./klamathLogo"
 import { Link } from "gatsby"
 import HomeBanner from "../components/homeBanner"
 
 export default ({ children }) => {
-  const [fixed, setFixed] = useState(false)
-  const hideFixedMenu = () => {
-    setFixed(false)
-  }
-  const showFixedMenu = () => {
-    setFixed(true)
-  }
   const { Media } = createMedia({
     breakpoints: {
       mobile: 0,
@@ -23,37 +16,34 @@ export default ({ children }) => {
 
   return (
     <Media greaterThan="mobile">
-      <Visibility
-        once={false}
-        onBottomPassed={showFixedMenu}
-        onBottomPassedReverse={hideFixedMenu}
+      <Menu
+        pointing={true}
+        secondary={true}
+        size="large"
+        className="menu-container"
+        borderless={true}
       >
-        <Link to="/" className="link-no-style">
-          <Menu.Item>
+        <Menu.Item position="left">
+          <Link to="/" className="link-no-style">
             <KlamathLogo />
-          </Menu.Item>
-        </Link>
-        <Menu
-          fixed={fixed ? "top" : null}
-          inverted={!fixed}
-          pointing={!fixed}
-          secondary={!fixed}
-          size="large"
-          floated="right"
-        >
-          <Container>
-            <Link to="/data" className="link-no-style">
-              <Menu.Item as="a">Data</Menu.Item>
-            </Link>
-            <Link to="/reports" className="link-no-style">
-              <Menu.Item as="a">Reports</Menu.Item>
-            </Link>
-            <Link to="/about" className="link-no-style">
-              <Menu.Item as="a">About</Menu.Item>
-            </Link>
-          </Container>
-        </Menu>
-      </Visibility>
+          </Link>
+        </Menu.Item>
+        <Menu.Item position="right">
+          <Link to="/data" className="link-no-style">
+            Data
+          </Link>
+        </Menu.Item>
+        <Menu.Item position="right">
+          <Link to="/reports" className="link-no-style">
+            Reports
+          </Link>
+        </Menu.Item>
+        <Menu.Item position="right">
+          <Link to="/about" className="link-no-style">
+            About
+          </Link>
+        </Menu.Item>
+      </Menu>
       {children}
     </Media>
   )

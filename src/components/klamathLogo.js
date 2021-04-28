@@ -5,23 +5,18 @@ import Img from "gatsby-image"
 export default () => (
   <StaticQuery
     query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-          }
-        }
+      query {
         file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
           childImageSharp {
-            fluid {
-              ...GatsbyImageSharpFluid
+            fixed {
+              ...GatsbyImageSharpFixed
             }
           }
         }
       }
     `}
     render={data => (
-      <Img fluid={data.file.childImageSharp.fluid} alt="Klamath Logo" />
+      <Img fixed={data.file.childImageSharp.fixed} alt="Klamath Logo" />
     )}
   />
 )

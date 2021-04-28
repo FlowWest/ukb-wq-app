@@ -32,3 +32,13 @@
   margin: auto;
   font-size: 24px;
 }
+
+.menu-container {
+  align-items: center !important;
+  border: none !important;
+}
+
+.ui.secondary.pointing.menu .menu-container {
+  align-items: center;
+  border: none;
+}

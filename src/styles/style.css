@@ -4,3 +4,7 @@
 @import "navbar.css";
 @import "header.css";
 @import "index.css";
+
+main {
+  min-width: 100vw;
+}

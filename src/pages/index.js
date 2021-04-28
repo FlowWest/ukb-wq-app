@@ -24,14 +24,14 @@ const IndexPage = ({ data }) => {
           title="Home"
           keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
         />
-        <Segment
-          inverted
+        {/* <Segment
+        inverted
           textAlign="center"
           style={{ minHeight: 700, padding: "1em 0em" }}
           vertical
         >
-          <HomeBanner />
-        </Segment>
+        </Segment> */}
+        <HomeBanner />
         <Grid container>
           <Grid.Row>
             <Grid.Column width={6}>
