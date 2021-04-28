@@ -2,7 +2,6 @@ import React from "react"
 import BackgroundImage from "gatsby-background-image"
 import { Header, Container } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
-import Img from "gatsby-image"
 
 export default ({ mobile }) => (
   <StaticQuery
@@ -19,7 +18,6 @@ export default ({ mobile }) => (
     `}
     render={data => (
       <Container>
-        {/* <Img fixed={data.file.childImageSharp.fluid} alt="Sucker" /> */}
         <BackgroundImage
           className="header-background-image"
           fluid={data.file.childImageSharp.fluid}
