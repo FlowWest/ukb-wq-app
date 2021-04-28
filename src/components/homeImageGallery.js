@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import ImageGallery from "react-image-gallery"
+// import "~react-image-gallery/styles/css/image-gallery.css"
 
 const imageInfo = {
   wq_tech_1: {
@@ -37,27 +38,9 @@ const imageInfo = {
   },
 }
 
-const HomeImageGallery = ({ imagesArray, imagesObject }) => {
+const HomeImageGallery = ({ imagesArray }) => {
   console.log("imagesArray", imagesArray)
-  console.log("imagesObject", imagesObject)
   const [galleryImagesArray, setGalleryImagesArray] = useState([])
-  const images = [
-    {
-      original: "https://picsum.photos/id/1018/1000/600/",
-      thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1015/1000/600/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-    {
-      original: "/static/f12509f7514a4f3a179ef72a5584d293/2f1b1/wq_tech_2.jpg",
-    },
-  ]
 
   useEffect(() => {
     if (imagesArray) {
@@ -70,7 +53,6 @@ const HomeImageGallery = ({ imagesArray, imagesObject }) => {
           })
         }
       })
-      console.log(",iga", imageGalleryArray)
       setGalleryImagesArray(imageGalleryArray)
     }
   }, [imagesArray])

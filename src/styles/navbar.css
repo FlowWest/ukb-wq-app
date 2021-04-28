@@ -1,0 +1,32 @@
+#site-navbar {
+  background-color: #f5f6fa;
+  color: #1e272e;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+#site-navbar .nav-link {
+  color: #1e272e;
+}
+
+#index-navbar {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+#index-navbar .nav-link {
+  color: #ffffff;
+}
+
+.logo-container {
+  width: 400px;
+}
+
+.link-no-style {
+  margin: 0 40px;
+}

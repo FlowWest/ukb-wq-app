@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid, Card, Header } from "semantic-ui-react"
+import { Grid, Card, Header, Segment } from "semantic-ui-react"
 import Layout from "../components/layout"
 import HomeBanner from "../components/homeBanner"
 import HomeImageGallery from "../components/homeImageGallery"
@@ -19,12 +19,19 @@ const IndexPage = ({ data }) => {
 
   return (
     <div>
-      <HomeBanner suckerPhotoNode={imagesObject["sucker_photo"]} />
       <Layout pageInfo={{ pageName: "index" }} data={data}>
         <SEO
           title="Home"
           keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
         />
+        <Segment
+          inverted
+          textAlign="center"
+          style={{ minHeight: 700, padding: "1em 0em" }}
+          vertical
+        >
+          <HomeBanner />
+        </Segment>
         <Grid container>
           <Grid.Row>
             <Grid.Column width={6}>
@@ -88,7 +95,9 @@ const IndexPage = ({ data }) => {
                 environment.
               </p>
             </Grid.Column>
-            <Grid.Column width={10}></Grid.Column>
+            <Grid.Column width={10}>
+              <HomeImageGallery imagesArray={imagesArray} />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </Layout>

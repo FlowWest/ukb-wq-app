@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import KlamathLogo from "../components/klamathLogo"
 import { Navbar, Nav } from "react-bootstrap"
+import { Menu } from "semantic-ui-react"
 
 const CustomNavbar = ({ pageInfo, data }) => {
   console.log("pi", pageInfo)

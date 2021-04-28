@@ -1,18 +1,22 @@
 import React from "react"
 import { Link } from "gatsby"
-
+import { Grid, Header, Search } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import ReportDownload from "../components/reportDownload"
 
-const WQReports = () => (
+export default () => (
   <Layout pageInfo={{ pageName: "reports" }}>
     <SEO title="Water Quality Reports" />
-    <h1>Water Quality Reports</h1>
-    <p>Reports available for download</p>
-    <ReportDownload/>
-    <Link to="/">Go back to the homepage</Link>
+    <Grid container>
+      <Grid.Row>
+        <Header
+          as="h1"
+          content="Klamath Tribes Water Quality Report Repository"
+        />
+      </Grid.Row>
+      <Grid.Row>
+        <Search />
+      </Grid.Row>
+    </Grid>
   </Layout>
 )
-
-export default WQReports
