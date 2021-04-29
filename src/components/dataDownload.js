@@ -1,18 +1,19 @@
 import React from "react"
-import { Card, DropdownButton, Dropdown } from "react-bootstrap"
+import { Card, Button } from "semantic-ui-react"
 
-const DataDownload = () => {
+const DataDownload = ({ reportMetaData }) => {
   return (
     <Card>
-      <Card.Header as="h5">Dataset Name</Card.Header>
-      <Card.Body>
-        <Card.Text>Parameter descriptions</Card.Text>
-        <DropdownButton id="dropdown-basic-button" title="Download">
-          <Dropdown.Item>csv</Dropdown.Item>
-          <Dropdown.Item>excel</Dropdown.Item>
-          <Dropdown.Item>json</Dropdown.Item>
-        </DropdownButton>
-      </Card.Body>
+      <Card.Content>
+        <Card.Header as="h5">{reportMetaData.title}</Card.Header>
+        <Card.Meta>{reportMetaData.type}</Card.Meta>
+        <Card.Description>
+          <strong>Author(s)</strong>: {reportMetaData.authors} <br />
+          <strong>Location</strong>: {reportMetaData.location} <br />
+          <strong>Year</strong>: {reportMetaData.year} <br />
+        </Card.Description>
+        <Button primary>Download</Button>
+      </Card.Content>
     </Card>
   )
 }
