@@ -1,5 +1,4 @@
 import React from "react"
-import { StaticQuery, graphql } from "gatsby"
 import { Grid } from "semantic-ui-react"
 import Footer from "./footer"
 import ResponsiveContainer from "./ResponsiveContainer"

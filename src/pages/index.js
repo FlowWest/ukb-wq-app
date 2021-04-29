@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import { Grid, Card, Header, Segment, Item } from "semantic-ui-react"
 import Layout from "../components/layout"
-import HomeBanner from "../components/homeBanner"
 import HomeImageGallery from "../components/homeImageGallery"
 import SEO from "../components/seo"
 import { graphql } from "gatsby"
@@ -27,7 +26,6 @@ export default ({ data }) => {
           title="Home"
           keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
         />
-        <HomeBanner />
         <Segment style={{ padding: "8em 0em" }} vertical>
           <Grid container stackable verticalAlign="middle">
             <Grid.Row>

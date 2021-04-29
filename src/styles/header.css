@@ -4,6 +4,7 @@
 
 .header-image-container .header-background-image {
   text-align: center;
+  position: initial;
 }
 
 .header-image-container .header-background-image .header-text-container {
