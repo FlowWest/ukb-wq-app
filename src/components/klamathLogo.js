@@ -9,7 +9,7 @@ export default () => (
         file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
           childImageSharp {
             fixed {
-              ...GatsbyImageSharpFixed
+              ...GatsbyImageSharpFixed_noBase64
             }
           }
         }

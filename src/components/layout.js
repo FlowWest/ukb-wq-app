@@ -4,20 +4,13 @@ import { Grid } from "semantic-ui-react"
 import Footer from "./footer"
 import ResponsiveContainer from "./ResponsiveContainer"
 
-const Layout = ({ children, pageInfo }) => (
+export default ({ children, pageInfo }) => (
   <ResponsiveContainer>
-    <Grid container columns={1}>
-      <Grid.Row
-        columns={1}
-        className={pageInfo.pageName !== "index" ? "mt-5" : ""}
-      >
+    <Grid style={{ height: "100vh" }}>
+      <Grid.Column className={pageInfo.pageName !== "index" ? "mt-5" : ""}>
         <main>{children}</main>
-      </Grid.Row>
-      <Grid.Row columns={1}>
-        <Footer />
-      </Grid.Row>
+      </Grid.Column>
+      <Footer />
     </Grid>
   </ResponsiveContainer>
 )
-
-export default Layout
