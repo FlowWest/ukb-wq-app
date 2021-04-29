@@ -17,13 +17,21 @@ export default ({ data }) => (
           </p>
           <br />
           <p>
-            <a href="https://www.waterqualitydata.us/" target="_blank">
+            <a
+              href="https://www.waterqualitydata.us/"
+              target="_blank"
+              rel="noreferrer"
+            >
               https://www.waterqualitydata.us/
             </a>
           </p>
         </Grid.Column>
         <Grid.Column width={4}>
-          <a href="https://www.waterqualitydata.us/" target="_blank">
+          <a
+            href="https://www.waterqualitydata.us/"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Img fluid={data.file.childImageSharp.fluid} alt="NWQMC Logo" />
           </a>
         </Grid.Column>
