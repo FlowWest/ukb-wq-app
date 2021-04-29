@@ -1,26 +1,45 @@
 import React from "react"
-import { Link } from "gatsby"
 import { Grid } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import { graphql } from "gatsby"
+import Img from "gatsby-image"
 
-export default () => (
+export default ({ data }) => (
   <Layout pageInfo={{ pageName: "data" }}>
     <SEO title="Water Quality Monitoring Data" />
-    <Grid.Row>
-      <Grid.Column width={10}>
-        <p>
-          The Klamath Tribes water quality data can be downloaded from the
-          National Water Quality Monitoring Council Water Quality Portal.{" "}
-        </p>
-        <br />
-        <p>
+    <Grid container>
+      <Grid.Row columns={2}>
+        <Grid.Column width={12}>
+          <p>
+            The Klamath Tribes water quality data can be downloaded from the
+            National Water Quality Monitoring Council Water Quality Portal.{" "}
+          </p>
+          <br />
+          <p>
+            <a href="https://www.waterqualitydata.us/" target="_blank">
+              https://www.waterqualitydata.us/
+            </a>
+          </p>
+        </Grid.Column>
+        <Grid.Column width={4}>
           <a href="https://www.waterqualitydata.us/" target="_blank">
-            https://www.waterqualitydata.us/
+            <Img fluid={data.file.childImageSharp.fluid} alt="NWQMC Logo" />
           </a>
-        </p>
-      </Grid.Column>
-      <Grid.Column width={6}>a</Grid.Column>
-    </Grid.Row>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   </Layout>
 )
+
+export const query = graphql`
+  query {
+    file(relativePath: { eq: "NWQMC_logo.png" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid_noBase64
+        }
+      }
+    }
+  }
+`
