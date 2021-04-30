@@ -10,7 +10,11 @@ const DataDownload = ({ reportMetaData }) => {
         <Card.Description>
           <strong>Author(s)</strong>: {reportMetaData.authors} <br />
           <strong>Location</strong>: {reportMetaData.location} <br />
-          <strong>Year</strong>: {reportMetaData.year} <br />
+          <strong>Year</strong>: {reportMetaData.year}{" "}
+          {reportMetaData.endyear !== "NA"
+            ? ` - ${reportMetaData.endyear}`
+            : null}
+          <br />
         </Card.Description>
         <Button primary>Download</Button>
       </Card.Content>

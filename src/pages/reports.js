@@ -1,45 +1,80 @@
-import React from "react"
-import { Grid, Header, Search, Card } from "semantic-ui-react"
+import React, { useEffect, useState } from "react"
+import { Grid, Header, Search, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import DataDownload from "../components/dataDownload"
+import { graphql } from "gatsby"
 
-export default () => (
-  <Layout pageInfo={{ pageName: "reports" }}>
-    <SEO title="Water Quality Reports" />
-    <Grid container>
-      <Grid.Row>
-        <Header
-          as="h1"
-          content="Klamath Tribes Water Quality Report Repository"
-        />
-      </Grid.Row>
-      <Grid.Row>
-        <Search />
-      </Grid.Row>
-      <Grid.Row>
-        <Card.Group>
-          {[
-            {
-              title:
-                "Upper Klamath Lake Tributary Loading: 2009 Data Summary Report",
-              type: "technical report",
-              authors: "Jacob Kann Ph.D.",
-              location: "Upper Klamath Lake Tributaries",
-              year: "2009",
-            },
-            {
-              title: "Upper Klamath Lake 2009 Data Summary Report",
-              type: "technical report",
-              authors: "Jacob Kann Ph.D.",
-              location: "Upper Klamath Lake",
-              year: "2009",
-            },
-          ].map(report => (
-            <DataDownload reportMetaData={report} />
-          ))}
-        </Card.Group>
-      </Grid.Row>
-    </Grid>
-  </Layout>
-)
+export default ({ data }) => {
+  const [filteredReports, setFilteredReports] = useState(
+    data.allReportsMetadataCsv.nodes
+  )
+
+  const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
+    (reportType, index) => ({ key: index, text: reportType, value: reportType })
+  )
+  // dropdown: location, report type
+  // year slider
+  const reportTypeChangeHandler = (event, { value }) => {
+    if (value.length > 0) {
+      setFilteredReports(
+        data.allReportsMetadataCsv.nodes.filter(report =>
+          value.includes(report.type)
+        )
+      )
+    } else {
+      setFilteredReports(data.allReportsMetadataCsv.nodes)
+    }
+  }
+
+  return (
+    <Layout pageInfo={{ pageName: "reports" }}>
+      <SEO title="Water Quality Reports" />
+      <Grid container>
+        <Grid.Row>
+          <Header
+            as="h1"
+            content="Klamath Tribes Water Quality Report Repository"
+          />
+        </Grid.Row>
+        <Grid.Row>
+          <Dropdown
+            placeholder="Report Type"
+            search
+            selection
+            multiple
+            onChange={reportTypeChangeHandler}
+            options={reportTypeOptions}
+          />
+          <Search />
+        </Grid.Row>
+        <Grid.Row>
+          <Card.Group>
+            {filteredReports.map(report => (
+              <DataDownload reportMetaData={report} />
+            ))}
+          </Card.Group>
+        </Grid.Row>
+      </Grid>
+    </Layout>
+  )
+}
+
+export const query = graphql`
+  query {
+    allReportsMetadataCsv {
+      distinct(field: type)
+      nodes {
+        id
+        authors
+        year
+        endyear
+        filename
+        location
+        organization
+        title
+        type
+      }
+    }
+  }
+`

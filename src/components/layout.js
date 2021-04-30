@@ -4,7 +4,7 @@ import Footer from "./footer"
 import ResponsiveContainer from "./ResponsiveContainer"
 
 export default ({ children, pageInfo }) => (
-  <ResponsiveContainer>
+  <ResponsiveContainer pageName={pageInfo.pageName}>
     <Grid style={{ height: "100vh" }}>
       <Grid.Column className={pageInfo.pageName !== "index" ? "mt-5" : ""}>
         <main>{children}</main>
