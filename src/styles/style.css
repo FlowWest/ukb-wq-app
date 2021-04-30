@@ -1,0 +1,13 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+@import "layout.css";
+@import "header.css";
+@import "index.css";
+
+main {
+  min-width: 100vw;
+}
+
+p {
+  font-size: 18px;
+}

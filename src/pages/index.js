@@ -1,80 +1,123 @@
-import React from "react"
-import { Row, Col, Container, ListGroup } from "react-bootstrap"
-
+import React, { useEffect } from "react"
+import { Grid, Card, Header, Segment, Item } from "semantic-ui-react"
 import Layout from "../components/layout"
+import HomeImageGallery from "../components/homeImageGallery"
 import SEO from "../components/seo"
-import Img from "gatsby-image"
 import { graphql } from "gatsby"
+import Img from "gatsby-image"
+import "semantic-ui-css/semantic.min.css"
 
-const IndexPage = ({ data }) => (
-  <Layout pageInfo={{ pageName: "index" }}>
-    <SEO title="Home" keywords={[`gatsby`, `react`, `bootstrap`]} />
-    <Container fluid>
-      <Row>
-        <Col>
-        <a href="https://klamathtribes.org/" target="_blank" rel="noreferrer">
-          <Img
-            fluid={data.file.childImageSharp.fluid}
-            alt="The Klamath Tribes (Klamath-Modoc-Yahooskin) Logo"
-          />
-        </a>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12} md={6}>
-          <h1>Welcome!</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-            suscipit justo lectus, eu imperdiet leo lacinia volutpat. Aenean eu
-            lectus sodales, aliquam velit non, porta massa. Fusce quis quam ac
-            risus rhoncus facilisis. Aenean vitae sodales neque, id venenatis
-            sapien. Interdum et malesuada fames ac ante ipsum primis in
-            faucibus. Aliquam eget fermentum mi. Pellentesque id dolor sapien.
-            Nulla enim turpis, consequat dapibus blandit at, rutrum in metus.
-            Vivamus molestie posuere porttitor. Vivamus mollis magna justo, in
-            hendrerit nibh porttitor vel. Vestibulum sed libero purus.
-            Vestibulum feugiat bibendum mi, vitae eleifend lectus rutrum vitae.
-            Curabitur elementum congue nulla, ac accumsan massa imperdiet id.
-            Praesent vitae sapien sit amet nulla aliquet placerat vitae quis
-            ipsum. Donec mattis justo sit amet dignissim dictum.
-          </p>
-          <p>
-            Vivamus sed est posuere, aliquam nunc vel, suscipit nibh. Sed purus
-            tellus, accumsan vitae felis ut, semper porta magna. Mauris
-            vestibulum sed ligula nec porttitor. Nam justo ipsum, vulputate quis
-            ante eu, gravida tincidunt dolor. Vivamus suscipit, orci ut accumsan
-            mollis, urna massa bibendum erat, nec vestibulum sem velit a sapien.
-            Phasellus a consequat velit. Sed imperdiet maximus libero, blandit
-            mollis dui consequat ut. Aenean finibus, metus id porta placerat,
-            orci nibh placerat arcu, in luctus neque massa in ante.
-          </p>
-        </Col>
-        <Col xs={12} md={6}>
-          <p>
-            Integer et eleifend libero. Ut in malesuada nisl. Sed et est eu
-            lorem congue dapibus. Nulla facilisi. Etiam nisi erat, euismod sed
-            maximus sed, cursus vel elit. Nam scelerisque congue mi, at commodo
-            sem volutpat tempor. Cras nisl neque, efficitur in suscipit sed,
-            vulputate id tellus. Vivamus cursus ut libero eu suscipit. Nulla
-            congue velit ut elit gravida feugiat. Vivamus fringilla nunc nec
-            mollis condimentum. Phasellus ultrices consequat nulla, sit amet
-            hendrerit nisl mollis ac. Quisque euismod vestibulum semper. Morbi
-            egestas a diam at euismod.
-          </p>
-        </Col>
-      </Row>
-    </Container>
-  </Layout>
-)
+export default ({ data }) => {
+  const imagesArray = data.allFile.edges
+  const imagesObject = {}
+  imagesArray.forEach(image => {
+    imagesObject[image.node.name] = image.node
+  })
 
-export default IndexPage
+  // useEffect(() => {
+  //   console.log("data", data.allFile.edges)
+
+  // }, [])
+
+  return (
+    <div>
+      <Layout pageInfo={{ pageName: "index" }} data={data}>
+        <SEO
+          title="Home"
+          keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
+        />
+        <Segment style={{ padding: "8em 0em" }} vertical>
+          <Grid container stackable verticalAlign="middle">
+            <Grid.Row>
+              <Grid.Column width={6}>
+                <Grid.Row>
+                  <Card href="/data">
+                    <Card.Content header="Download Our Data" />
+                    <Img
+                      fluid={imagesObject["beaker"].childImageSharp.fluid}
+                      alt="black line drawing of half full glass beaker"
+                      className="index-icon-image"
+                    />
+                  </Card>
+                </Grid.Row>
+                <Grid.Row>
+                  <Card href="/reports">
+                    <Card.Content header="View Water Quality Reports" />
+                    <Img
+                      fluid={imagesObject["report"].childImageSharp.fluid}
+                      alt="black line drawing of report document with pie and bar chart"
+                      className="index-icon-image"
+                    />
+                  </Card>
+                </Grid.Row>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <p>
+                  The monitoring program includes sampling water nutrients,
+                  water chemistry, algal toxins, and aquatic biota at up to 11
+                  lake sites and water nutrients, water chemistry, and stream
+                  discharge at up to 20 river and stream sites.
+                </p>
+                <p>
+                  This rich dataset is the foundation for environmental
+                  management and restoration of Upper Klamath Basin and is
+                  critical to enacting significant water quality change. By
+                  providing this data to the restoration and management
+                  community and the public the Klamath Tribes are committed to
+                  efficient and transparent data sharing and collaborative
+                  analysis across all partners committed to improving the future
+                  health of the basin. The Klamath Tribes hopes the water
+                  quality dataset and this app will support restoration actions
+                  that achieve water quality, native fish populations, and other
+                  ecosystem goals for the basin.
+                </p>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        <Segment style={{ padding: "8em 8em" }} vertical secondary>
+          <Grid stackable verticalAlign="middle">
+            <Grid.Row>
+              <Grid.Column width={6}>
+                <Header as="h2">Sprague River Water Quality Lab (SRWQL)</Header>
+                <p>
+                  Since 2006 the Sprague River Water Quality Lab (SRWQL) has
+                  allowed the Klamath Tribes to analyze all water nutrients,
+                  water chemistry, and algal toxin samples in-house. The lab
+                  worked closely with the U.S. Geological Survey’s National
+                  Water Quality Lab to complete a laboratory evaluation project
+                  comparing the data split between the two labs. The lab has
+                  been accredited through the National Environmental Lab
+                  Accreditation Program and Oregon Environmental Lab
+                  Accreditation Program. The SRWQL utilizes state-of-the-art
+                  automated discrete analyzer technology with the Thermo Fisher
+                  Aquakem 250. The lab also uses E-friendly methods that employ
+                  chemicals that are less toxic to the environment.
+                </p>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <HomeImageGallery imagesArray={imagesArray} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Layout>
+    </div>
+  )
+}
 
 export const query = graphql`
-  query {
-    file(relativePath: { eq: "klamathtribes1200.png" }) {
-      childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid_tracedSVG
+  query artImages {
+    allFile(filter: { relativePath: { regex: "images/" } }) {
+      edges {
+        node {
+          relativePath
+          name
+          childImageSharp {
+            fluid(quality: 100) {
+              ...GatsbyImageSharpFluid_noBase64
+            }
+          }
         }
       }
     }
