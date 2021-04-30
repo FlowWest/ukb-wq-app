@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react"
-import { Grid, Header, Search, Card, Dropdown } from "semantic-ui-react"
+import React, { useState } from "react"
+import { Grid, Header, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
+import ReportSearch from "../components/reportSearch"
+
+//https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/2009+UKL+Data+Summary+Report_final.pdf
 
 export default ({ data }) => {
   const [filteredReports, setFilteredReports] = useState(
@@ -13,6 +16,7 @@ export default ({ data }) => {
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({ key: index, text: reportType, value: reportType })
   )
+
   // dropdown: location, report type
   // year slider
   const reportTypeChangeHandler = (event, { value }) => {
@@ -46,7 +50,10 @@ export default ({ data }) => {
             onChange={reportTypeChangeHandler}
             options={reportTypeOptions}
           />
-          <Search />
+          <ReportSearch
+            source={data.allReportsMetadataCsv.nodes}
+            setFilteredReports={setFilteredReports}
+          />
         </Grid.Row>
         <Grid.Row>
           <Card.Group>
@@ -65,7 +72,6 @@ export const query = graphql`
     allReportsMetadataCsv {
       distinct(field: type)
       nodes {
-        id
         authors
         year
         endyear
