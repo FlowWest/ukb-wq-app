@@ -2,6 +2,7 @@ import React from "react"
 import { Card, Button } from "semantic-ui-react"
 
 const DataDownload = ({ reportMetaData }) => {
+  const clickHandler = () => {}
   return (
     <Card>
       <Card.Content>
@@ -16,7 +17,13 @@ const DataDownload = ({ reportMetaData }) => {
             : null}
           <br />
         </Card.Description>
-        <Button primary>Download</Button>
+        <a
+          href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${reportMetaData.filename}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Button primary>View</Button>
+        </a>
       </Card.Content>
     </Card>
   )

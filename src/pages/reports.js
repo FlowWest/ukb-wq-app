@@ -6,8 +6,6 @@ import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/reportSearch"
 
-//https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/2009+UKL+Data+Summary+Report_final.pdf
-
 export default ({ data }) => {
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
