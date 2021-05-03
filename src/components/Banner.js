@@ -18,9 +18,9 @@ export default ({ mobile }) => {
     <StaticQuery
       query={graphql`
         query {
-          file(relativePath: { eq: "Chiloquin_Dam_removed.jpg" }) {
+          file(relativePath: { eq: "sucker_photo.jpg" }) {
             childImageSharp {
-              fluid {
+              fluid(quality: 100) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -28,29 +28,51 @@ export default ({ mobile }) => {
         }
       `}
       render={data => (
-        <Segment style={{ padding: "1em 0em" }}>
+        <Segment
+          style={{
+            padding: "1em 0em",
+            height: "50em",
+            margin: 0,
+            border: "none",
+          }}
+          className="header-image-container"
+        >
           <BackgroundImage
             className="header-background-image"
-            fluid={data.file.childImageSharp.fluid}
+            fluid={[
+              `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))`,
+              data.file.childImageSharp.fluid,
+            ]}
             style={{
               height: "100%",
               width: "100%",
               backgroundImage:
                 "linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5))",
-              position: "initial",
+              position: "cover",
             }}
           >
-            <Container textAlign="center">
+            <Container textAlign="center" className="header-text-container">
               <Header
                 as="h1"
                 inverted
-                content="The Klamath Tribes Water Quality Monitoring"
+                content="The Klamath Tribes"
                 style={{
                   fontSize: mobile ? "2em" : "4em",
                   fontWeight: "normal",
                   marginBottom: 0,
-                  marginTop: mobile ? "1.5em" : "3em",
                 }}
+                className="header-title"
+              />
+              <Header
+                as="h1"
+                inverted
+                content="Water Quality Monitoring"
+                style={{
+                  fontSize: mobile ? "2em" : "4em",
+                  fontWeight: "normal",
+                  marginBottom: 0,
+                }}
+                className="header-title"
               />
               <Header
                 as="h2"
@@ -64,6 +86,7 @@ export default ({ mobile }) => {
                   fontWeight: "normal",
                   marginTop: mobile ? "0.5em" : "1.5em",
                 }}
+                className="header-text"
               />
             </Container>
           </BackgroundImage>

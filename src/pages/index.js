@@ -26,12 +26,12 @@ export default ({ data }) => {
           title="Home"
           keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
         />
-        <Segment style={{ padding: "8em 0em" }} vertical>
+        <Segment vertical>
           <Grid container stackable verticalAlign="middle">
             <Grid.Row>
               <Grid.Column width={6}>
                 <Grid.Row>
-                  <Card href="/data">
+                  <Card href="/data" className="page-link-card">
                     <Card.Content header="Download Our Data" />
                     <Img
                       fluid={imagesObject["beaker"].childImageSharp.fluid}
@@ -41,7 +41,7 @@ export default ({ data }) => {
                   </Card>
                 </Grid.Row>
                 <Grid.Row>
-                  <Card href="/reports">
+                  <Card href="/reports" className="page-link-card">
                     <Card.Content header="View Water Quality Reports" />
                     <Img
                       fluid={imagesObject["report"].childImageSharp.fluid}

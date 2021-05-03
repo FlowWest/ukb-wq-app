@@ -20,26 +20,32 @@
   .header-background-image
   .header-text-container
   .header-text {
-  width: 400px;
+  width: 50rem;
   margin: auto;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .header-image-container
   .header-background-image
   .header-text-container
   .header-title {
-  width: 400px;
   margin: auto;
   font-size: 24px;
 }
 
 .menu-container {
-  align-items: center !important;
   border: none !important;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
 }
 
 .ui.secondary.pointing.menu .menu-container {
   align-items: center;
   border: none;
+}
+
+.ui.secondary.pointing.menu .item {
+  align-self: auto !important;
 }

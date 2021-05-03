@@ -28,17 +28,17 @@ const DesktopContainer = ({ children }) => {
             <KlamathLogo />
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/data" className="link-no-style">
             Data
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/reports" className="link-no-style">
             Reports
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/about" className="link-no-style">
             About
           </Link>
@@ -70,6 +70,7 @@ const MobileContainer = ({ children }) => {
           onHide={handleSidebarHide}
           vertical
           visible={sidebarOpen}
+          float="left"
         >
           <Menu.Item as="a" active>
             Home

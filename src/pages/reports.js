@@ -11,8 +11,24 @@ export default ({ data }) => {
     data.allReportsMetadataCsv.nodes
   )
 
+  const formatTextCasing = str => {
+    var splitStr = str.split(" ")
+    for (var i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] =
+        splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    // Directly return the joined string
+    return splitStr.join(" ")
+  }
+
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
-    (reportType, index) => ({ key: index, text: reportType, value: reportType })
+    (reportType, index) => ({
+      key: index,
+      text: formatTextCasing(reportType),
+      value: reportType,
+    })
   )
 
   // dropdown: location, report type

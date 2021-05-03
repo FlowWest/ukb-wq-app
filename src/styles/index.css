@@ -2,3 +2,7 @@
   width: 100px;
   margin-bottom: 20px;
 }
+
+.ui.card.page-link-card {
+  margin: 3rem 0 !important;
+}
