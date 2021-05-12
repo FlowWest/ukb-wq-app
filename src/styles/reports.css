@@ -1,0 +1,7 @@
+.ui.cards.reports {
+  justify-content: center;
+}
+
+.ui.grid > .row.report-filters-container {
+  justify-content: space-evenly;
+}

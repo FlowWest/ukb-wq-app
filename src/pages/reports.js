@@ -5,23 +5,12 @@ import SEO from "../components/seo"
 import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/reportSearch"
+import { formatTextCasing } from "../helpers/utils"
 
 export default ({ data }) => {
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
-
-  const formatTextCasing = str => {
-    var splitStr = str.split(" ")
-    for (var i = 0; i < splitStr.length; i++) {
-      // You do not need to check if i is larger than splitStr length, as your for does that for you
-      // Assign it back to the array
-      splitStr[i] =
-        splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
-    }
-    // Directly return the joined string
-    return splitStr.join(" ")
-  }
 
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({
@@ -55,7 +44,7 @@ export default ({ data }) => {
             content="Klamath Tribes Water Quality Report Repository"
           />
         </Grid.Row>
-        <Grid.Row>
+        <Grid.Row className="report-filters-container">
           <Dropdown
             placeholder="Report Type"
             search
@@ -70,7 +59,7 @@ export default ({ data }) => {
           />
         </Grid.Row>
         <Grid.Row>
-          <Card.Group>
+          <Card.Group className="reports">
             {filteredReports.map(report => (
               <DataDownload reportMetaData={report} />
             ))}

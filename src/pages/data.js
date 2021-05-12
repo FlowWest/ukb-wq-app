@@ -8,9 +8,9 @@ import Img from "gatsby-image"
 export default ({ data }) => (
   <Layout pageInfo={{ pageName: "data" }}>
     <SEO title="Water Quality Monitoring Data" />
-    <Grid container>
-      <Grid.Row columns={2}>
-        <Grid.Column width={12}>
+    <Grid container style={{ paddingTop: "8em" }}>
+      <Grid.Row columns={3}>
+        <Grid.Column width={8}>
           <p>
             The Klamath Tribes water quality data can be downloaded from the
             National Water Quality Monitoring Council Water Quality Portal.{" "}
@@ -26,6 +26,7 @@ export default ({ data }) => (
             </a>
           </p>
         </Grid.Column>
+        <Grid.Column width={4}></Grid.Column>
         <Grid.Column width={4}>
           <a
             href="https://www.waterqualitydata.us/"

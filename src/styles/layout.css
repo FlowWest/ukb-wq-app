@@ -1,6 +1,11 @@
 div.main {
   min-height: 100vh;
   padding: 60px 0;
+  margin-top: 10rem;
+}
+
+main {
+  margin-top: 3rem;
 }
 
 div.full-height {

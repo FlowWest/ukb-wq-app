@@ -1,13 +1,14 @@
 import React from "react"
 import { Card, Button } from "semantic-ui-react"
+import { formatTextCasing } from "../helpers/utils"
 
 const DataDownload = ({ reportMetaData }) => {
   const clickHandler = () => {}
   return (
-    <Card>
+    <Card className="report-card">
       <Card.Content>
         <Card.Header as="h5">{reportMetaData.title}</Card.Header>
-        <Card.Meta>{reportMetaData.type}</Card.Meta>
+        <Card.Meta>{formatTextCasing(reportMetaData.type)}</Card.Meta>
         <Card.Description>
           <strong>Author(s)</strong>: {reportMetaData.authors} <br />
           <strong>Location</strong>: {reportMetaData.location} <br />
