@@ -1,32 +1,39 @@
-import React from "react"
-import { Link } from "gatsby"
-import { Grid, Header } from "semantic-ui-react"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import { GoogleMap, LoadScript } from "@react-google-maps/api"
+import React, { useRef, useEffect, useState } from "react"
+import mapboxgl from "mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 
-const containerStyle = {
-  width: "400px",
-  height: "400px",
-  display: "inlineBlock",
-  margin: "1rem",
-  float: "right",
-}
+mapboxgl.accessToken = process.env.GATSBY_MAPBOX_TOKEN
 
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-}
+console.log("mab", process.env.GATSBY_MAPBOX_TOKEN)
 
-export default () => {
+export default function App() {
+  const mapContainer = useRef(null)
+  const map = useRef(null)
+  const [lng, setLng] = useState(-70.9)
+  const [lat, setLat] = useState(42.35)
+  const [zoom, setZoom] = useState(9)
+
+  useEffect(() => {
+    if (map.current) return // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    })
+  })
+
+  useEffect(() => {
+    if (!map.current) return // wait for map to initialize
+    map.current.on("move", () => {
+      setLng(map.current.getCenter().lng.toFixed(4))
+      setLat(map.current.getCenter().lat.toFixed(4))
+      setZoom(map.current.getZoom().toFixed(2))
+    })
+  })
+
   return (
-    <div className="about-map">
-      <LoadScript googleMapsApiKey={process.env.GATSBY_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-          {/* Child components, such as markers, info windows, etc. */}
-          <></>
-        </GoogleMap>
-      </LoadScript>
+    <div>
+      <div ref={mapContainer} className="map-container" />
     </div>
   )
 }

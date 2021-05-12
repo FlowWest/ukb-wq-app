@@ -6,7 +6,6 @@
   "author": "Sadie Gill <sgill@flowwest.com>",
   "dependencies": {
     "@artsy/fresnel": "^1.3.1",
-    "@react-google-maps/api": "^2.1.1",
     "bootstrap": "^4.3.1",
     "gatsby": "^2.3.34",
     "gatsby-background-image": "^1.1.2",
@@ -20,6 +19,7 @@
     "gatsby-transformer-csv": "^2.7.0",
     "gatsby-transformer-sharp": "^2.1.18",
     "lodash": "^4.17.21",
+    "mapbox-gl": "^1.10.1",
     "plotly.js": "^1.58.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",

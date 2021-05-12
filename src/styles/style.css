@@ -6,6 +6,7 @@
 @import "image-gallery.css";
 @import "reports.css";
 @import "about.css";
+@import "map.css";
 
 main {
   min-width: 100vw;
