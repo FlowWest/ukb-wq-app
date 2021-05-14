@@ -9,12 +9,12 @@ export default () => (
   <Layout pageInfo={{ pageName: "about" }}>
     <SEO title="Water Quality Monitoring Data" />
     <Grid container>
-      <Grid.Row>
+      {/* <Grid.Row>
         <Header
           as="h1"
           content="Klamath Tribes Water Quality Monitoring Program"
         />
-      </Grid.Row>
+      </Grid.Row> */}
       <Grid.Row>
         <Item className="map-paragraph">
           <Item.Content>

@@ -3,13 +3,53 @@ import BackgroundImage from "gatsby-background-image"
 import { Header, Container, Segment } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
 
-export default ({ mobile }) => {
-  const bannerImages = {
-    index: "sucker_photo.jpg",
-    data: "Bridge_williamson_bridge_by_T_Tupper.jpg",
-    about: "Charles_Jackson_labeling_wq_sample_bottles_on_UKL.jpg",
-    reports: "Chiloquin_Dam_removed.jpg",
+export default ({ mobile, pageName }) => {
+  console.log("pn pn banner", pageName)
+
+  const headerContent = {
+    index: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Water Quality Monitoring
+        </div>
+      ),
+      text:
+        "The largest water quality data collection entity in the Upper Klamath Basin, monitoring water quality conditions in Upper Klamath Lake since 1990 and major tributaries including the Sprague, Williamson, and Wood Rivers since 2001.",
+    },
+    data: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Water Quality Monitoring Data
+        </div>
+      ),
+      text: "",
+    },
+    reports: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Water Quality Report Repository
+        </div>
+      ),
+      text: "",
+    },
+    about: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Water Quality Monitoring Program
+        </div>
+      ),
+      text: "",
+    },
   }
+
   // 'Klamath_Tribes_sampling_wq_on_UKL.jpg'
   //'River_and_Forest.jpg'
   //'Sprague_River_above_dam_by_taylor_tupper_copy.jpg'
@@ -18,9 +58,30 @@ export default ({ mobile }) => {
     <StaticQuery
       query={graphql`
         query {
-          file(relativePath: { eq: "sucker_photo.jpg" }) {
+          index: file(relativePath: { eq: "sucker_photo.jpg" }) {
             childImageSharp {
-              fluid(quality: 100) {
+              fluid(quality: 95) {
+                ...GatsbyImageSharpFluid_noBase64
+              }
+            }
+          }
+          data: file(relativePath: { eq: "wq_tech_2.jpg" }) {
+            childImageSharp {
+              fluid(quality: 95) {
+                ...GatsbyImageSharpFluid_noBase64
+              }
+            }
+          }
+          reports: file(relativePath: { eq: "UKL.jpg" }) {
+            childImageSharp {
+              fluid(quality: 95) {
+                ...GatsbyImageSharpFluid_noBase64
+              }
+            }
+          }
+          about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
+            childImageSharp {
+              fluid(quality: 95) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -41,7 +102,7 @@ export default ({ mobile }) => {
             className="header-background-image"
             fluid={[
               `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))`,
-              data.file.childImageSharp.fluid,
+              data[pageName].childImageSharp.fluid,
             ]}
             style={{
               height: "100%",
@@ -55,18 +116,7 @@ export default ({ mobile }) => {
               <Header
                 as="h1"
                 inverted
-                content="The Klamath Tribes"
-                style={{
-                  fontSize: mobile ? "2em" : "4em",
-                  fontWeight: "normal",
-                  marginBottom: 0,
-                }}
-                className="header-title"
-              />
-              <Header
-                as="h1"
-                inverted
-                content="Water Quality Monitoring"
+                content={headerContent[pageName].title}
                 style={{
                   fontSize: mobile ? "2em" : "4em",
                   fontWeight: "normal",
@@ -77,10 +127,7 @@ export default ({ mobile }) => {
               <Header
                 as="h2"
                 inverted
-                content="The largest water quality data collection entity in the Upper
-            Klamath Basin, monitoring water quality conditions in Upper Klamath
-            Lake since 1990 and major tributaries including the Sprague,
-            Williamson, and Wood Rivers since 2001."
+                content={headerContent[pageName].text}
                 style={{
                   fontSize: mobile ? "1.5em" : "1.7em",
                   fontWeight: "normal",

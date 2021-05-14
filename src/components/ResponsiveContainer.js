@@ -13,7 +13,7 @@ const { Media, MediaContextProvider } = createMedia({
   },
 })
 
-const DesktopContainer = ({ children }) => {
+const DesktopContainer = ({ children, pageName }) => {
   return (
     <Media greaterThan="mobile">
       <Menu
@@ -44,7 +44,7 @@ const DesktopContainer = ({ children }) => {
           </Link>
         </Menu.Item>
       </Menu>
-      <Banner />
+      <Banner pageName={pageName} />
       {children}
     </Media>
   )
@@ -114,10 +114,10 @@ const MobileContainer = ({ children }) => {
   )
 }
 
-export default ({ children }) => {
+export default ({ children, pageName }) => {
   return (
     <MediaContextProvider>
-      <DesktopContainer>{children}</DesktopContainer>
+      <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
       <MobileContainer>{children}</MobileContainer>
     </MediaContextProvider>
   )

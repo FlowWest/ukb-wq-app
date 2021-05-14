@@ -38,12 +38,12 @@ export default ({ data }) => {
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Header
             as="h1"
             content="Klamath Tribes Water Quality Report Repository"
           />
-        </Grid.Row>
+        </Grid.Row> */}
         <Grid.Row className="report-filters-container">
           <Dropdown
             placeholder="Report Type"

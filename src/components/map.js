@@ -3,8 +3,6 @@ import mapboxgl from "mapbox-gl" // eslint-disable-line import/no-webpack-loader
 
 mapboxgl.accessToken = process.env.GATSBY_MAPBOX_TOKEN
 
-console.log("mab", process.env.GATSBY_MAPBOX_TOKEN)
-
 export default function App() {
   const mapContainer = useRef(null)
   const map = useRef(null)
