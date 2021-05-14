@@ -1,7 +1,12 @@
 .ui.cards.reports {
   justify-content: center;
+  width: inherit;
 }
 
 .ui.grid > .row.report-filters-container {
   justify-content: space-evenly;
+}
+
+.ui.primary.button.view-report-button {
+  margin-top: 5px;
 }

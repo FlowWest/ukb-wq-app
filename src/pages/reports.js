@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Grid, Header, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -11,6 +11,9 @@ export default ({ data }) => {
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
+  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
+
+  useEffect(() => {}, [filteredReports])
 
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({
@@ -22,16 +25,20 @@ export default ({ data }) => {
 
   // dropdown: location, report type
   // year slider
-  const reportTypeChangeHandler = (event, { value }) => {
-    if (value.length > 0) {
+  const reportTypeChangeHandler = (event, { value, allData }) => {
+    console.log("adad", allData)
+    if (allData && value.length) {
+      console.log("hello", value)
+      setFilteredReports(allData.filter(report => value.includes(report.type)))
+    } else if (value.length > 0) {
       setFilteredReports(
-        data.allReportsMetadataCsv.nodes.filter(report =>
-          value.includes(report.type)
-        )
+        filteredReports.filter(report => value.includes(report.type))
       )
     } else {
       setFilteredReports(data.allReportsMetadataCsv.nodes)
     }
+
+    setCurrentReportTypeFilters(value)
   }
 
   return (
@@ -54,12 +61,15 @@ export default ({ data }) => {
             options={reportTypeOptions}
           />
           <ReportSearch
-            source={data.allReportsMetadataCsv.nodes}
+            source={filteredReports}
             setFilteredReports={setFilteredReports}
+            reportTypeChangeHandler={reportTypeChangeHandler}
+            currentReportTypeFilters={currentReportTypeFilters}
+            allData={data.allReportsMetadataCsv.nodes}
           />
         </Grid.Row>
         <Grid.Row>
-          <Card.Group className="reports">
+          <Card.Group className="reports" itemsPerRow={4}>
             {filteredReports.map(report => (
               <DataDownload reportMetaData={report} />
             ))}

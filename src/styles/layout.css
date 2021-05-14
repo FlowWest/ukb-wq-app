@@ -13,6 +13,7 @@ div.full-height {
 }
 
 a.link-no-style {
+  font-size: 20px;
   text-decoration: underline;
   color: white;
 }

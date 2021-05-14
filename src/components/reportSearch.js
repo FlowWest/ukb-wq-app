@@ -1,8 +1,20 @@
 import _ from "lodash"
-import React, { useEffect, useCallback, useRef, useReducer } from "react"
+import React, {
+  useEffect,
+  useCallback,
+  useRef,
+  useReducer,
+  useState,
+} from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({ source, setFilteredReports }) => {
+export default ({
+  source,
+  setFilteredReports,
+  reportTypeChangeHandler,
+  currentReportTypeFilters,
+  allData,
+}) => {
   const initialState = {
     loading: false,
     results: [],
@@ -31,13 +43,17 @@ export default ({ source, setFilteredReports }) => {
 
   //   useEffect(() => {}, [results])
 
-  const handleSearchChange = useCallback((e, data) => {
+  const handleSearchChange = (e, data) => {
     clearTimeout(timeoutRef.current)
     dispatch({ type: "START_SEARCH", query: data.value })
 
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
+        reportTypeChangeHandler(null, {
+          value: currentReportTypeFilters,
+          allData,
+        })
         return
       }
 
@@ -50,7 +66,7 @@ export default ({ source, setFilteredReports }) => {
         results: _.filter(source, isMatch),
       })
     }, 300)
-  }, [])
+  }
 
   useEffect(() => {
     return () => {

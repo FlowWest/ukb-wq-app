@@ -76,7 +76,7 @@ export default ({ data }) => (
               Manager). We calibrate meters before each monitoring day and check
               their accuracy after monitoring to ensure our data is accurate.
               For more information on methods, please see the SOPs and QAPP
-              documents in the reference library associated with this APP or
+              documents in the reference library associated with this app or
               contact Mark Buettner at{" "}
               <a href="mailto:mark.buettner@klamathtribes.com">
                 mark.buettner@klamathtribes.com

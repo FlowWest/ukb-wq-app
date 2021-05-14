@@ -23,7 +23,9 @@ const DataDownload = ({ reportMetaData }) => {
           target="_blank"
           rel="noreferrer"
         >
-          <Button primary>View</Button>
+          <Button primary className="view-report-button">
+            View
+          </Button>
         </a>
       </Card.Content>
     </Card>
