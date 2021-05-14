@@ -60,28 +60,30 @@ export default ({ mobile, pageName }) => {
         query {
           index: file(relativePath: { eq: "sucker_photo.jpg" }) {
             childImageSharp {
-              fluid(quality: 95) {
+              fluid(quality: 99, maxWidth: 3080) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           data: file(relativePath: { eq: "wq_tech_2.jpg" }) {
             childImageSharp {
-              fluid(quality: 95) {
+              fluid(quality: 99, maxWidth: 3080) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
-          reports: file(relativePath: { eq: "UKL.jpg" }) {
+          reports: file(
+            relativePath: { eq: "Chiloquin_Williamson_2011_by_Tupper.jpg" }
+          ) {
             childImageSharp {
-              fluid(quality: 95) {
+              fluid(quality: 99, maxWidth: 3080) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
             childImageSharp {
-              fluid(quality: 95) {
+              fluid(quality: 99, maxWidth: 3080) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -101,14 +103,12 @@ export default ({ mobile, pageName }) => {
           <BackgroundImage
             className="header-background-image"
             fluid={[
-              `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))`,
+              `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3))`,
               data[pageName].childImageSharp.fluid,
             ]}
             style={{
               height: "100%",
               width: "100%",
-              backgroundImage:
-                "linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5))",
               position: "cover",
             }}
           >

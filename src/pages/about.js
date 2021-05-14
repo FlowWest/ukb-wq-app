@@ -5,7 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Map from "../components/map"
 
-export default () => (
+export default ({ data }) => (
   <Layout pageInfo={{ pageName: "about" }}>
     <SEO title="Water Quality Monitoring Data" />
     <Grid container>
@@ -18,7 +18,7 @@ export default () => (
       <Grid.Row>
         <Item className="map-paragraph">
           <Item.Content>
-            <Map />{" "}
+            <Map monitoringLocations={data.allMonitoringLocationsCsv.edges} />{" "}
             <p>
               The Klamath Tribes have monitored water quality conditions in
               Upper Klamath Lake since 1990 and major tributaries including the
@@ -89,3 +89,19 @@ export default () => (
     </Grid>
   </Layout>
 )
+
+export const query = graphql`
+  query {
+    allMonitoringLocationsCsv {
+      edges {
+        node {
+          Latitude
+          Longitude
+          Monitoring_Location_ID
+          Monitoring_Location_Name
+          Monitoring_Location_Type
+        }
+      }
+    }
+  }
+`

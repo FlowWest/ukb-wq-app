@@ -1,37 +1,55 @@
 import React, { useRef, useEffect, useState } from "react"
-import mapboxgl from "mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
+import L from "leaflet"
+import marker from "../images/pin.svg"
+import { formatTextCasing } from "../helpers/utils"
+import "leaflet/dist/leaflet.css"
 
-mapboxgl.accessToken = process.env.GATSBY_MAPBOX_TOKEN
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 
-export default function App() {
-  const mapContainer = useRef(null)
-  const map = useRef(null)
-  const [lng, setLng] = useState(-70.9)
-  const [lat, setLat] = useState(42.35)
-  const [zoom, setZoom] = useState(9)
+export default ({ monitoringLocations }) => {
+  const position = [42.44333343664235, -121.41037747833549]
 
-  useEffect(() => {
-    if (map.current) return // initialize map only once
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: zoom,
-    })
-  })
-
-  useEffect(() => {
-    if (!map.current) return // wait for map to initialize
-    map.current.on("move", () => {
-      setLng(map.current.getCenter().lng.toFixed(4))
-      setLat(map.current.getCenter().lat.toFixed(4))
-      setZoom(map.current.getZoom().toFixed(2))
-    })
+  const markerIcon = new L.Icon({
+    iconUrl: marker,
+    iconRetinaUrl: marker,
+    iconAnchor: null,
+    popupAnchor: [-0, -0],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+    iconSize: new L.Point(20, 35),
+    // className: "marker-icon",
   })
 
   return (
-    <div>
-      <div ref={mapContainer} className="map-container" />
-    </div>
+    <MapContainer
+      center={position}
+      zoom={9}
+      scrollWheelZoom={false}
+      className="map-container"
+    >
+      <TileLayer
+        attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+      />
+      {monitoringLocations.map(location => {
+        var locationName = formatTextCasing(
+          location.node.Monitoring_Location_Name.toLowerCase()
+        )
+
+        return (
+          <Marker
+            position={[location.node.Latitude, location.node.Longitude]}
+            icon={markerIcon}
+          >
+            <Popup>
+              {`Monitoring Location ID: ${location.node.Monitoring_Location_ID}`}
+              <br />
+              {`Monitoring Location Name: ${locationName}`}
+            </Popup>
+          </Marker>
+        )
+      })}
+    </MapContainer>
   )
 }
