@@ -4,8 +4,6 @@ import { Header, Container, Segment } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
 
 export default ({ mobile, pageName }) => {
-  console.log("pn pn banner", pageName)
-
   const headerContent = {
     index: {
       title: (

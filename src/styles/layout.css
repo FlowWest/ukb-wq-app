@@ -1,15 +1,16 @@
 div.main {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   padding: 60px 0;
   margin-top: 10rem;
 }
 
 main {
   margin-top: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 div.full-height {
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 a.link-no-style {
@@ -27,6 +28,7 @@ a.link-no-style:hover {
   bottom: 0;
   width: 100%;
   height: 2.5rem; /* Footer height */
+  margin-bottom: 1rem;
 }
 
 .footer-content {
@@ -34,6 +36,7 @@ a.link-no-style:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: inherit;
 }
 
 .container {

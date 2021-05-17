@@ -12,6 +12,7 @@ export default () => {
         // height: "10em",
         margin: 0,
         border: "none",
+        height: "3rem",
       }}
     >
       <footer id="footer">

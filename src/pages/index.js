@@ -14,11 +14,6 @@ export default ({ data }) => {
     imagesObject[image.node.name] = image.node
   })
 
-  // useEffect(() => {
-  //   console.log("data", data.allFile.edges)
-
-  // }, [])
-
   return (
     <div>
       <Layout pageInfo={{ pageName: "index" }} data={data}>

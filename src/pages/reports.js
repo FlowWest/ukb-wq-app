@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useReducer } from "react"
 import { Grid, Header, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -6,12 +6,17 @@ import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/reportSearch"
 import { formatTextCasing } from "../helpers/utils"
+import _ from "lodash"
 
 export default ({ data }) => {
+  const [searchFilteredReports, setSearchFilteredReports] = useState(
+    data.allReportsMetadataCsv.nodes
+  )
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
+  const [currentQueryString, setCurrentQueryString] = useState("")
 
   useEffect(() => {}, [filteredReports])
 
@@ -23,34 +28,27 @@ export default ({ data }) => {
     })
   )
 
-  // dropdown: location, report type
-  // year slider
-  const reportTypeChangeHandler = (event, { value, allData }) => {
-    console.log("adad", allData)
-    if (allData && value.length) {
-      console.log("hello", value)
-      setFilteredReports(allData.filter(report => value.includes(report.type)))
-    } else if (value.length > 0) {
+  const reportTypeChangeHandler = (event, { value }) => {
+    if (value.length > 0) {
       setFilteredReports(
-        filteredReports.filter(report => value.includes(report.type))
+        searchFilteredReports.filter(report => value.includes(report.type))
       )
     } else {
-      setFilteredReports(data.allReportsMetadataCsv.nodes)
+      setFilteredReports(searchFilteredReports)
     }
 
     setCurrentReportTypeFilters(value)
   }
 
+  // search query changes
+  useEffect(() => {
+    reportTypeChangeHandler(null, { value: currentReportTypeFilters })
+  }, [searchFilteredReports])
+
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-        {/* <Grid.Row>
-          <Header
-            as="h1"
-            content="Klamath Tribes Water Quality Report Repository"
-          />
-        </Grid.Row> */}
         <Grid.Row className="report-filters-container">
           <Dropdown
             placeholder="Report Type"
@@ -61,10 +59,7 @@ export default ({ data }) => {
             options={reportTypeOptions}
           />
           <ReportSearch
-            source={filteredReports}
-            setFilteredReports={setFilteredReports}
-            reportTypeChangeHandler={reportTypeChangeHandler}
-            currentReportTypeFilters={currentReportTypeFilters}
+            setSearchFilteredReports={setSearchFilteredReports}
             allData={data.allReportsMetadataCsv.nodes}
           />
         </Grid.Row>

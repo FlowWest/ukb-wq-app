@@ -9,4 +9,30 @@
 
 .ui.primary.button.view-report-button {
   margin-top: 5px;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+/* .extra.content.view-report-button-container {
+
+} */
+
+.ui.card.report-card {
+  margin: 10px !important;
+}
+
+.report-card-header {
+  min-height: 5rem;
+}
+
+.report-card {
+  width: 350px !important;
+  /* height: 300px; */
+  cursor: pointer;
+}
+
+.ui.cards > .card > .content > .meta + .description {
+  /* min-height: 200px; */
+  padding-bottom: 10px;
 }

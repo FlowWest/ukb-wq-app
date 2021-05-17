@@ -8,7 +8,7 @@ import Img from "gatsby-image"
 export default ({ data }) => (
   <Layout pageInfo={{ pageName: "data" }}>
     <SEO title="Water Quality Monitoring Data" />
-    <Grid container style={{ paddingTop: "8em" }}>
+    <Grid container style={{ padding: "4em 0" }}>
       <Grid.Row columns={3}>
         <Grid.Column width={4}>
           <a

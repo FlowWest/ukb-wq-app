@@ -5,7 +5,7 @@ import ResponsiveContainer from "./ResponsiveContainer"
 
 export default ({ children, pageInfo }) => (
   <ResponsiveContainer pageName={pageInfo.pageName}>
-    <Grid style={{ height: "100vh" }}>
+    <Grid>
       <Grid.Column className={pageInfo.pageName !== "index" ? "mt-5" : ""}>
         <main className="main">{children}</main>
       </Grid.Column>

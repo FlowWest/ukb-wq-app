@@ -8,13 +8,7 @@ import React, {
 } from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({
-  source,
-  setFilteredReports,
-  reportTypeChangeHandler,
-  currentReportTypeFilters,
-  allData,
-}) => {
+export default ({ setSearchFilteredReports, allData }) => {
   const initialState = {
     loading: false,
     results: [],
@@ -50,20 +44,17 @@ export default ({
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
-        reportTypeChangeHandler(null, {
-          value: currentReportTypeFilters,
-          allData,
-        })
+        setSearchFilteredReports(allData)
         return
       }
 
       const re = new RegExp(_.escapeRegExp(data.value), "i")
       const isMatch = result => re.test(`${result.title} ${result.authors}`)
-      setFilteredReports(_.filter(source, isMatch))
+      setSearchFilteredReports(_.filter(allData, isMatch))
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: _.filter(source, isMatch),
+        results: _.filter(allData, isMatch),
       })
     }, 300)
   }
