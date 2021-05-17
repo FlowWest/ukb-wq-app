@@ -48,10 +48,6 @@ export default ({ mobile, pageName }) => {
     },
   }
 
-  // 'Klamath_Tribes_sampling_wq_on_UKL.jpg'
-  //'River_and_Forest.jpg'
-  //'Sprague_River_above_dam_by_taylor_tupper_copy.jpg'
-  // 'Williamson_2016_by_T_Tupper.jpg'
   return (
     <StaticQuery
       query={graphql`

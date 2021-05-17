@@ -1,11 +1,5 @@
 import _ from "lodash"
-import React, {
-  useEffect,
-  useCallback,
-  useRef,
-  useReducer,
-  useState,
-} from "react"
+import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
 export default ({ setSearchFilteredReports, allData }) => {
@@ -34,8 +28,6 @@ export default ({ setSearchFilteredReports, allData }) => {
   const [searchState, dispatch] = useReducer(searchReducer, initialState)
   const { loading, results, value } = searchState
   const timeoutRef = useRef()
-
-  //   useEffect(() => {}, [results])
 
   const handleSearchChange = (e, data) => {
     clearTimeout(timeoutRef.current)

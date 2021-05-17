@@ -1,9 +1,8 @@
 import React from "react"
-import { Card, Button } from "semantic-ui-react"
+import { Card } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 
 const DataDownload = ({ reportMetaData }) => {
-  const clickHandler = () => {}
   return (
     <a
       href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${reportMetaData.filename}`}

@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useReducer } from "react"
-import { Grid, Header, Card, Dropdown } from "semantic-ui-react"
+import React, { useState, useEffect } from "react"
+import { Grid, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/reportSearch"
 import { formatTextCasing } from "../helpers/utils"
-import _ from "lodash"
 
 export default ({ data }) => {
   const [searchFilteredReports, setSearchFilteredReports] = useState(
@@ -16,9 +15,6 @@ export default ({ data }) => {
     data.allReportsMetadataCsv.nodes
   )
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
-  const [currentQueryString, setCurrentQueryString] = useState("")
-
-  useEffect(() => {}, [filteredReports])
 
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({
@@ -42,8 +38,16 @@ export default ({ data }) => {
 
   // search query changes
   useEffect(() => {
-    reportTypeChangeHandler(null, { value: currentReportTypeFilters })
-  }, [searchFilteredReports])
+    if (currentReportTypeFilters.length > 0) {
+      setFilteredReports(
+        searchFilteredReports.filter(report =>
+          currentReportTypeFilters.includes(report.type)
+        )
+      )
+    } else {
+      setFilteredReports(searchFilteredReports)
+    }
+  }, [searchFilteredReports, currentReportTypeFilters])
 
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
@@ -65,8 +69,8 @@ export default ({ data }) => {
         </Grid.Row>
         <Grid.Row>
           <Card.Group className="reports" itemsPerRow={4}>
-            {filteredReports.map(report => (
-              <DataDownload reportMetaData={report} />
+            {filteredReports.map((report, index) => (
+              <DataDownload reportMetaData={report} key={index} />
             ))}
           </Card.Group>
         </Grid.Row>

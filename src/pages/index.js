@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { Grid, Card, Header, Segment, Item } from "semantic-ui-react"
+import React from "react"
+import { Grid, Card, Header, Segment } from "semantic-ui-react"
 import Layout from "../components/layout"
 import HomeImageGallery from "../components/homeImageGallery"
 import SEO from "../components/seo"
@@ -103,7 +103,24 @@ export default ({ data }) => {
 
 export const query = graphql`
   query artImages {
-    allFile(filter: { relativePath: { regex: "images/" } }) {
+    allFile(
+      filter: {
+        relativePath: {
+          regex: "images/"
+          in: [
+            "wq_tech_1.jpg"
+            "ben_desk_1.jpg"
+            "IMG_0780.jpg"
+            "IMG_0781.jpg"
+            "IMG_0790.jpg"
+            "Charles_Jackson_SRWQL.jpg"
+            "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL.jpg"
+            "beaker.png"
+            "report.png"
+          ]
+        }
+      }
+    ) {
       edges {
         node {
           relativePath

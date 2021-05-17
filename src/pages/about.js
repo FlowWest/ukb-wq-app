@@ -1,6 +1,6 @@
 import React from "react"
-import { Link } from "gatsby"
-import { Grid, Header, Item } from "semantic-ui-react"
+import { graphql } from "gatsby"
+import { Grid, Item } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Map from "../components/map"
@@ -9,12 +9,6 @@ export default ({ data }) => (
   <Layout pageInfo={{ pageName: "about" }}>
     <SEO title="Water Quality Monitoring Data" />
     <Grid container>
-      {/* <Grid.Row>
-        <Header
-          as="h1"
-          content="Klamath Tribes Water Quality Monitoring Program"
-        />
-      </Grid.Row> */}
       <Grid.Row>
         <Item className="map-paragraph">
           <Item.Content>

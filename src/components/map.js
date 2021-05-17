@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
+import React from "react"
 import L from "leaflet"
 import marker from "../images/pin.svg"
 import { formatTextCasing } from "../helpers/utils"
@@ -18,7 +18,6 @@ export default ({ monitoringLocations }) => {
     shadowSize: null,
     shadowAnchor: null,
     iconSize: new L.Point(20, 35),
-    // className: "marker-icon",
   })
 
   return (
@@ -32,7 +31,7 @@ export default ({ monitoringLocations }) => {
         attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
       />
-      {monitoringLocations.map(location => {
+      {monitoringLocations.map((location, index) => {
         var locationName = formatTextCasing(
           location.node.Monitoring_Location_Name.toLowerCase()
         )
@@ -41,6 +40,7 @@ export default ({ monitoringLocations }) => {
           <Marker
             position={[location.node.Latitude, location.node.Longitude]}
             icon={markerIcon}
+            key={index}
           >
             <Popup>
               {`Monitoring Location ID: ${location.node.Monitoring_Location_ID}`}
