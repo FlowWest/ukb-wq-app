@@ -1,19 +1,32 @@
 import React from "react"
-import { Card, DropdownButton, Dropdown } from "react-bootstrap"
+import { Card } from "semantic-ui-react"
+import { formatTextCasing } from "../helpers/utils"
 
-const DataDownload = () => {
+const DataDownload = ({ reportMetaData }) => {
   return (
-    <Card>
-      <Card.Header as="h5">Dataset Name</Card.Header>
-      <Card.Body>
-        <Card.Text>Parameter descriptions</Card.Text>
-        <DropdownButton id="dropdown-basic-button" title="Download">
-          <Dropdown.Item>csv</Dropdown.Item>
-          <Dropdown.Item>excel</Dropdown.Item>
-          <Dropdown.Item>json</Dropdown.Item>
-        </DropdownButton>
-      </Card.Body>
-    </Card>
+    <a
+      href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${reportMetaData.filename}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <Card className="report-card" color="blue">
+        <Card.Content>
+          <Card.Header as="h5" className="report-card-header">
+            {reportMetaData.title}
+          </Card.Header>
+          <Card.Meta>{formatTextCasing(reportMetaData.type)}</Card.Meta>
+          <Card.Description>
+            <strong>Author(s)</strong>: {reportMetaData.authors} <br />
+            <strong>Location</strong>: {reportMetaData.location} <br />
+            <strong>Year</strong>: {reportMetaData.year}{" "}
+            {reportMetaData.endyear !== "NA"
+              ? ` - ${reportMetaData.endyear}`
+              : null}
+            <br />
+          </Card.Description>
+        </Card.Content>
+      </Card>
+    </a>
   )
 }
 

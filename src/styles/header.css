@@ -1,0 +1,51 @@
+#site-header {
+  background-color: #173457;
+}
+
+.header-image-container .header-background-image {
+  text-align: center;
+  position: initial;
+}
+
+.header-image-container .header-background-image .header-text-container {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+}
+
+.header-image-container
+  .header-background-image
+  .header-text-container
+  .header-text {
+  width: 50rem;
+  margin: auto;
+  font-size: 16px;
+}
+
+.header-image-container
+  .header-background-image
+  .header-text-container
+  .header-title {
+  margin: auto;
+  font-size: 24px;
+}
+
+.menu-container {
+  border: none !important;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.ui.secondary.pointing.menu .menu-container {
+  align-items: center;
+  border: none;
+}
+
+.ui.secondary.pointing.menu .item {
+  align-self: auto !important;
+}

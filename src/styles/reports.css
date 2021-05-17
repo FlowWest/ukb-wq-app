@@ -1,0 +1,32 @@
+.ui.cards.reports {
+  justify-content: center;
+  width: inherit;
+}
+
+.ui.grid > .row.report-filters-container {
+  justify-content: space-evenly;
+}
+
+.ui.primary.button.view-report-button {
+  margin-top: 5px;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.ui.card.report-card {
+  margin: 10px !important;
+}
+
+.report-card-header {
+  min-height: 5rem;
+}
+
+.report-card {
+  width: 350px !important;
+  cursor: pointer;
+}
+
+.ui.cards > .card > .content > .meta + .description {
+  padding-bottom: 10px;
+}
