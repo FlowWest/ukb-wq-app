@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import ImageGallery from "react-image-gallery"
-// import "~react-image-gallery/styles/css/image-gallery.css"
 
 const imageInfo = {
   wq_tech_1: {
@@ -30,7 +29,7 @@ const imageInfo = {
     altText:
       "Charles Jackson working in the Sprague River Water Quality Lab (SRWQL)",
   },
-  ["Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL"]: {
+  "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL": {
     filename:
       "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL.jpg",
     altText:
@@ -39,7 +38,6 @@ const imageInfo = {
 }
 
 const HomeImageGallery = ({ imagesArray }) => {
-  console.log("imagesArray", imagesArray)
   const [galleryImagesArray, setGalleryImagesArray] = useState([])
 
   useEffect(() => {

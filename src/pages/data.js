@@ -8,24 +8,8 @@ import Img from "gatsby-image"
 export default ({ data }) => (
   <Layout pageInfo={{ pageName: "data" }}>
     <SEO title="Water Quality Monitoring Data" />
-    <Grid container>
-      <Grid.Row columns={2}>
-        <Grid.Column width={12}>
-          <p>
-            The Klamath Tribes water quality data can be downloaded from the
-            National Water Quality Monitoring Council Water Quality Portal.{" "}
-          </p>
-          <br />
-          <p>
-            <a
-              href="https://www.waterqualitydata.us/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              https://www.waterqualitydata.us/
-            </a>
-          </p>
-        </Grid.Column>
+    <Grid container style={{ padding: "4em 0" }}>
+      <Grid.Row columns={3}>
         <Grid.Column width={4}>
           <a
             href="https://www.waterqualitydata.us/"
@@ -35,6 +19,33 @@ export default ({ data }) => (
             <Img fluid={data.file.childImageSharp.fluid} alt="NWQMC Logo" />
           </a>
         </Grid.Column>
+        <Grid.Column width={1}></Grid.Column>
+        <Grid.Column width={8}>
+          <p>
+            The Klamath Tribes water quality data can be downloaded from the
+            National Water Quality Monitoring Council Water Quality Portal.{" "}
+          </p>
+          <p>
+            Search the portal by Organization ID: KLAMATHTRIBES_WQX
+            <br />
+            <a
+              href="https://www.waterqualitydata.us/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              https://www.waterqualitydata.us/
+            </a>
+          </p>
+        </Grid.Column>
+        {/* <Grid.Column width={4}>
+          <a
+            href="https://www.waterqualitydata.us/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Img fluid={data.file.childImageSharp.fluid} alt="NWQMC Logo" />
+          </a>
+        </Grid.Column> */}
       </Grid.Row>
     </Grid>
   </Layout>

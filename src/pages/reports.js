@@ -1,45 +1,59 @@
-import React, { useState } from "react"
-import { Grid, Header, Card, Dropdown } from "semantic-ui-react"
+import React, { useState, useEffect } from "react"
+import { Grid, Card, Dropdown } from "semantic-ui-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import DataDownload from "../components/dataDownload"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/reportSearch"
+import { formatTextCasing } from "../helpers/utils"
 
 export default ({ data }) => {
+  const [searchFilteredReports, setSearchFilteredReports] = useState(
+    data.allReportsMetadataCsv.nodes
+  )
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
+  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
 
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
-    (reportType, index) => ({ key: index, text: reportType, value: reportType })
+    (reportType, index) => ({
+      key: index,
+      text: formatTextCasing(reportType),
+      value: reportType,
+    })
   )
 
-  // dropdown: location, report type
-  // year slider
   const reportTypeChangeHandler = (event, { value }) => {
     if (value.length > 0) {
       setFilteredReports(
-        data.allReportsMetadataCsv.nodes.filter(report =>
-          value.includes(report.type)
+        searchFilteredReports.filter(report => value.includes(report.type))
+      )
+    } else {
+      setFilteredReports(searchFilteredReports)
+    }
+
+    setCurrentReportTypeFilters(value)
+  }
+
+  // search query changes
+  useEffect(() => {
+    if (currentReportTypeFilters.length > 0) {
+      setFilteredReports(
+        searchFilteredReports.filter(report =>
+          currentReportTypeFilters.includes(report.type)
         )
       )
     } else {
-      setFilteredReports(data.allReportsMetadataCsv.nodes)
+      setFilteredReports(searchFilteredReports)
     }
-  }
+  }, [searchFilteredReports, currentReportTypeFilters])
 
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-        <Grid.Row>
-          <Header
-            as="h1"
-            content="Klamath Tribes Water Quality Report Repository"
-          />
-        </Grid.Row>
-        <Grid.Row>
+        <Grid.Row className="report-filters-container">
           <Dropdown
             placeholder="Report Type"
             search
@@ -49,14 +63,14 @@ export default ({ data }) => {
             options={reportTypeOptions}
           />
           <ReportSearch
-            source={data.allReportsMetadataCsv.nodes}
-            setFilteredReports={setFilteredReports}
+            setSearchFilteredReports={setSearchFilteredReports}
+            allData={data.allReportsMetadataCsv.nodes}
           />
         </Grid.Row>
         <Grid.Row>
-          <Card.Group>
-            {filteredReports.map(report => (
-              <DataDownload reportMetaData={report} />
+          <Card.Group className="reports" itemsPerRow={4}>
+            {filteredReports.map((report, index) => (
+              <DataDownload reportMetaData={report} key={index} />
             ))}
           </Card.Group>
         </Grid.Row>

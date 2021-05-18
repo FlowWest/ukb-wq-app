@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { Grid, Card, Header, Segment, Item } from "semantic-ui-react"
+import React from "react"
+import { Grid, Card, Header, Segment } from "semantic-ui-react"
 import Layout from "../components/layout"
 import HomeImageGallery from "../components/homeImageGallery"
 import SEO from "../components/seo"
@@ -14,11 +14,6 @@ export default ({ data }) => {
     imagesObject[image.node.name] = image.node
   })
 
-  // useEffect(() => {
-  //   console.log("data", data.allFile.edges)
-
-  // }, [])
-
   return (
     <div>
       <Layout pageInfo={{ pageName: "index" }} data={data}>
@@ -26,12 +21,12 @@ export default ({ data }) => {
           title="Home"
           keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
         />
-        <Segment style={{ padding: "8em 0em" }} vertical>
+        <Segment vertical>
           <Grid container stackable verticalAlign="middle">
             <Grid.Row>
               <Grid.Column width={6}>
                 <Grid.Row>
-                  <Card href="/data">
+                  <Card href="/data" className="page-link-card">
                     <Card.Content header="Download Our Data" />
                     <Img
                       fluid={imagesObject["beaker"].childImageSharp.fluid}
@@ -41,7 +36,7 @@ export default ({ data }) => {
                   </Card>
                 </Grid.Row>
                 <Grid.Row>
-                  <Card href="/reports">
+                  <Card href="/reports" className="page-link-card">
                     <Card.Content header="View Water Quality Reports" />
                     <Img
                       fluid={imagesObject["report"].childImageSharp.fluid}
@@ -108,7 +103,24 @@ export default ({ data }) => {
 
 export const query = graphql`
   query artImages {
-    allFile(filter: { relativePath: { regex: "images/" } }) {
+    allFile(
+      filter: {
+        relativePath: {
+          regex: "images/"
+          in: [
+            "wq_tech_1.jpg"
+            "ben_desk_1.jpg"
+            "IMG_0780.jpg"
+            "IMG_0781.jpg"
+            "IMG_0790.jpg"
+            "Charles_Jackson_SRWQL.jpg"
+            "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL.jpg"
+            "beaker.png"
+            "report.png"
+          ]
+        }
+      }
+    ) {
       edges {
         node {
           relativePath

@@ -1,8 +1,8 @@
 import _ from "lodash"
-import React, { useEffect, useCallback, useRef, useReducer } from "react"
+import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({ source, setFilteredReports }) => {
+export default ({ setSearchFilteredReports, allData }) => {
   const initialState = {
     loading: false,
     results: [],
@@ -29,28 +29,27 @@ export default ({ source, setFilteredReports }) => {
   const { loading, results, value } = searchState
   const timeoutRef = useRef()
 
-  //   useEffect(() => {}, [results])
-
-  const handleSearchChange = useCallback((e, data) => {
+  const handleSearchChange = (e, data) => {
     clearTimeout(timeoutRef.current)
     dispatch({ type: "START_SEARCH", query: data.value })
 
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
+        setSearchFilteredReports(allData)
         return
       }
 
       const re = new RegExp(_.escapeRegExp(data.value), "i")
       const isMatch = result => re.test(`${result.title} ${result.authors}`)
-      setFilteredReports(_.filter(source, isMatch))
+      setSearchFilteredReports(_.filter(allData, isMatch))
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: _.filter(source, isMatch),
+        results: _.filter(allData, isMatch),
       })
     }, 300)
-  }, [])
+  }
 
   useEffect(() => {
     return () => {

@@ -13,7 +13,7 @@ const { Media, MediaContextProvider } = createMedia({
   },
 })
 
-const DesktopContainer = ({ children }) => {
+const DesktopContainer = ({ children, pageName }) => {
   return (
     <Media greaterThan="mobile">
       <Menu
@@ -28,23 +28,23 @@ const DesktopContainer = ({ children }) => {
             <KlamathLogo />
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/data" className="link-no-style">
             Data
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/reports" className="link-no-style">
             Reports
           </Link>
         </Menu.Item>
-        <Menu.Item position="right">
+        <Menu.Item position="left">
           <Link to="/about" className="link-no-style">
             About
           </Link>
         </Menu.Item>
       </Menu>
-      <Banner />
+      <Banner pageName={pageName} />
       {children}
     </Media>
   )
@@ -70,6 +70,7 @@ const MobileContainer = ({ children }) => {
           onHide={handleSidebarHide}
           vertical
           visible={sidebarOpen}
+          float="left"
         >
           <Menu.Item as="a" active>
             Home
@@ -113,10 +114,10 @@ const MobileContainer = ({ children }) => {
   )
 }
 
-export default ({ children }) => {
+export default ({ children, pageName }) => {
   return (
     <MediaContextProvider>
-      <DesktopContainer>{children}</DesktopContainer>
+      <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
       <MobileContainer>{children}</MobileContainer>
     </MediaContextProvider>
   )

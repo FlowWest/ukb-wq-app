@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { StaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
 
 export default () => (
@@ -8,8 +8,8 @@ export default () => (
       query {
         file(relativePath: { eq: "flowwest-logo.png" }) {
           childImageSharp {
-            fluid {
-              ...GatsbyImageSharpFluid_noBase64
+            fixed(width: 100) {
+              ...GatsbyImageSharpFixed_noBase64
             }
           }
         }

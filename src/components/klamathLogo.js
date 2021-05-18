@@ -8,7 +8,7 @@ export default () => (
       query {
         file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
           childImageSharp {
-            fixed {
+            fixed(width: 500) {
               ...GatsbyImageSharpFixed_noBase64
             }
           }
