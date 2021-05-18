@@ -7,7 +7,7 @@ export default () => (
   <Layout pageInfo={{ pageName: "notFound" }}>
     <SEO title="404: Not found" />
     <Container text textAlign="center">
-      <p>The url you are trying to visit doesn&#39;t exist.</p>
+      <p>The URL you are trying to visit doesn&#39;t exist.</p>
     </Container>
   </Layout>
 )
