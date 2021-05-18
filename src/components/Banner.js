@@ -46,6 +46,10 @@ export default ({ mobile, pageName }) => {
       ),
       text: "",
     },
+    notFound: {
+      title: <div>Page Not Found</div>,
+      text: "",
+    },
   }
 
   return (
@@ -76,6 +80,15 @@ export default ({ mobile, pageName }) => {
             }
           }
           about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
+            childImageSharp {
+              fluid(quality: 99, maxWidth: 3080) {
+                ...GatsbyImageSharpFluid_noBase64
+              }
+            }
+          }
+          notFound: file(
+            relativePath: { eq: "Klamath_Tribes_sampling_wq_on_UKL.jpg" }
+          ) {
             childImageSharp {
               fluid(quality: 99, maxWidth: 3080) {
                 ...GatsbyImageSharpFluid_noBase64

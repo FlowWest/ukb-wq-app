@@ -1,13 +1,13 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import { Container } from "semantic-ui-react"
 
-const NotFoundPage = () => (
-  <Layout>
+export default () => (
+  <Layout pageInfo={{ pageName: "notFound" }}>
     <SEO title="404: Not found" />
-    <h1>NOT FOUND</h1>
-    <p>You just hit a route that doesn&#39;t exist... the sadness.</p>
+    <Container text textAlign="center">
+      <p>The url you are trying to visit doesn&#39;t exist.</p>
+    </Container>
   </Layout>
 )
-
-export default NotFoundPage
