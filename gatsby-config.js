@@ -4,7 +4,7 @@ module.exports = {
   pathPrefix: "/gatsby-react-bootstrap-starter",
   siteMetadata: {
     title: `Water Quality Explorer`,
-    description: `The Klamath Tribes' water quality data dashboard and repository.`,
+    description: `The Klamath Tribes' water quality data and report repository.`,
     author: `The Klamath Tribes`,
   },
   plugins: [
