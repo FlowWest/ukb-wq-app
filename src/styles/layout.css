@@ -42,6 +42,6 @@ a.link-no-style:hover {
   justify-content: center;
 }
 
-.pushable > .pusher {
+/* .pushable > .pusher {
   min-height: 100vh !important;
-}
+} */
