@@ -1,6 +1,13 @@
 import React, { useState } from "react"
 import { createMedia } from "@artsy/fresnel"
-import { Menu, Sidebar, Segment, Container, Icon } from "semantic-ui-react"
+import {
+  Menu,
+  Sidebar,
+  Segment,
+  Container,
+  Icon,
+  Grid,
+} from "semantic-ui-react"
 import KlamathLogo from "./klamathLogo"
 import { Link } from "gatsby"
 import Banner from "../components/Banner"
@@ -73,26 +80,20 @@ const MobileContainer = ({ children, pageName }) => {
           visible={sidebarOpen}
           float="left"
         >
-          <Menu.Item as="a" active={pageName === "index"}>
-            <Link to="/" className="link-no-style">
+          <Link to="/" className="link-no-style">
+            <Menu.Item as="a" active={pageName === "index"}>
               Home
-            </Link>
-          </Menu.Item>
-          <Menu.Item active={pageName === "data"}>
-            <Link to="/data" className="link-no-style">
-              Data
-            </Link>
-          </Menu.Item>
-          <Menu.Item active={pageName === "reports"}>
-            <Link to="/reports" className="link-no-style">
-              Reports
-            </Link>
-          </Menu.Item>
-          <Menu.Item active={pageName === "about"}>
-            <Link to="/about" className="link-no-style">
-              About
-            </Link>
-          </Menu.Item>
+            </Menu.Item>
+          </Link>
+          <Link to="/data" className="link-no-style">
+            <Menu.Item active={pageName === "data"}>Data</Menu.Item>
+          </Link>
+          <Link to="/reports" className="link-no-style">
+            <Menu.Item active={pageName === "reports"}>Reports</Menu.Item>
+          </Link>
+          <Link to="/about" className="link-no-style">
+            <Menu.Item active={pageName === "about"}>About</Menu.Item>
+          </Link>
         </Sidebar>
         <Sidebar.Pusher dimmed={sidebarOpen}>
           <Segment
@@ -101,7 +102,7 @@ const MobileContainer = ({ children, pageName }) => {
             style={{ padding: "0" }}
             vertical
           >
-            <Container>
+            <Grid style={{ height: "6rem" }} verticalAlign="middle">
               <Menu inverted pointing secondary size="large">
                 <Menu.Item onClick={handleToggle}>
                   <Icon name="sidebar" />
@@ -112,7 +113,7 @@ const MobileContainer = ({ children, pageName }) => {
                     : formatTextCasing(pageName)}
                 </Menu.Item>
               </Menu>
-            </Container>
+            </Grid>
             <Banner mobile={true} pageName={pageName} />
           </Segment>
           {children}
