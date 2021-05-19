@@ -2,7 +2,6 @@ import React from "react"
 import BackgroundImage from "gatsby-background-image"
 import { Header, Container, Segment } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
-import { formatTextCasing } from "../helpers/utils"
 
 export default ({ mobile, pageName }) => {
   const headerContent = {

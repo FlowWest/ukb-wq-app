@@ -1,13 +1,6 @@
 import React, { useState } from "react"
 import { createMedia } from "@artsy/fresnel"
-import {
-  Menu,
-  Sidebar,
-  Segment,
-  Container,
-  Icon,
-  Grid,
-} from "semantic-ui-react"
+import { Menu, Sidebar, Segment, Icon, Grid } from "semantic-ui-react"
 import KlamathLogo from "./klamathLogo"
 import { Link } from "gatsby"
 import Banner from "../components/Banner"
@@ -81,9 +74,7 @@ const MobileContainer = ({ children, pageName }) => {
           float="left"
         >
           <Link to="/" className="link-no-style">
-            <Menu.Item as="a" active={pageName === "index"}>
-              Home
-            </Menu.Item>
+            <Menu.Item active={pageName === "index"}>Home</Menu.Item>
           </Link>
           <Link to="/data" className="link-no-style">
             <Menu.Item active={pageName === "data"}>Data</Menu.Item>
