@@ -46,6 +46,10 @@ export default ({ mobile, pageName }) => {
       ),
       text: "",
     },
+    notFound: {
+      title: <div>Page Not Found</div>,
+      text: "",
+    },
   }
 
   return (
@@ -82,6 +86,15 @@ export default ({ mobile, pageName }) => {
               }
             }
           }
+          notFound: file(
+            relativePath: { eq: "Klamath_Tribes_sampling_wq_on_UKL.jpg" }
+          ) {
+            childImageSharp {
+              fluid(quality: 99, maxWidth: 3080) {
+                ...GatsbyImageSharpFluid_noBase64
+              }
+            }
+          }
         }
       `}
       render={data => (
@@ -98,7 +111,7 @@ export default ({ mobile, pageName }) => {
             className="header-background-image"
             fluid={[
               `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3))`,
-              data[pageName].childImageSharp.fluid,
+              ...(data[pageName] ? [data[pageName].childImageSharp.fluid] : []),
             ]}
             style={{
               height: "100%",
@@ -110,7 +123,9 @@ export default ({ mobile, pageName }) => {
               <Header
                 as="h1"
                 inverted
-                content={headerContent[pageName].title}
+                content={
+                  headerContent[pageName] ? headerContent[pageName].title : ""
+                }
                 style={{
                   fontSize: mobile ? "2em" : "4em",
                   fontWeight: "normal",
@@ -121,7 +136,9 @@ export default ({ mobile, pageName }) => {
               <Header
                 as="h2"
                 inverted
-                content={headerContent[pageName].text}
+                content={
+                  headerContent[pageName] ? headerContent[pageName].text : ""
+                }
                 style={{
                   fontSize: mobile ? "1.5em" : "1.7em",
                   fontWeight: "normal",
