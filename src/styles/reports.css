@@ -30,3 +30,7 @@
 .ui.cards > .card > .content > .meta + .description {
   padding-bottom: 10px;
 }
+
+.filter-input-field {
+  margin-bottom: 2rem;
+}

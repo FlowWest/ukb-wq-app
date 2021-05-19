@@ -4,6 +4,7 @@ import { Menu, Sidebar, Segment, Container, Icon } from "semantic-ui-react"
 import KlamathLogo from "./klamathLogo"
 import { Link } from "gatsby"
 import Banner from "../components/Banner"
+import { formatTextCasing } from "../helpers/utils"
 
 const { Media, MediaContextProvider } = createMedia({
   breakpoints: {
@@ -50,7 +51,7 @@ const DesktopContainer = ({ children, pageName }) => {
   )
 }
 
-const MobileContainer = ({ children }) => {
+const MobileContainer = ({ children, pageName }) => {
   const [sidebarOpen, setSideBarOpen] = useState(false)
 
   const handleSidebarHide = () => {
@@ -72,20 +73,22 @@ const MobileContainer = ({ children }) => {
           visible={sidebarOpen}
           float="left"
         >
-          <Menu.Item as="a" active>
-            Home
+          <Menu.Item as="a" active={pageName === "index"}>
+            <Link to="/" className="link-no-style">
+              Home
+            </Link>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item active={pageName === "data"}>
             <Link to="/data" className="link-no-style">
               Data
             </Link>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item active={pageName === "reports"}>
             <Link to="/reports" className="link-no-style">
               Reports
             </Link>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item active={pageName === "about"}>
             <Link to="/about" className="link-no-style">
               About
             </Link>
@@ -95,7 +98,7 @@ const MobileContainer = ({ children }) => {
           <Segment
             inverted
             textAlign="center"
-            style={{ minHeight: 350, padding: "1em 0em" }}
+            style={{ padding: "0" }}
             vertical
           >
             <Container>
@@ -103,9 +106,14 @@ const MobileContainer = ({ children }) => {
                 <Menu.Item onClick={handleToggle}>
                   <Icon name="sidebar" />
                 </Menu.Item>
+                <Menu.Item>
+                  {pageName === "index"
+                    ? "The Klamath Tribes WQ Monitoring"
+                    : formatTextCasing(pageName)}
+                </Menu.Item>
               </Menu>
             </Container>
-            <Banner />
+            <Banner mobile={true} pageName={pageName} />
           </Segment>
           {children}
         </Sidebar.Pusher>
@@ -118,7 +126,7 @@ export default ({ children, pageName }) => {
   return (
     <MediaContextProvider>
       <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
-      <MobileContainer>{children}</MobileContainer>
+      <MobileContainer pageName={pageName}>{children}</MobileContainer>
     </MediaContextProvider>
   )
 }

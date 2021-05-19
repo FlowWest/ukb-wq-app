@@ -8,8 +8,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 
 export default ({ monitoringLocations }) => {
   if (typeof window !== "undefined") {
-    const position = [42.44333343664235, -121.41037747833549]
-
+    const position = [42.410112765753546, -120.97433210691513]
     let markerIcon = null
     markerIcon = new L.Icon({
       iconUrl: marker,
@@ -24,7 +23,7 @@ export default ({ monitoringLocations }) => {
     return (
       <MapContainer
         center={position}
-        zoom={9}
+        zoom={10}
         scrollWheelZoom={false}
         className="map-container"
       >

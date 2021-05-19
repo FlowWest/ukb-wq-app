@@ -1,7 +1,7 @@
 .map-container {
-  height: 500px;
-  width: 600px;
-  margin: 0 0 2rem 2rem;
+  height: 35rem;
+  width: 100%;
+  margin: 0 1rem 2rem 0rem;
   overflow: hidden;
   display: inline;
   float: right;

@@ -61,10 +61,12 @@ export default ({ data }) => {
             multiple
             onChange={reportTypeChangeHandler}
             options={reportTypeOptions}
+            className="filter-input-field"
           />
           <ReportSearch
             setSearchFilteredReports={setSearchFilteredReports}
             allData={data.allReportsMetadataCsv.nodes}
+            className="filter-input-field"
           />
         </Grid.Row>
         <Grid.Row>

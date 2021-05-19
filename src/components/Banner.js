@@ -2,6 +2,7 @@ import React from "react"
 import BackgroundImage from "gatsby-background-image"
 import { Header, Container, Segment } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
+import { formatTextCasing } from "../helpers/utils"
 
 export default ({ mobile, pageName }) => {
   const headerContent = {
@@ -58,14 +59,14 @@ export default ({ mobile, pageName }) => {
         query {
           index: file(relativePath: { eq: "sucker_photo.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 1540) {
+              fluid(quality: 90, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           data: file(relativePath: { eq: "wq_tech_2.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 1540) {
+              fluid(quality: 90, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -74,14 +75,14 @@ export default ({ mobile, pageName }) => {
             relativePath: { eq: "Chiloquin_Williamson_2011_by_Tupper.jpg" }
           ) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 1540) {
+              fluid(quality: 90, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 1540) {
+              fluid(quality: 90, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -97,59 +98,107 @@ export default ({ mobile, pageName }) => {
           }
         }
       `}
-      render={data => (
-        <Segment
-          style={{
-            padding: "1em 0em",
-            height: "50em",
-            margin: 0,
-            border: "none",
-          }}
-          className="header-image-container"
-        >
-          <BackgroundImage
-            className="header-background-image"
-            fluid={[
-              `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3))`,
-              ...(data[pageName] ? [data[pageName].childImageSharp.fluid] : []),
-            ]}
-            style={{
-              height: "100%",
-              width: "100%",
-              position: "cover",
-            }}
-          >
-            <Container textAlign="center" className="header-text-container">
-              <Header
-                as="h1"
-                inverted
-                content={
-                  headerContent[pageName] ? headerContent[pageName].title : ""
-                }
+      render={data => {
+        if (mobile) {
+          if (pageName === "index") {
+            return (
+              <Segment
                 style={{
-                  fontSize: mobile ? "2em" : "4em",
-                  fontWeight: "normal",
-                  marginBottom: 0,
+                  height: "15em",
+                  margin: 0,
+                  border: "none",
+                  padding: "1em 0em",
                 }}
-                className="header-title"
-              />
-              <Header
-                as="h2"
-                inverted
-                content={
-                  headerContent[pageName] ? headerContent[pageName].text : ""
-                }
+                className="header-image-container"
+              >
+                <BackgroundImage
+                  className="header-background-image"
+                  fluid={[
+                    `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))`,
+                    data["index"].childImageSharp.fluid,
+                  ]}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    position: "cover",
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "white",
+                      padding: "1rem",
+                    }}
+                  >
+                    {headerContent[pageName].text}
+                  </p>
+                </BackgroundImage>
+              </Segment>
+            )
+          } else {
+            return <></>
+          }
+        } else {
+          return (
+            <Segment
+              style={{
+                padding: "1em 0em",
+                height: "50em",
+                margin: 0,
+                border: "none",
+              }}
+              className="header-image-container"
+            >
+              <BackgroundImage
+                className="header-background-image"
+                fluid={[
+                  `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3))`,
+                  ...(data[pageName]
+                    ? [data[pageName].childImageSharp.fluid]
+                    : []),
+                ]}
                 style={{
-                  fontSize: mobile ? "1.5em" : "1.7em",
-                  fontWeight: "normal",
-                  marginTop: mobile ? "0.5em" : "1.5em",
+                  height: "100%",
+                  width: "100%",
+                  position: "cover",
                 }}
-                className="header-text"
-              />
-            </Container>
-          </BackgroundImage>
-        </Segment>
-      )}
+              >
+                <Container textAlign="center" className="header-text-container">
+                  <Header
+                    as="h1"
+                    inverted
+                    content={
+                      headerContent[pageName]
+                        ? headerContent[pageName].title
+                        : ""
+                    }
+                    style={{
+                      fontSize: mobile ? "2em" : "4em",
+                      fontWeight: "normal",
+                      marginBottom: 0,
+                    }}
+                    className="header-title"
+                  />
+                  <Header
+                    as="h2"
+                    inverted
+                    content={
+                      headerContent[pageName]
+                        ? headerContent[pageName].text
+                        : ""
+                    }
+                    style={{
+                      fontSize: mobile ? "1.5em" : "1.7em",
+                      fontWeight: "normal",
+                      marginTop: mobile ? "0.5em" : "1.5em",
+                    }}
+                    className="header-text"
+                  />
+                </Container>
+              </BackgroundImage>
+            </Segment>
+          )
+        }
+      }}
     />
   )
 }
