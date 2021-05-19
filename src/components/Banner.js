@@ -58,14 +58,14 @@ export default ({ mobile, pageName }) => {
         query {
           index: file(relativePath: { eq: "sucker_photo.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 3080) {
+              fluid(quality: 99, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           data: file(relativePath: { eq: "wq_tech_2.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 3080) {
+              fluid(quality: 99, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
@@ -74,14 +74,14 @@ export default ({ mobile, pageName }) => {
             relativePath: { eq: "Chiloquin_Williamson_2011_by_Tupper.jpg" }
           ) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 3080) {
+              fluid(quality: 99, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
           }
           about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
             childImageSharp {
-              fluid(quality: 99, maxWidth: 3080) {
+              fluid(quality: 99, maxWidth: 1540) {
                 ...GatsbyImageSharpFluid_noBase64
               }
             }
