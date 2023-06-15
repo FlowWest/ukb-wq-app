@@ -19,12 +19,15 @@
 }
 
 .report-card-header {
-  min-height: 5rem;
+  min-height: 6rem;
+  margin-bottom: 0.5rem !important;
+  font-size: 1.15rem !important;
 }
 
 .report-card {
   width: 350px !important;
   cursor: pointer;
+  height: 300px;
 }
 
 .ui.cards > .card > .content > .meta + .description {
