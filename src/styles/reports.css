@@ -1,10 +1,25 @@
 .ui.cards.reports {
-  justify-content: center;
+  justify-content: space-around;
+  gap: 2rem;
   width: inherit;
 }
 
+/* 
+Filter Container and Input Styles
+*/
 .ui.grid > .row.report-filters-container {
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 25px;
+}
+/* Search Input */
+.ui.grid > .row.report-filters-container div .input {
+  width: 100%;
+}
+.ui.grid > .row.report-filters-container div .input .prompt:hover {
+  border-color: rgba(34, 36, 38, 0.35);
+}
+.ui.grid > .row.report-filters-container div:first-child {
+  flex-grow: 1;
 }
 
 .ui.primary.button.view-report-button {
@@ -15,7 +30,7 @@
 }
 
 .ui.card.report-card {
-  margin: 10px !important;
+  /* margin: 10px !important; */
 }
 
 .report-card-header {
@@ -30,10 +45,19 @@
   height: 300px;
 }
 
+/* @media (max-width: 680px) {
+  .report-card {
+    width: 100% !important;
+  }
+} */
 .ui.cards > .card > .content > .meta + .description {
   padding-bottom: 10px;
 }
 
 .filter-input-field {
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
+}
+
+.report-search-input.ui.search .prompt {
+  border-radius: 0.28571429rem !important;
 }

@@ -67,6 +67,9 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
 
   return (
     <Search
+    fluid
+    className="report-search-input"
+     input={{ icon: 'search', iconPosition: 'left' }}
       loading={loading}
       onResultSelect={(e, data) =>
         dispatch({
@@ -78,6 +81,8 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
       results={results}
       open={false}
       value={value}
+                          placeholder='Search by Title'
+
     />
   )
 }

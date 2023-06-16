@@ -130,6 +130,12 @@ The code below was overriding the reportTypeChangeHandler. I didn't want to dele
       <SEO title="Water Quality Reports" />
       <Grid container>
         <Grid.Row className="report-filters-container">
+                    <ReportSearch
+          sortMethod={sortMethod}
+            setSearchFilteredReports={setSearchFilteredReports}
+            allData={data.allReportsMetadataCsv.nodes}
+            className="filter-input-field"
+          />
           <Dropdown
             placeholder="Report Type"
             search
@@ -143,17 +149,11 @@ The code below was overriding the reportTypeChangeHandler. I didn't want to dele
             placeholder="Sort by"
             
             selection
-            defaultValue={sortMethod.value}
             onChange={sortMethodChangeHandler}
             options={sortingOptions}
             className="filter-input-field"
           />
-          <ReportSearch
-          sortMethod={sortMethod}
-            setSearchFilteredReports={setSearchFilteredReports}
-            allData={data.allReportsMetadataCsv.nodes}
-            className="filter-input-field"
-          />
+
         </Grid.Row>
         <Grid.Row>
           <Card.Group className="reports" itemsPerRow={4}>
