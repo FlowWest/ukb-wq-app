@@ -12,22 +12,34 @@ import { formatTextCasing } from "../helpers/utils"
     {
       key: 'Year - Descending',
       value: 'Year - Descending',
-      text: 'Year - Descending'
+      text: 'Year - Descending',
+      sort: function(reports) {
+        return reports.sort((a,b) => +b.year - +a.year)
+      }
     },
     {
       key: 'Year - Ascending',
       value: 'Year - Ascending',
-      text: 'Year - Ascending'
+      text: 'Year - Ascending',
+          sort: function(reports) {
+        return reports.sort((a,b) => +a.year - +b.year)
+      }
     },
     {
       key:  'Alphabetically - A-Z',
       value:  'Alphabetically - A-Z',
-      text:  'Alphabetically - A-Z'
+      text:  'Alphabetically - A-Z',
+          sort: function(reports) {
+        return reports.sort((a,b) => (a.title > b.title) ? 1 : -1)
+      }
     },
     {
       key:  'Alphabetically - Z-A',
       value:  'Alphabetically - Z-A',
-      text:  'Alphabetically - Z-A'
+      text:  'Alphabetically - Z-A',
+          sort: function(reports) {
+        return reports.sort((a,b) => (a.title < b.title) ? 1 : -1)
+      }
     },
   ]
 
@@ -39,7 +51,6 @@ export default ({ data }) => {
     data.allReportsMetadataCsv.nodes.sort((a,b) => (+b.year - +a.year))
   )
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
-
   
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({
@@ -53,12 +64,14 @@ export default ({ data }) => {
 
 
   const reportTypeChangeHandler = (event, { value }) => {
+    const searchFilteredReportsCopy = sortMethod.sort([...searchFilteredReports])
     if (value.length > 0) {
       setFilteredReports(
-        searchFilteredReports.filter(report => value.includes(report.type))
+       searchFilteredReportsCopy.filter(report => value.includes(report.type))
+
       )
     } else {
-      setFilteredReports(searchFilteredReports)
+      setFilteredReports(searchFilteredReportsCopy)
     }
 
     setCurrentReportTypeFilters(value)
@@ -72,19 +85,19 @@ export default ({ data }) => {
 
   switch (selectedSortMethod.value) {
     case 'Year - Descending': 
-     setFilteredReports(prevFilteredReports => prevFilteredReports.sort((a,b) => +b.year - +a.year))
+     setFilteredReports(prevFilteredReports => selectedSortMethod.sort(prevFilteredReports))
 
 
     return
     case 'Year - Ascending': 
-         setFilteredReports(prevFilteredReports => prevFilteredReports.sort((a,b) => +a.year - +b.year))
+         setFilteredReports(prevFilteredReports => selectedSortMethod.sort(prevFilteredReports))
      
 return
     case 'Alphabetically - A-Z': 
-         setFilteredReports(prevFilteredReports => prevFilteredReports.sort((a,b) => (a.title > b.title) ? 1 : -1))
+         setFilteredReports(prevFilteredReports => selectedSortMethod.sort(prevFilteredReports))
 return
     case 'Alphabetically - Z-A': 
-         setFilteredReports(prevFilteredReports => prevFilteredReports.sort((a,b) => (a.title < b.title) ? 1 : -1))
+         setFilteredReports(prevFilteredReports => selectedSortMethod.sort(prevFilteredReports))
 return
     
     default: return
@@ -95,19 +108,21 @@ return
 
 
   
-
+/*********************************
+The code below was overriding the reportTypeChangeHandler. I didn't want to delete in case this change affects something else 
+**********************************/
   // search query changes
-  useEffect(() => {
-    if (currentReportTypeFilters.length > 0) {
-      setFilteredReports(
-        searchFilteredReports.filter(report =>
-          currentReportTypeFilters.includes(report.type)
-        )
-      )
-    } else {
-      setFilteredReports(searchFilteredReports)
-    }
-  }, [searchFilteredReports, currentReportTypeFilters])
+  // useEffect(() => {
+  //   if (currentReportTypeFilters.length > 0) {
+  //     setFilteredReports(
+  //       searchFilteredReports.filter(report =>
+  //         currentReportTypeFilters.includes(report.type)
+  //       )
+  //     )
+  //   } else {
+  //     setFilteredReports(searchFilteredReports)
+  //   }
+  // }, [searchFilteredReports, currentReportTypeFilters])
 
 
   return (
@@ -134,8 +149,7 @@ return
             className="filter-input-field"
           />
           <ReportSearch
-          sortMethodChangeHandler={sortMethodChangeHandler}
-          sortMethodValue={sortMethod.value}
+          sortMethod={sortMethod}
             setSearchFilteredReports={setSearchFilteredReports}
             allData={data.allReportsMetadataCsv.nodes}
             className="filter-input-field"
