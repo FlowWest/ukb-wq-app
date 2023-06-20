@@ -1,5 +1,5 @@
 import React from "react"
-import { Card } from "semantic-ui-react"
+import { Card, Button } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 
 const DataDownload = ({ reportMetaData }) => {
@@ -15,7 +15,7 @@ const DataDownload = ({ reportMetaData }) => {
           <Card.Header as="h6" className="report-card-header">
             {reportMetaData.title}
           </Card.Header>
-          <Card.Meta>{formatTextCasing(reportMetaData.type)}</Card.Meta>
+          <Card.Meta className="report-card-subheader">{formatTextCasing(reportMetaData.type)}</Card.Meta>
           <Card.Description>
             <strong>Author(s)</strong>: {reportMetaData.authors} <br />
             <strong>Location</strong>: {reportMetaData.location} <br />
@@ -25,6 +25,9 @@ const DataDownload = ({ reportMetaData }) => {
               : null}
             <br />
           </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <Button fluid color="blue" inverted>View</Button>
         </Card.Content>
       </Card>
     </a>

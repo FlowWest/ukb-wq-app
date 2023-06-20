@@ -133,9 +133,9 @@ export default ({ data }) => {
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
-      <Grid container columns={3} doubling stackable>
-        <Grid.Row>
-          <Grid.Column>
+      <Grid container>
+       
+          <Grid.Column mobile={16} tablet={8} computer={8}>
             <ReportSearch
               sortMethod={sortMethod}
               setSearchFilteredReports={setSearchFilteredReports}
@@ -143,7 +143,7 @@ export default ({ data }) => {
               className="filter-input-field"
             />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column mobile={16} tablet={4} computer={4}>
             <Dropdown
               fluid
               placeholder="Report Type"
@@ -155,7 +155,7 @@ export default ({ data }) => {
               className="filter-input-field"
             />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column mobile={16} tablet={4} computer={4}>
             <Dropdown
               placeholder="Sort by"
               fluid
@@ -165,7 +165,9 @@ export default ({ data }) => {
               className="filter-input-field"
             />
           </Grid.Column>
-        </Grid.Row>
+ 
+      </Grid>
+      <Grid container columns={3} doubling stackable className="mobile-grid-container"> 
         {filteredReports.map((report, index) => (
           <Grid.Column>
             <DataDownload reportMetaData={report} key={index} />
