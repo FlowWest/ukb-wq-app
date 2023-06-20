@@ -12,7 +12,7 @@ Filter Container and Input Styles
   gap: 25px;
 }
 /* Search Input */
-.ui.grid > .row.report-filters-container div .input {
+.ui.grid > .row .report-search-input .input {
   width: 100%;
 }
 .ui.grid > .row.report-filters-container div .input .prompt:hover {
@@ -40,7 +40,7 @@ Filter Container and Input Styles
 }
 
 .report-card {
-  width: 350px !important;
+  /* width: 350px !important; */
   cursor: pointer;
   height: 300px;
 }

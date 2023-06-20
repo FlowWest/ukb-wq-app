@@ -9,7 +9,8 @@ const DataDownload = ({ reportMetaData }) => {
       target="_blank"
       rel="noreferrer"
     >
-      <Card className="report-card" color="blue" link >
+      <Card  color="blue" link fluid className="report-card"  >
+      {/* <Card className="report-card" color="blue" link > */}
         <Card.Content>
           <Card.Header as="h6" className="report-card-header">
             {reportMetaData.title}

@@ -105,63 +105,62 @@ return
   }
   },[sortingOptions])
 
-
-
-  
-/*********************************
-The code below was overriding the reportTypeChangeHandler. I didn't want to delete in case this change affects something else 
-**********************************/
   // search query changes
-  // useEffect(() => {
-  //   if (currentReportTypeFilters.length > 0) {
-  //     setFilteredReports(
-  //       searchFilteredReports.filter(report =>
-  //         currentReportTypeFilters.includes(report.type)
-  //       )
-  //     )
-  //   } else {
-  //     setFilteredReports(searchFilteredReports)
-  //   }
-  // }, [searchFilteredReports, currentReportTypeFilters])
+  useEffect(() => {
+    if (currentReportTypeFilters.length > 0) {
+      setFilteredReports(
+        searchFilteredReports.filter(report =>
+          currentReportTypeFilters.includes(report.type)
+        )
+      )
+    } else {
+      setFilteredReports(searchFilteredReports)
+    }
+  }, [searchFilteredReports, currentReportTypeFilters])
 
 
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
-      <Grid container>
-        <Grid.Row className="report-filters-container">
-                    <ReportSearch
-          sortMethod={sortMethod}
-            setSearchFilteredReports={setSearchFilteredReports}
-            allData={data.allReportsMetadataCsv.nodes}
-            className="filter-input-field"
-          />
-          <Dropdown
-            placeholder="Report Type"
-            search
-            selection
-            multiple
-            onChange={reportTypeChangeHandler}
-            options={reportTypeOptions}
-            className="filter-input-field"
-          />
-          <Dropdown
-            placeholder="Sort by"
-            
-            selection
-            onChange={sortMethodChangeHandler}
-            options={sortingOptions}
-            className="filter-input-field"
-          />
+      <Grid container columns={3} doubling stackable>
 
-        </Grid.Row>
-        <Grid.Row>
-          <Card.Group className="reports" itemsPerRow={4}>
+                           <Grid.Row >
+                             <Grid.Column >
+                               <ReportSearch
+                                         sortMethod={sortMethod}
+                                           setSearchFilteredReports={setSearchFilteredReports}
+                                           allData={data.allReportsMetadataCsv.nodes}
+                                           className="filter-input-field"
+                                         />
+                             </Grid.Column>
+  <Grid.Column >                                        
+   <Dropdown
+                                         fluid
+                                           placeholder="Report Type"
+                                           search
+                                           selection
+                                           multiple
+                                           onChange={reportTypeChangeHandler}
+                                           options={reportTypeOptions}
+                                           className="filter-input-field"
+                                         />
+                                       </Grid.Column>
+  <Grid.Column  >                                       
+    <Dropdown
+                                           placeholder="Sort by"
+                                         fluid
+                                           selection
+                                           onChange={sortMethodChangeHandler}
+                                           options={sortingOptions}
+                                           className="filter-input-field"
+                                         />
+                                       </Grid.Column>
+                           </Grid.Row>       
             {filteredReports.map((report, index) => (
-              <DataDownload reportMetaData={report} key={index} />
-            ))}
-          </Card.Group>
-        </Grid.Row>
+              <Grid.Column>
+                <DataDownload reportMetaData={report} key={index} />
+              </Grid.Column>
+            ))}       
       </Grid>
     </Layout>
   )
