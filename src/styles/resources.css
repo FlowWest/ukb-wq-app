@@ -33,3 +33,9 @@
   height: 3rem;
   margin-bottom: 1rem;
 }
+
+.previous-report-weekly-header {
+  color: hsl(0, 0%, 50%);
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+}

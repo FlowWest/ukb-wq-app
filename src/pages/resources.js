@@ -14,9 +14,99 @@ const ResourceUpload = ({title, description, link}) => (
     </Grid.Column>
 )
 
-
-
-
+const usbr = {
+  header: 'Weekly Bureau of Reclamation FASTA slides',
+  description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
+  path: '/resources/usbr',
+  uploads: [
+    {
+      uploadDate: new Date(2023,5,30),
+      link: 'usbr/1'
+    },
+    {
+      uploadDate: new Date(2023,5,23),
+      link: 'usbr/2'
+    },
+    {
+      uploadDate: new Date(2023,5,16),
+      link: 'usbr/3'
+    },
+    {
+      uploadDate: new Date(2023,5,9),
+      link: 'usbr/4'
+    },
+    {
+      uploadDate: new Date(2023,5,2),
+      link: 'usbr/5'
+    },
+    {
+      uploadDate: new Date(2023,4,26),
+      link: 'usbr/6'
+    },
+  ]
+}
+const usgs = {
+  header: 'Weekly USGS UKL Water Quality Conditions Map',
+  description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
+  path: '/resources/usgs',
+  uploads: [
+    {
+      uploadDate: new Date(2023,5,27),
+      link: 'usgs/1'
+    },
+    {
+      uploadDate: new Date(2023,5,20),
+      link: 'usgs/2'
+    },
+    {
+      uploadDate: new Date(2023,5,13),
+      link: 'usgs/3'
+    },
+    {
+      uploadDate: new Date(2023,5,5),
+      link: 'usgs/4'
+    },
+    {
+      uploadDate: new Date(2023,4,29),
+      link: 'usgs/5'
+    },
+    {
+      uploadDate: new Date(2023,4,22),
+      link: 'usgs/6'
+    },
+  ]
+}
+const klamath = {
+  header: 'Weekly Klamath Tribes Water Reports (Water Rights Regulation)',
+  description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
+  path: '/resources/klamath',
+  uploads: [
+    {
+      uploadDate: new Date(2023,6,12),
+      link: 'klamath/1'
+    },
+    {
+      uploadDate: new Date(2023,6,5),
+      link: 'klamath/2'
+    },
+    {
+      uploadDate: new Date(2023,5,28),
+      link: 'klamath/3'
+    },
+    {
+      uploadDate: new Date(2023,5,22),
+      link: 'klamath/4'
+    },
+    {
+      uploadDate: new Date(2023,5,14),
+      link: 'klamath/5'
+    },
+    {
+      uploadDate: new Date(2023,5,7),
+      link: 'klamath/6'
+    },
+  ]
+}
 
 const Resources = ({data}) => {
   return (
@@ -37,9 +127,9 @@ const Resources = ({data}) => {
               <Header as='h1'>Weekly Reports</Header>
             </Grid.Row>
           <Grid.Row columns={3}>
-            <WeeklyUploadCard />
-            <WeeklyUploadCard />
-            <WeeklyUploadCard />
+            <WeeklyUploadCard data={usbr}/>
+            <WeeklyUploadCard data={usgs}/>
+            <WeeklyUploadCard data={klamath}/>
           </Grid.Row>
         </Grid>
     </Layout>

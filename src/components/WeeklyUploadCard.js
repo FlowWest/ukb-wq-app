@@ -8,36 +8,40 @@ const ResourcePhoto = () => (
   </div>
 )
 
-const WeeklyUploadCard = () => (
+const formatDate = (date) => Intl.DateTimeFormat('en-us', {month: 'long', day: '2-digit', year:'numeric' }).format(date)
+
+const WeeklyUploadCard = ({data}) => {
+  const {header, path, description, uploads} = data
+  const [mostRecent, ...remainingUploads] = uploads
+  return (
    <Grid.Column>
     <Card fluid>
       <Card.Content>
       <ResourcePhoto />
-      <Card.Header>Weekly Bureau of Reclamation FASTA slides</Card.Header>
-      <Card.Meta>Last Updated: July 4, 2023</Card.Meta>
-      <Card.Description>Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.
-      </Card.Description>
+      <Card.Header>{header}</Card.Header>
+      <Card.Meta>Last Updated: {formatDate(mostRecent.uploadDate)}</Card.Meta>
+      <Card.Description>{description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-      <Button fluid>View Most Recent Upload</Button>
+      <Link to={mostRecent.link}>
+        <Button fluid>
+          View Most Recent Upload
+        </Button>
+      </Link>
       </Card.Content>
       <Card.Content extra>
       <List size='medium'>
-      <List.Item as='a'>June 28</List.Item>
-      <List.Item as='a'>June 21</List.Item>
-      <List.Item as='a'>June 14</List.Item>
-      <List.Item as='a'>June 7</List.Item>
-      <List.Item as='a'>May 30</List.Item>
-      <List.Item as='a'>May 23</List.Item>
-      <List.Item as='a'>May 16</List.Item>
-      <List.Item as='a'>May 9</List.Item>
-      <List.Item as='a'>May 2</List.Item>
-      <List.Item as='a'>April 25</List.Item>
+      <List.Header className="previous-report-weekly-header">Previous Reports</List.Header>
+      {remainingUploads.map(upload => (
+        <List.Item>
+          <Link to={upload.link}>{formatDate(upload.uploadDate)}</Link>
+        </List.Item>
+      ))}
       </List>
-      <Link to='#'>View All</Link>
+      <Link to={path}><b>View All</b></Link>
       </Card.Content>
     </Card>
   </Grid.Column>
-)
+)}
 
 export default WeeklyUploadCard
