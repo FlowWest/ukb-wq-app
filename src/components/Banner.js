@@ -46,6 +46,16 @@ export default ({ mobile, pageName }) => {
       ),
       text: "",
     },
+    resources: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Water Quality Monitoring Resources
+        </div>
+      ),
+      text: "",
+    },
     notFound: {
       title: <div>Page Not Found</div>,
       text: "",

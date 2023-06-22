@@ -1,0 +1,35 @@
+.resource-upload-container {
+  display: flex !important;
+  flex-wrap: wrap;
+}
+
+.resource-photo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.resource-placeholder {
+  background-color: hsl(0, 0%, 70%);
+  height: 250px;
+  width: 250px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: auto;
+}
+
+.resource-placeholder + .content {
+  display: inline-block;
+  padding: 0 0 0 0.5em;
+  vertical-align: top;
+  width: 390px;
+}
+
+.resource-upload-header {
+  line-height: 1.5rem !important;
+  height: 3rem;
+  margin-bottom: 1rem;
+}

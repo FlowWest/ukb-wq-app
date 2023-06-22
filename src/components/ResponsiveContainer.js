@@ -44,6 +44,11 @@ const DesktopContainer = ({ children, pageName }) => {
             About
           </Link>
         </Menu.Item>
+        <Menu.Item position="left">
+          <Link to="/resources" className="link-no-style">
+            Resources
+          </Link>
+        </Menu.Item>
       </Menu>
       <Banner pageName={pageName} />
       {children}
@@ -84,6 +89,11 @@ const MobileContainer = ({ children, pageName }) => {
           </Link>
           <Link to="/about" className="link-no-style">
             <Menu.Item active={pageName === "about"}>About</Menu.Item>
+          </Link>
+          <Link to="/resources" className="link-no-style">
+           <Menu.Item active={pageName === "resources"}>
+            Resources
+           </Menu.Item>
           </Link>
         </Sidebar>
         <Sidebar.Pusher dimmed={sidebarOpen}>
