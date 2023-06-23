@@ -32,7 +32,7 @@ const WeeklyUploadCard = ({data}) => {
       <Card.Content extra>
       <List size='medium'>
       <List.Header className="previous-report-weekly-header">Previous Reports</List.Header>
-      {remainingUploads.map(upload => (
+      {remainingUploads.slice(0,5).map(upload => (
         <List.Item>
           <Link to={upload.link}>{formatDate(upload.uploadDate)}</Link>
         </List.Item>

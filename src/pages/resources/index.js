@@ -1,9 +1,9 @@
 import React from 'react'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Layout from '../../components/layout'
+import SEO from '../../components/seo'
 import { Grid, Header, Dropdown, Search, Card, Button, List, Divider } from 'semantic-ui-react'
 import { Link } from 'gatsby'
-import WeeklyUploadCard from '../components/WeeklyUploadCard'
+import WeeklyUploadCard from '../../components/WeeklyUploadCard'
 
 
 const ResourceUpload = ({title, description, link}) => (
@@ -14,8 +14,8 @@ const ResourceUpload = ({title, description, link}) => (
     </Grid.Column>
 )
 
-const usbr = {
-  header: 'Weekly Bureau of Reclamation FASTA slides',
+export const usbrData = {
+  header: 'Weekly Bureau of Reclamation FASTA Slides',
   description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
   path: '/resources/usbr',
   uploads: [
@@ -43,9 +43,43 @@ const usbr = {
       uploadDate: new Date(2023,4,26),
       link: 'usbr/6'
     },
+    {
+      uploadDate: new Date(2023,4,19),
+      link: 'usbr/6'
+    },
+    {
+      uploadDate: new Date(2023,4,12),
+      link: 'usbr/6'
+    },
+    {
+      uploadDate: new Date(2023,4,5),
+      link: 'usbr/6'
+    },
+    {
+      uploadDate: new Date(2023,3,28),
+      link: 'usbr/6'
+    },
+    {
+      uploadDate: new Date(2023,4,21),
+      link: 'usbr/6'
+    },
+    {
+      uploadDate: new Date(2023,4,14),
+      link: 'usbr/6'
+    },
+    
+    {
+      uploadDate: new Date(2023,4,7),
+      link: 'usbr/6'
+    },
+    
+    {
+      uploadDate: new Date(2023,4,1),
+      link: 'usbr/6'
+    },
   ]
 }
-const usgs = {
+export const usgsData = {
   header: 'Weekly USGS UKL Water Quality Conditions Map',
   description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
   path: '/resources/usgs',
@@ -76,7 +110,7 @@ const usgs = {
     },
   ]
 }
-const klamath = {
+export const klamathData = {
   header: 'Weekly Klamath Tribes Water Reports (Water Rights Regulation)',
   description: 'Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.',
   path: '/resources/klamath',
@@ -127,9 +161,9 @@ const Resources = ({data}) => {
               <Header as='h1'>Weekly Reports</Header>
             </Grid.Row>
           <Grid.Row columns={3}>
-            <WeeklyUploadCard data={usbr}/>
-            <WeeklyUploadCard data={usgs}/>
-            <WeeklyUploadCard data={klamath}/>
+            <WeeklyUploadCard data={usbrData}/>
+            <WeeklyUploadCard data={usgsData}/>
+            <WeeklyUploadCard data={klamathData}/>
           </Grid.Row>
         </Grid>
     </Layout>
