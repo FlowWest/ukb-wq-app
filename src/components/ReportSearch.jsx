@@ -2,8 +2,7 @@ import _ from "lodash"
 import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({ setSearchFilteredReports, allData, sortMethod }) => {
-
+const ReportSearch = ({ setSearchFilteredReports, allData, sortMethod }) => {
   const initialState = {
     loading: false,
     results: [],
@@ -34,22 +33,19 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
   const timeoutRef = useRef()
 
   const handleSearchChange = (e, data) => {
-    
     clearTimeout(timeoutRef.current)
     dispatch({ type: "START_SEARCH", query: data.value })
-    
+
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
         setSearchFilteredReports(sortMethod.sort(allDataCopy))
-     
 
-       
         return
       }
-      
+
       const re = new RegExp(_.escapeRegExp(data.value), "i")
-      const isMatch = result => re.test(`${result.title} ${result.authors}`)
+      const isMatch = (result) => re.test(`${result.title} ${result.authors}`)
       setSearchFilteredReports(sortMethod.sort(_.filter(allDataCopy, isMatch)))
 
       dispatch({
@@ -67,9 +63,9 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
 
   return (
     <Search
-    fluid
-    className="report-search-input"
-     input={{ icon: 'search', iconPosition: 'left' }}
+      fluid
+      className="report-search-input"
+      input={{ icon: "search", iconPosition: "left" }}
       loading={loading}
       onResultSelect={(e, data) =>
         dispatch({
@@ -81,8 +77,9 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
       results={results}
       open={false}
       value={value}
-                          placeholder='Search by Title'
-
+      placeholder="Search by Title"
     />
   )
 }
+
+export default ReportSearch

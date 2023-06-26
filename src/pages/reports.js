@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Grid, Card, Dropdown } from "semantic-ui-react"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import DataDownload from "../components/dataDownload"
+import { Grid, Dropdown } from "semantic-ui-react"
+import Layout from "../components/Layout"
+import SEO from "../components/Seo"
+import DataDownloadCard from "../components/DataDownloadCard"
 import { graphql } from "gatsby"
-import ReportSearch from "../components/reportSearch"
+import ReportSearch from "../components/ReportSearch"
 import { formatTextCasing } from "../helpers/utils"
 
 const sortingOptions = [
@@ -42,7 +42,7 @@ const sortingOptions = [
   },
 ]
 
-export default ({ data }) => {
+const ReportsPage = ({ data }) => {
   const [searchFilteredReports, setSearchFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
@@ -134,43 +134,47 @@ export default ({ data }) => {
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-       
-          <Grid.Column mobile={16} tablet={8} computer={8}>
-            <ReportSearch
-              sortMethod={sortMethod}
-              setSearchFilteredReports={setSearchFilteredReports}
-              allData={data.allReportsMetadataCsv.nodes}
-              className="filter-input-field"
-            />
-          </Grid.Column>
-          <Grid.Column mobile={16} tablet={4} computer={4}>
-            <Dropdown
-              fluid
-              placeholder="Report Type"
-              search
-              selection
-              multiple
-              onChange={reportTypeChangeHandler}
-              options={reportTypeOptions}
-              className="filter-input-field"
-            />
-          </Grid.Column>
-          <Grid.Column mobile={16} tablet={4} computer={4}>
-            <Dropdown
-              placeholder="Sort by"
-              fluid
-              selection
-              onChange={sortMethodChangeHandler}
-              options={sortingOptions}
-              className="filter-input-field"
-            />
-          </Grid.Column>
- 
+        <Grid.Column mobile={16} tablet={8} computer={8}>
+          <ReportSearch
+            sortMethod={sortMethod}
+            setSearchFilteredReports={setSearchFilteredReports}
+            allData={data.allReportsMetadataCsv.nodes}
+            className="filter-input-field"
+          />
+        </Grid.Column>
+        <Grid.Column mobile={16} tablet={4} computer={4}>
+          <Dropdown
+            fluid
+            placeholder="Report Type"
+            search
+            selection
+            multiple
+            onChange={reportTypeChangeHandler}
+            options={reportTypeOptions}
+            className="filter-input-field"
+          />
+        </Grid.Column>
+        <Grid.Column mobile={16} tablet={4} computer={4}>
+          <Dropdown
+            placeholder="Sort by"
+            fluid
+            selection
+            onChange={sortMethodChangeHandler}
+            options={sortingOptions}
+            className="filter-input-field"
+          />
+        </Grid.Column>
       </Grid>
-      <Grid container columns={3} doubling stackable className="mobile-grid-container"> 
+      <Grid
+        container
+        columns={3}
+        doubling
+        stackable
+        className="mobile-grid-container"
+      >
         {filteredReports.map((report, index) => (
-          <Grid.Column>
-            <DataDownload reportMetaData={report} key={index} />
+          <Grid.Column key={index}>
+            <DataDownloadCard reportMetaData={report} />
           </Grid.Column>
         ))}
       </Grid>
@@ -195,3 +199,5 @@ export const query = graphql`
     }
   }
 `
+
+export default ReportsPage

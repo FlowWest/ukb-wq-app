@@ -1,8 +1,8 @@
 import React from "react"
 import { Segment, Grid } from "semantic-ui-react"
-import FlowWestLogo from "./flowwestLogo"
+import FlowWestLogo from "./FlowwestLogo"
 
-export default () => {
+export const Footer = () => {
   return (
     <Segment
       attached="bottom"
@@ -26,3 +26,5 @@ export default () => {
     </Segment>
   )
 }
+
+export default Footer

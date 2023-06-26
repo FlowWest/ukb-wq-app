@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css"
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 
-export default ({ monitoringLocations }) => {
+const MapIframe = ({ monitoringLocations }) => {
   if (typeof window !== "undefined") {
     const position = [42.410112765753546, -120.97433210691513]
     let markerIcon = null
@@ -39,7 +39,7 @@ export default ({ monitoringLocations }) => {
           return (
             <Marker
               position={[location.node.Latitude, location.node.Longitude]}
-              icon={!!markerIcon ? markerIcon : null}
+              icon={markerIcon ? markerIcon : null}
               key={index}
             >
               <Popup>
@@ -56,3 +56,5 @@ export default ({ monitoringLocations }) => {
     return <></>
   }
 }
+
+export default MapIframe

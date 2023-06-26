@@ -1,11 +1,11 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { Grid } from "semantic-ui-react"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import Map from "../components/map"
+import Layout from "../components/Layout"
+import SEO from "../components/Seo"
+import Map from "../components/MapIframe"
 
-export default ({ data }) => (
+const AboutPage = ({ data }) => (
   <Layout pageInfo={{ pageName: "about" }}>
     <SEO title="Water Quality Monitoring Data" />
     <Grid container>
@@ -93,3 +93,5 @@ export const query = graphql`
     }
   }
 `
+
+export default AboutPage

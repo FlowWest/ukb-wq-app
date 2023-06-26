@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { createMedia } from "@artsy/fresnel"
 import { Menu, Sidebar, Segment, Icon, Grid } from "semantic-ui-react"
-import KlamathLogo from "./klamathLogo"
+import KlamathLogo from "./KlamathLogo"
 import { Link } from "gatsby"
-import Banner from "../components/Banner"
+import Banner from "./Banner"
 import { formatTextCasing } from "../helpers/utils"
 
 const { Media, MediaContextProvider } = createMedia({
@@ -91,9 +91,7 @@ const MobileContainer = ({ children, pageName }) => {
             <Menu.Item active={pageName === "about"}>About</Menu.Item>
           </Link>
           <Link to="/resources" className="link-no-style">
-           <Menu.Item active={pageName === "resources"}>
-            Resources
-           </Menu.Item>
+            <Menu.Item active={pageName === "resources"}>Resources</Menu.Item>
           </Link>
         </Sidebar>
         <Sidebar.Pusher dimmed={sidebarOpen}>
@@ -124,7 +122,7 @@ const MobileContainer = ({ children, pageName }) => {
   )
 }
 
-export default ({ children, pageName }) => {
+const ResponsiveContainer = ({ children, pageName }) => {
   return (
     <MediaContextProvider>
       <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
@@ -132,3 +130,5 @@ export default ({ children, pageName }) => {
     </MediaContextProvider>
   )
 }
+
+export default ResponsiveContainer

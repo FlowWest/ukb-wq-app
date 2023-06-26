@@ -3,7 +3,7 @@ import BackgroundImage from "gatsby-background-image"
 import { Header, Container, Segment } from "semantic-ui-react"
 import { StaticQuery, graphql } from "gatsby"
 
-export default ({ mobile, pageName }) => {
+const Banner = ({ mobile, pageName }) => {
   const headerContent = {
     index: {
       title: (
@@ -13,8 +13,7 @@ export default ({ mobile, pageName }) => {
           Water Quality Monitoring
         </div>
       ),
-      text:
-        "The largest water quality data collection entity in the Upper Klamath Basin, monitoring water quality conditions in Upper Klamath Lake since 1990 and major tributaries including the Sprague, Williamson, and Wood Rivers since 2001.",
+      text: "The largest water quality data collection entity in the Upper Klamath Basin, monitoring water quality conditions in Upper Klamath Lake since 1990 and major tributaries including the Sprague, Williamson, and Wood Rivers since 2001.",
     },
     data: {
       title: (
@@ -107,7 +106,7 @@ export default ({ mobile, pageName }) => {
           }
         }
       `}
-      render={data => {
+      render={(data) => {
         if (mobile) {
           if (pageName === "index") {
             return (
@@ -211,3 +210,5 @@ export default ({ mobile, pageName }) => {
     />
   )
 }
+
+export default Banner
