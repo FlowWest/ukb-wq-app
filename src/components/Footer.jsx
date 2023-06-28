@@ -1,5 +1,5 @@
 import React from "react"
-import { Segment, Grid, Icon, Dropdown, Button } from "semantic-ui-react"
+import { Segment, Grid, Icon, Dropdown, Divider } from "semantic-ui-react"
 import { Link } from "gatsby"
 import FlowWestLogo from "./FlowwestLogo"
 
@@ -14,6 +14,7 @@ export const Footer = () => {
         height: "3rem",
       }}
     >
+      <Divider section />
       <Grid centered>
         <footer className="footer">
           <div className="footer-content">
