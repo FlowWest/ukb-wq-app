@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Grid, Dropdown } from "semantic-ui-react"
+import { Grid, Dropdown, Pagination } from "semantic-ui-react"
 import Layout from "../components/Layout"
 import SEO from "../components/Seo"
 import DataDownloadCard from "../components/DataDownloadCard"
@@ -46,6 +46,7 @@ const ReportsPage = ({ data }) => {
   const [searchFilteredReports, setSearchFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
+
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes.sort((a, b) => +b.year - +a.year)
   )
@@ -60,6 +61,20 @@ const ReportsPage = ({ data }) => {
   )
 
   const [sortMethod, setSortMethod] = useState(sortingOptions.at(0))
+
+  // Pagination Logic
+  const [currentPage, setCurrentPage] = useState(1)
+  const reportsPerPage = 9
+  const lastIndex = currentPage * reportsPerPage
+  const firstIndex = lastIndex - reportsPerPage
+  const paginatedReports = sortMethod
+    .sort(filteredReports)
+    .slice(firstIndex, lastIndex)
+  const numberOfPages = Math.ceil(filteredReports.length / reportsPerPage)
+
+  const handlePaginationPageChange = (e, { activePage }) => {
+    setCurrentPage(activePage)
+  }
 
   const reportTypeChangeHandler = (event, { value }) => {
     const searchFilteredReportsCopy = sortMethod.sort([
@@ -172,11 +187,18 @@ const ReportsPage = ({ data }) => {
         stackable
         className="mobile-grid-container"
       >
-        {filteredReports.map((report, index) => (
+        {paginatedReports.map((report, index) => (
           <Grid.Column key={index}>
             <DataDownloadCard reportMetaData={report} />
           </Grid.Column>
         ))}
+      </Grid>
+      <Grid container>
+        <Pagination
+          defaultActivePage={currentPage}
+          totalPages={numberOfPages}
+          onPageChange={handlePaginationPageChange}
+        />
       </Grid>
     </Layout>
   )
