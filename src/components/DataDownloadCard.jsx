@@ -3,7 +3,7 @@ import { Card, Button, Icon, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 
 const DataDownloadCard = ({ reportMetaData }) => {
-  const userIsAdmin = true
+  const userIsAdmin = sessionStorage.getItem("admin-cookie")
   const authorsArray = reportMetaData.authors.split(",")
 
   const generateAuthorsString = (authors) => {

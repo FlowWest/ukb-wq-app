@@ -76,6 +76,13 @@ Filter Container and Input Styles
   border-radius: 0.28571429rem !important;
 }
 
+.card-action-buttons {
+  display: flex;
+}
+.card-action-buttons a:first-child {
+  flex-grow: 1;
+}
+
 @media only screen and (max-width: 690px) {
   .ui.grid .mobile-grid-container.ui.doubling.stackable {
     margin-left: 0rem !important;

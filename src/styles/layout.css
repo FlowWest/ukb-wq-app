@@ -48,11 +48,3 @@ a.link-no-style:hover {
 .pushable > .pusher #footer {
   position: fixed;
 }
-
-.admin-menu-icon {
-  margin-right: 1rem;
-}
-.admin-menu-icon-wrapper {
-  width: 4rem;
-  margin-right: 1rem;
-}
