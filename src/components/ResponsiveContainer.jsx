@@ -40,13 +40,13 @@ const DesktopContainer = ({ children, pageName }) => {
           </Link>
         </Menu.Item>
         <Menu.Item position="left">
-          <Link to="/about" className="link-no-style">
-            About
+          <Link to="/resources" className="link-no-style">
+            Resources
           </Link>
         </Menu.Item>
         <Menu.Item position="left">
-          <Link to="/resources" className="link-no-style">
-            Resources
+          <Link to="/about" className="link-no-style">
+            About
           </Link>
         </Menu.Item>
       </Menu>
@@ -87,11 +87,11 @@ const MobileContainer = ({ children, pageName }) => {
           <Link to="/reports" className="link-no-style">
             <Menu.Item active={pageName === "reports"}>Reports</Menu.Item>
           </Link>
-          <Link to="/about" className="link-no-style">
-            <Menu.Item active={pageName === "about"}>About</Menu.Item>
-          </Link>
           <Link to="/resources" className="link-no-style">
             <Menu.Item active={pageName === "resources"}>Resources</Menu.Item>
+          </Link>
+          <Link to="/about" className="link-no-style">
+            <Menu.Item active={pageName === "about"}>About</Menu.Item>
           </Link>
         </Sidebar>
         <Sidebar.Pusher dimmed={sidebarOpen}>

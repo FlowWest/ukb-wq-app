@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import {
   Segment,
   Grid,
@@ -13,9 +13,10 @@ import {
 import { Link } from "gatsby"
 import FlowWestLogo from "./FlowwestLogo"
 import LoginForm from "./LoginForm"
+import { UserContext } from "../../gatsby-browser"
 
 export const Footer = () => {
-  const userIsAdmin = sessionStorage.getItem("admin-cookie")
+  const { user } = useContext(UserContext)
   const handleLogout = () => {
     sessionStorage.removeItem("admin-cookie")
     window.location.reload()
@@ -42,9 +43,9 @@ export const Footer = () => {
           <div className="admin-menu-icon-wrapper">
             <Popup
               className="admin-menu-popup"
-              style={userIsAdmin ? { padding: 0 } : null}
+              style={user ? { padding: 0 } : null}
               content={
-                userIsAdmin ? (
+                user ? (
                   <Menu secondary fluid vertical>
                     <Menu.Item>
                       <b>

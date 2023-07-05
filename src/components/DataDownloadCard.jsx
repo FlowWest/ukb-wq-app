@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Card, Button, Icon, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
+import { UserContext } from "../../gatsby-browser"
 
 const DataDownloadCard = ({ reportMetaData }) => {
-  const userIsAdmin = sessionStorage.getItem("admin-cookie")
+  const { user } = useContext(UserContext)
   const authorsArray = reportMetaData.authors.split(",")
 
   const generateAuthorsString = (authors) => {
@@ -48,7 +49,7 @@ const DataDownloadCard = ({ reportMetaData }) => {
         >
           View
         </Button>
-        {userIsAdmin && (
+        {user && (
           <Dropdown
             button
             basic
