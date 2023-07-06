@@ -1,11 +1,20 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { Grid, Dropdown, Pagination } from "semantic-ui-react"
+import React, { useState, useEffect, useCallback, useContext } from "react"
+import {
+  Button,
+  Grid,
+  Dropdown,
+  Pagination,
+  Modal,
+  Form,
+} from "semantic-ui-react"
 import Layout from "../components/Layout"
 import SEO from "../components/Seo"
 import DataDownloadCard from "../components/DataDownloadCard"
 import { graphql } from "gatsby"
 import ReportSearch from "../components/ReportSearch"
 import { formatTextCasing } from "../helpers/utils"
+import { UserContext } from "../../gatsby-browser"
+import UploadReportForm from "../components/UploadReportForm"
 
 const sortingOptions = [
   {
@@ -43,6 +52,8 @@ const sortingOptions = [
 ]
 
 const ReportsPage = ({ data }) => {
+  const { user, setUser } = useContext(UserContext)
+
   const [searchFilteredReports, setSearchFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
   )
@@ -149,7 +160,7 @@ const ReportsPage = ({ data }) => {
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-        <Grid.Column mobile={16} tablet={8} computer={8}>
+        <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 7 : 8}>
           <ReportSearch
             sortMethod={sortMethod}
             setSearchFilteredReports={setSearchFilteredReports}
@@ -157,7 +168,7 @@ const ReportsPage = ({ data }) => {
             className="filter-input-field"
           />
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={4} computer={4}>
+        <Grid.Column mobile={16} tablet={4} computer={user ? 3 : 4}>
           <Dropdown
             fluid
             placeholder="Report Type"
@@ -169,7 +180,7 @@ const ReportsPage = ({ data }) => {
             className="filter-input-field"
           />
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={4} computer={4}>
+        <Grid.Column mobile={16} tablet={4} computer={user ? 3 : 4}>
           <Dropdown
             placeholder="Sort by"
             fluid
@@ -179,6 +190,24 @@ const ReportsPage = ({ data }) => {
             className="filter-input-field"
           />
         </Grid.Column>
+        {user && (
+          <Modal
+            closeIcon
+            trigger={
+              <Grid.Column only="mobile computer" mobile={16} computer={3}>
+                <Button color="blue" icon="upload" content="Upload" fluid />
+              </Grid.Column>
+              // <Grid.Column only="tablet" tablet={2}>
+              //   <Button color="blue" icon="upload" fluid />
+              // </Grid.Column>
+            }
+          >
+            <Modal.Header>Upload Report</Modal.Header>
+            <Modal.Content>
+              <UploadReportForm />
+            </Modal.Content>
+          </Modal>
+        )}
       </Grid>
       <Grid
         container
