@@ -6,6 +6,9 @@
   "author": "Sadie Gill <sgill@flowwest.com>",
   "dependencies": {
     "@artsy/fresnel": "^6.1.0",
+    "@aws-sdk/client-s3": "^3.363.0",
+    "amazon-cognito-identity-js": "^6.3.1",
+    "aws-sdk": "^2.1411.0",
     "gatsby": "^5.11.0",
     "gatsby-background-image": "^1.6.0",
     "gatsby-image": "^2.0.41",
@@ -21,6 +24,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.45.1",
     "react-icons": "^4.9.0",

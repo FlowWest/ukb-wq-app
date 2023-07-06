@@ -15,44 +15,28 @@ import ReportSearch from "../components/ReportSearch"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "../components/UploadReportForm"
-
-const sortingOptions = [
-  {
-    key: "Year - Descending",
-    value: "Year - Descending",
-    text: "Year - Descending",
-    sort: function (reports) {
-      return reports.sort((a, b) => +b.year - +a.year)
-    },
-  },
-  {
-    key: "Year - Ascending",
-    value: "Year - Ascending",
-    text: "Year - Ascending",
-    sort: function (reports) {
-      return reports.sort((a, b) => +a.year - +b.year)
-    },
-  },
-  {
-    key: "Alphabetically - A-Z",
-    value: "Alphabetically - A-Z",
-    text: "Alphabetically - A-Z",
-    sort: function (reports) {
-      return reports.sort((a, b) => (a.title > b.title ? 1 : -1))
-    },
-  },
-  {
-    key: "Alphabetically - Z-A",
-    value: "Alphabetically - Z-A",
-    text: "Alphabetically - Z-A",
-    sort: function (reports) {
-      return reports.sort((a, b) => (a.title < b.title ? 1 : -1))
-    },
-  },
-]
+import reportSortingOptions from "../helpers/reportSortingOptions"
 
 const ReportsPage = ({ data }) => {
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
+  const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
+
+  const [isTabletScreenSize, setIsTabletScreenSize] = useState(false)
+
+  useEffect(() => {
+    const handleResize = (e) => {
+      const { innerWidth } = e.target
+      if (innerWidth >= 768 && innerWidth <= 991) setIsTabletScreenSize(true)
+
+      if (innerWidth < 768 || innerWidth > 991) setIsTabletScreenSize(false)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   const [searchFilteredReports, setSearchFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes
@@ -71,7 +55,7 @@ const ReportsPage = ({ data }) => {
     })
   )
 
-  const [sortMethod, setSortMethod] = useState(sortingOptions.at(0))
+  const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1)
@@ -106,7 +90,7 @@ const ReportsPage = ({ data }) => {
 
   const sortMethodChangeHandler = useCallback(
     (event, { value }) => {
-      const selectedSortMethod = sortingOptions.find(
+      const selectedSortMethod = reportSortingOptions.find(
         (option) => option.value === value
       )
 
@@ -140,7 +124,7 @@ const ReportsPage = ({ data }) => {
           return
       }
     },
-    [sortingOptions]
+    [reportSortingOptions]
   )
 
   // search query changes
@@ -186,25 +170,32 @@ const ReportsPage = ({ data }) => {
             fluid
             selection
             onChange={sortMethodChangeHandler}
-            options={sortingOptions}
+            options={reportSortingOptions}
             className="filter-input-field"
           />
         </Grid.Column>
         {user && (
           <Modal
             closeIcon
+            open={uploadReportModalOpen}
+            onOpen={() => setUploadReportModalOpen(true)}
+            onClose={() => setUploadReportModalOpen(false)}
             trigger={
-              <Grid.Column only="mobile computer" mobile={16} computer={3}>
-                <Button color="blue" icon="upload" content="Upload" fluid />
+              <Grid.Column mobile={16} computer={3} tablet={2}>
+                <Button
+                  color="blue"
+                  icon="upload"
+                  content={isTabletScreenSize ? null : "Upload"}
+                  fluid
+                />
               </Grid.Column>
-              // <Grid.Column only="tablet" tablet={2}>
-              //   <Button color="blue" icon="upload" fluid />
-              // </Grid.Column>
             }
           >
             <Modal.Header>Upload Report</Modal.Header>
             <Modal.Content>
-              <UploadReportForm />
+              <UploadReportForm
+                onClose={() => setUploadReportModalOpen(false)}
+              />
             </Modal.Content>
           </Modal>
         )}

@@ -12,9 +12,7 @@ import React, { createContext, useState } from "react"
 export const UserContext = createContext(null)
 
 const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    sessionStorage.getItem("admin-cookie") ? { user: "admin" } : null
-  )
+  const [user, setUser] = useState({ user: "admin" })
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

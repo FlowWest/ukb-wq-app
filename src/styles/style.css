@@ -8,6 +8,7 @@
 @import "about.css";
 @import "map.css";
 @import "resources.css";
+@import "data-uploader.css";
 
 main {
   min-width: 100vw;
