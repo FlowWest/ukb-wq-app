@@ -16,6 +16,8 @@ import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "../components/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
+import * as AWS from "aws-sdk"
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 const ReportsPage = ({ data }) => {
   const { user } = useContext(UserContext)
@@ -140,6 +142,23 @@ const ReportsPage = ({ data }) => {
     }
   }, [searchFilteredReports, currentReportTypeFilters])
 
+  const testUpload = async () => {
+    AWS
+    const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+
+    const command = new PutObjectCommand({
+      Bucket: "klamath-water-quality-app",
+      Key: "hello-s3-2.txt",
+      Body: "Hello S3!",
+    })
+    try {
+      const response = await client.send(command)
+      console.log(response)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
@@ -200,6 +219,15 @@ const ReportsPage = ({ data }) => {
           </Modal>
         )}
       </Grid>
+      <Button
+        mobile={2}
+        computer={2}
+        tablet={2}
+        color="blue"
+        icon="upload"
+        content={isTabletScreenSize ? null : "test"}
+        onClick={testUpload}
+      />
       <Grid
         container
         columns={3}

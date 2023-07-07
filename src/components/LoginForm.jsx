@@ -72,6 +72,7 @@ const LoginForm = () => {
                 .getJwtToken(),
             },
           })
+          console.log(" AWS.config.credentials", AWS.config.credentials)
 
           setUser(cognitoUser)
 
