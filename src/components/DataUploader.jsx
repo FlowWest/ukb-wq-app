@@ -8,10 +8,11 @@ import {
 } from "../styles/dropzone-style-helper"
 import { Icon, Button, Divider } from "semantic-ui-react"
 
-function DataUploader({ setValue, getValues }, field) {
+function DataUploader({ setValue, getValues, error, clearErrors }, field) {
   const selectedFile = getValues("file")
   const onDrop = useCallback((acceptedFiles) => {
     setValue("file", acceptedFiles[0])
+    clearErrors("file")
   }, [])
 
   const {
@@ -40,7 +41,10 @@ function DataUploader({ setValue, getValues }, field) {
       <label htmlFor="file" className="dropzone-label">
         File Upload
       </label>
-      <div {...getRootProps({ style })}>
+      <div
+        {...getRootProps({ style })}
+        className={error && "form-file-upload-error"}
+      >
         <input {...getInputProps()} {...field} />
         {!selectedFile && (
           <div className="dropzone-content">

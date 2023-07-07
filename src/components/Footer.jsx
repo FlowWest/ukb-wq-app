@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
   Segment,
   Grid,
@@ -9,6 +9,8 @@ import {
   Menu,
   Popup,
   Item,
+  Dimmer,
+  Loader,
 } from "semantic-ui-react"
 import { Link } from "gatsby"
 import FlowWestLogo from "./FlowwestLogo"
@@ -17,16 +19,22 @@ import { UserContext } from "../../gatsby-browser"
 
 export const Footer = () => {
   const { user, setUser } = useContext(UserContext)
+  const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = () => {
-    sessionStorage.removeItem("admin-cookie")
-    setUser(null)
-    window.location.reload()
+    setLoggingOut(true)
+    setTimeout(() => {
+      sessionStorage.removeItem("admin-cookie")
+      setUser(null)
+      setLoggingOut(false)
+    }, 1000)
+    // window.location.reload()
   }
 
-  useEffect(() => {
-    console.log("user", user)
-  }, [user])
+  // useEffect(() => {
+  //   console.log("user", user)
+  // }, [user])
+
   return (
     <Segment
       attached="bottom"
@@ -53,6 +61,9 @@ export const Footer = () => {
               content={
                 user ? (
                   <Menu secondary fluid vertical>
+                    <Dimmer active={loggingOut} inverted>
+                      <Loader>Logging Out</Loader>
+                    </Dimmer>
                     <Menu.Item>
                       <b>
                         <em>Logged in as Admin</em>
