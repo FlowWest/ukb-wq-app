@@ -2,12 +2,15 @@ import _ from "lodash"
 import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({ setSearchFilteredReports, allData }) => {
+export default ({ setSearchFilteredReports, allData, sortMethod }) => {
+
   const initialState = {
     loading: false,
     results: [],
     value: "",
   }
+
+  const allDataCopy = [...allData]
 
   function searchReducer(state, action) {
     switch (action.type) {
@@ -27,26 +30,31 @@ export default ({ setSearchFilteredReports, allData }) => {
 
   const [searchState, dispatch] = useReducer(searchReducer, initialState)
   const { loading, results, value } = searchState
+
   const timeoutRef = useRef()
 
   const handleSearchChange = (e, data) => {
+    
     clearTimeout(timeoutRef.current)
     dispatch({ type: "START_SEARCH", query: data.value })
-
+    
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
-        setSearchFilteredReports(allData)
+        setSearchFilteredReports(sortMethod.sort(allDataCopy))
+     
+
+       
         return
       }
-
+      
       const re = new RegExp(_.escapeRegExp(data.value), "i")
       const isMatch = result => re.test(`${result.title} ${result.authors}`)
-      setSearchFilteredReports(_.filter(allData, isMatch))
+      setSearchFilteredReports(sortMethod.sort(_.filter(allDataCopy, isMatch)))
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: _.filter(allData, isMatch),
+        results: sortMethod.sort(_.filter(allDataCopy, isMatch)),
       })
     }, 300)
   }
@@ -59,6 +67,9 @@ export default ({ setSearchFilteredReports, allData }) => {
 
   return (
     <Search
+    fluid
+    className="report-search-input"
+     input={{ icon: 'search', iconPosition: 'left' }}
       loading={loading}
       onResultSelect={(e, data) =>
         dispatch({
@@ -70,6 +81,8 @@ export default ({ setSearchFilteredReports, allData }) => {
       results={results}
       open={false}
       value={value}
+                          placeholder='Search by Title'
+
     />
   )
 }
