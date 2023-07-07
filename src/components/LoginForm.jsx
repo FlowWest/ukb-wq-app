@@ -1,15 +1,16 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Form, Message } from "semantic-ui-react"
 import {
   CognitoUserPool,
-  CognitoUserAttribute,
   CognitoUser,
   AuthenticationDetails,
 } from "amazon-cognito-identity-js"
 import * as AWS from "aws-sdk"
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+// import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { UserContext } from "../../gatsby-browser"
 
 const LoginForm = () => {
+  const { user, setUser } = useContext(UserContext)
   const [usernameValue, setUsernameValue] = useState("")
 
   const [passwordValue, setPasswordValue] = useState("")
@@ -72,30 +73,26 @@ const LoginForm = () => {
             },
           })
 
-          // window.location.reload()
+          setUser(cognitoUser)
 
           //call refresh method in order to authenticate user and get new temp credentials
           AWS.config.credentials.refresh(async (error) => {
             if (error) {
               console.error(error)
             } else {
-              console.log("idk", AWS.config.credentials)
+              // const client = new S3Client(AWS.config)
 
-              const client = new S3Client(AWS.config)
-              console.log("client", client)
-
-              const command = new PutObjectCommand({
-                Bucket: "klamath-water-quality-app",
-                Key: "hello-s3.txt",
-                Body: "Hello S3!",
-              })
-              try {
-                console.log("command", command)
-                const response = await client.send(command)
-                console.log(response)
-              } catch (err) {
-                console.error(err)
-              }
+              // const command = new PutObjectCommand({
+              //   Bucket: "klamath-water-quality-app",
+              //   Key: "hello-s3.txt",
+              //   Body: "Hello S3!",
+              // })
+              // try {
+              //   const response = await client.send(command)
+              //   console.log(response)
+              // } catch (err) {
+              //   console.error(err)
+              // }
               console.log("Successfully logged!")
             }
           })
@@ -105,21 +102,21 @@ const LoginForm = () => {
           console.log(err)
         },
 
-        newPasswordRequired: function (userAttributes, requiredAttributes) {
-          // User was signed up by an admin and must provide new
-          // password and required attributes, if any, to complete
-          // authentication.
+        // newPasswordRequired: function (userAttributes, requiredAttributes) {
+        //   // User was signed up by an admin and must provide new
+        //   // password and required attributes, if any, to complete
+        //   // authentication.
 
-          // the api doesn't accept this field back
-          delete userAttributes.email_verified
+        //   // the api doesn't accept this field back
+        //   delete userAttributes.email_verified
 
-          // store userAttributes on global variable
-          const sessionUserAttributes = userAttributes
-          cognitoUser.completeNewPasswordChallenge(
-            "Klamath123!",
-            sessionUserAttributes
-          )
-        },
+        //   // store userAttributes on global variable
+        //   const sessionUserAttributes = userAttributes
+        //   cognitoUser.completeNewPasswordChallenge(
+        //     "Klamath123!",
+        //     sessionUserAttributes
+        //   )
+        // },
       })
     } catch (error) {
       console.log("error", error)

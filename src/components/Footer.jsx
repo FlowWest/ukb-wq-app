@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import {
   Segment,
   Grid,
@@ -16,11 +16,17 @@ import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
 
 export const Footer = () => {
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
+
   const handleLogout = () => {
     sessionStorage.removeItem("admin-cookie")
+    setUser(null)
     window.location.reload()
   }
+
+  useEffect(() => {
+    console.log("user", user)
+  }, [user])
   return (
     <Segment
       attached="bottom"
