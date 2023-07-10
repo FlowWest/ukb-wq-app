@@ -6,16 +6,9 @@
   margin-right: 1rem !important;
 }
 
-.admin-page-wrapper {
-  /* position: relative; */
-}
-
-.admin-menu-icon {
-  margin-right: 2rem !important;
-}
-
 .admin-menu-popup {
   width: 500px !important;
+  padding: 1rem !important;
 }
 
 .admin-menu::before {
@@ -33,6 +26,10 @@
 .admin-menu-icon {
   margin-right: 1rem;
 }
+.admin-menu-item-icon {
+  margin-right: 0.5rem;
+}
+
 .admin-menu-icon-wrapper {
   margin-right: 1rem;
 }

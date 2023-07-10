@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { Form, Message } from "semantic-ui-react"
+import { Form } from "semantic-ui-react"
 import { Controller, useForm } from "react-hook-form"
 import {
   CognitoUserPool,
@@ -71,8 +71,9 @@ const LoginForm = () => {
                   result.getIdToken().getJwtToken(),
               },
             })
-
-            setUser(cognitoUser)
+            const cognitoUserEmail =
+              cognitoUser.signInUserSession.idToken.payload.email
+            setUser({ ...cognitoUser, email: cognitoUserEmail })
 
             //call refresh method in order to authenticate user and get new temp credentials
             AWS.config.credentials.refresh(async (error) => {

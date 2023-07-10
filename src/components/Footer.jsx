@@ -1,18 +1,15 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import {
   Segment,
   Grid,
   Icon,
-  Dropdown,
   Divider,
   Button,
   Menu,
   Popup,
-  Item,
   Dimmer,
   Loader,
 } from "semantic-ui-react"
-import { Link } from "gatsby"
 import FlowWestLogo from "./FlowwestLogo"
 import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
@@ -28,12 +25,7 @@ export const Footer = () => {
       setUser(null)
       setLoggingOut(false)
     }, 1000)
-    // window.location.reload()
   }
-
-  // useEffect(() => {
-  //   console.log("user", user)
-  // }, [user])
 
   return (
     <Segment
@@ -65,13 +57,30 @@ export const Footer = () => {
                       <Loader>Logging Out</Loader>
                     </Dimmer>
                     <Menu.Item>
-                      <b>
-                        <em>Logged in as Admin</em>
-                      </b>
+                      <b>Logged in as</b>
                     </Menu.Item>
-                    <Menu.Item link>Upload Report</Menu.Item>
-                    <Menu.Item link>Upload Resource</Menu.Item>
+                    <Menu.Item fitted="vertically">
+                      <em>{user.email}</em>
+                    </Menu.Item>
+                    <Divider />
+                    <Menu.Item link>
+                      <Icon.Group className="admin-menu-item-icon">
+                        <Icon name="file alternate outline" />
+                        <Icon name="upload" corner />
+                      </Icon.Group>
+                      Upload Report
+                    </Menu.Item>
+                    <Menu.Item link>
+                      <Icon.Group className="admin-menu-item-icon">
+                        <Icon name="globe" />
+                        <Icon name="upload" corner />
+                      </Icon.Group>
+                      Upload Resource
+                    </Menu.Item>
                     <Menu.Item link onClick={handleLogout}>
+                      <Icon.Group className="admin-menu-item-icon">
+                        <Icon name="log out" />
+                      </Icon.Group>
                       Logout
                     </Menu.Item>
                   </Menu>
