@@ -62,6 +62,14 @@ const ReportsPage = ({ data }) => {
 
   const reportVisibilityFilterOptions = [
     {
+      key: "all",
+      value: "All Reports",
+      text: "All Reports",
+      filter: function (reports) {
+        return reports
+      },
+    },
+    {
       key: "active",
       value: "Active Reports",
       text: "Active Reports",
@@ -77,21 +85,13 @@ const ReportsPage = ({ data }) => {
         return reports.filter((report) => +report.year % 2 === 0)
       },
     },
-    {
-      key: "all",
-      value: "All Reports",
-      text: "All Reports",
-      filter: function (reports) {
-        return reports
-      },
-    },
   ]
 
   const [reportVisibilityFilterMethod, setReportVisibilityFilterMethod] =
     useState(
       user
-        ? reportVisibilityFilterOptions.at(-1)
-        : reportVisibilityFilterOptions.at(0)
+        ? reportVisibilityFilterOptions.at(0)
+        : reportVisibilityFilterOptions.at(1)
     )
   console.log(
     "🚀 ~ ReportsPage ~ reportVisibilityFilterMethod:",
