@@ -47,6 +47,7 @@ const ReportsPage = ({ data }) => {
   const [filteredReports, setFilteredReports] = useState(
     data.allReportsMetadataCsv.nodes.sort((a, b) => +b.year - +a.year)
   )
+
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
 
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
@@ -59,6 +60,44 @@ const ReportsPage = ({ data }) => {
 
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
 
+  const reportVisibilityFilterOptions = [
+    {
+      key: "active",
+      value: "Active Reports",
+      text: "Active Reports",
+      filter: function (reports) {
+        return reports.filter((report) => +report.year % 2 === 1)
+      },
+    },
+    {
+      key: "hidden",
+      value: "Hidden Reports",
+      text: "Hidden Reports",
+      filter: function (reports) {
+        return reports.filter((report) => +report.year % 2 === 0)
+      },
+    },
+    {
+      key: "all",
+      value: "All Reports",
+      text: "All Reports",
+      filter: function (reports) {
+        return reports
+      },
+    },
+  ]
+
+  const [reportVisibilityFilterMethod, setReportVisibilityFilterMethod] =
+    useState(
+      user
+        ? reportVisibilityFilterOptions.at(-1)
+        : reportVisibilityFilterOptions.at(0)
+    )
+  console.log(
+    "🚀 ~ ReportsPage ~ reportVisibilityFilterMethod:",
+    reportVisibilityFilterMethod
+  )
+
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1)
   const reportsPerPage = 9
@@ -67,6 +106,7 @@ const ReportsPage = ({ data }) => {
   const paginatedReports = sortMethod
     .sort(filteredReports)
     .slice(firstIndex, lastIndex)
+
   const numberOfPages = Math.ceil(filteredReports.length / reportsPerPage)
 
   const handlePaginationPageChange = (e, { activePage }) => {
@@ -88,6 +128,28 @@ const ReportsPage = ({ data }) => {
     }
 
     setCurrentReportTypeFilters(value)
+  }
+
+  const reportVisibilityChangeHandler = (event, { value }) => {
+    switch (value) {
+      case "Active Reports":
+        setFilteredReports(
+          sortMethod
+            .sort(searchFilteredReports)
+            .filter((report) => +report.year % 2 === 1)
+        )
+        break
+      case "Hidden Reports":
+        setFilteredReports(
+          sortMethod
+            .sort(searchFilteredReports)
+            .filter((report) => +report.year % 2 === 0)
+        )
+        break
+      case "All":
+        setFilteredReports(sortMethod.sort(searchFilteredReports))
+        break
+    }
   }
 
   const sortMethodChangeHandler = useCallback(
@@ -138,9 +200,15 @@ const ReportsPage = ({ data }) => {
         )
       )
     } else {
-      setFilteredReports(searchFilteredReports)
+      user
+        ? setFilteredReports(sortMethod.sort(searchFilteredReports))
+        : setFilteredReports(
+            sortMethod
+              .sort(searchFilteredReports)
+              .filter((report) => report.year % 2 === 1)
+          )
     }
-  }, [searchFilteredReports, currentReportTypeFilters])
+  }, [searchFilteredReports, currentReportTypeFilters, user])
 
   const testUpload = async () => {
     AWS
@@ -163,7 +231,20 @@ const ReportsPage = ({ data }) => {
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
       <Grid container>
-        <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 7 : 8}>
+        {user && (
+          <Grid.Column computer={3}>
+            <Dropdown
+              fluid
+              placeholder="All Reports"
+              selection
+              onChange={reportVisibilityChangeHandler}
+              options={reportVisibilityFilterOptions}
+              className="filter-input-field"
+            />
+          </Grid.Column>
+        )}
+        <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 4 : 8}>
+          {/* <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 7 : 8}> */}
           <ReportSearch
             sortMethod={sortMethod}
             setSearchFilteredReports={setSearchFilteredReports}
@@ -219,7 +300,7 @@ const ReportsPage = ({ data }) => {
           </Modal>
         )}
       </Grid>
-      <Button
+      {/* <Button
         mobile={2}
         computer={2}
         tablet={2}
@@ -227,7 +308,7 @@ const ReportsPage = ({ data }) => {
         icon="upload"
         content={isTabletScreenSize ? null : "test"}
         onClick={testUpload}
-      />
+      /> */}
       <Grid
         container
         columns={3}
