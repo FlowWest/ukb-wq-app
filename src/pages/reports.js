@@ -93,10 +93,6 @@ const ReportsPage = ({ data }) => {
         ? reportVisibilityFilterOptions.at(0)
         : reportVisibilityFilterOptions.at(1)
     )
-  console.log(
-    "🚀 ~ ReportsPage ~ reportVisibilityFilterMethod:",
-    reportVisibilityFilterMethod
-  )
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1)
@@ -132,6 +128,9 @@ const ReportsPage = ({ data }) => {
 
   const reportVisibilityChangeHandler = (event, { value }) => {
     switch (value) {
+      case "All Reports":
+        setFilteredReports(sortMethod.sort(searchFilteredReports))
+        break
       case "Active Reports":
         setFilteredReports(
           sortMethod
@@ -145,9 +144,6 @@ const ReportsPage = ({ data }) => {
             .sort(searchFilteredReports)
             .filter((report) => +report.year % 2 === 0)
         )
-        break
-      case "All":
-        setFilteredReports(sortMethod.sort(searchFilteredReports))
         break
     }
   }
