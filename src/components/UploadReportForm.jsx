@@ -5,6 +5,8 @@ import DataUploader from "./DataUploader"
 import reportTypeDropdownOptions from "../helpers/reportTypeOptions"
 import { uploadReportSchema } from "../helpers/validationSchemas"
 import { yupResolver } from "@hookform/resolvers/yup"
+import * as AWS from "aws-sdk"
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 const UploadReportForm = ({ onClose }) => {
   const {
@@ -25,8 +27,33 @@ const UploadReportForm = ({ onClose }) => {
     },
   })
 
-  const handleFormSubmit = (data) => {
-    console.log("data", data)
+  const handleFormSubmit = async (data) => {
+    const reader = new FileReader()
+
+    reader.onabort = () => console.log("file reading was aborted")
+    reader.onerror = () => console.log("file reading has failed")
+    reader.onload = async () => {
+      // Do whatever you want with the file contents
+      const binaryStr = reader.result
+
+      const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+      const command = new PutObjectCommand({
+        Bucket: process.env.GATSBY_S3_BUCKET,
+        Key: data.file.name,
+        Body: binaryStr,
+        ContentType: "application/pdf",
+        StorageClass: "STANDARD_IA",
+        ACL: "public-read",
+      })
+      try {
+        const response = await client.send(command)
+        console.log(response)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    reader.readAsArrayBuffer(data.file)
+
     // onClose()
   }
   const handleSelectChange = (event, option) => {

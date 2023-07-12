@@ -16,16 +16,50 @@ import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "../components/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
-import * as AWS from "aws-sdk"
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import Papa from "papaparse"
+import { orderBy } from "lodash"
 
 const ReportsPage = ({ data }) => {
   const { user } = useContext(UserContext)
   const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
-
   const [isTabletScreenSize, setIsTabletScreenSize] = useState(false)
+  const [allData, setAllData] = useState([])
+  const [searchFilteredReports, setSearchFilteredReports] = useState([])
+  const [filteredReports, setFilteredReports] = useState([])
+  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
+  const [reportTypeOptions, setReportTypeOptions] = useState([])
 
   useEffect(() => {
+    ;(async () => {
+      try {
+        fetch(
+          "https://klamath-water-quality-app.s3.us-west-2.amazonaws.com/reportsMetadata.csv"
+        )
+          .then((response) => response.text())
+          .then((value) => {
+            const { data } = Papa.parse(value)
+            const headers = data.shift()
+
+            const reportsData = orderBy(
+              data.map((row) => {
+                const obj = {}
+
+                row.forEach((value, index) => {
+                  obj[headers[index]] = value
+                })
+
+                return obj
+              }),
+              ["startYear"],
+              ["desc"]
+            )
+            console.log("reportsdata", reportsData)
+            setAllData(reportsData)
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })()
     const handleResize = (e) => {
       const { innerWidth } = e.target
       if (innerWidth >= 768 && innerWidth <= 991) setIsTabletScreenSize(true)
@@ -40,22 +74,24 @@ const ReportsPage = ({ data }) => {
     }
   }, [])
 
-  const [searchFilteredReports, setSearchFilteredReports] = useState(
-    data.allReportsMetadataCsv.nodes
-  )
+  useEffect(() => {
+    setSearchFilteredReports(allData)
+    setFilteredReports(allData.sort((a, b) => +b.year - +a.year))
 
-  const [filteredReports, setFilteredReports] = useState(
-    data.allReportsMetadataCsv.nodes.sort((a, b) => +b.year - +a.year)
-  )
-  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
+    const uniqueReportTypes = [
+      ...new Set(allData.map((item) => item.type)),
+    ].sort(function (a, b) {
+      return a.toLowerCase().localeCompare(b.toLowerCase())
+    })
 
-  const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
-    (reportType, index) => ({
+    const reportTypesArray = uniqueReportTypes.map((reportType, index) => ({
       key: index,
       text: formatTextCasing(reportType),
       value: reportType,
-    })
-  )
+    }))
+
+    setReportTypeOptions(reportTypesArray)
+  }, [allData])
 
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
 
@@ -142,23 +178,6 @@ const ReportsPage = ({ data }) => {
     }
   }, [searchFilteredReports, currentReportTypeFilters])
 
-  const testUpload = async () => {
-    AWS
-    const client = new S3Client({ ...AWS.config, region: "us-west-2" })
-
-    const command = new PutObjectCommand({
-      Bucket: "klamath-water-quality-app",
-      Key: "hello-s3-2.txt",
-      Body: "Hello S3!",
-    })
-    try {
-      const response = await client.send(command)
-      console.log(response)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
@@ -167,7 +186,7 @@ const ReportsPage = ({ data }) => {
           <ReportSearch
             sortMethod={sortMethod}
             setSearchFilteredReports={setSearchFilteredReports}
-            allData={data.allReportsMetadataCsv.nodes}
+            allData={allData}
             className="filter-input-field"
           />
         </Grid.Column>
@@ -219,15 +238,6 @@ const ReportsPage = ({ data }) => {
           </Modal>
         )}
       </Grid>
-      <Button
-        mobile={2}
-        computer={2}
-        tablet={2}
-        color="blue"
-        icon="upload"
-        content={isTabletScreenSize ? null : "test"}
-        onClick={testUpload}
-      />
       <Grid
         container
         columns={3}

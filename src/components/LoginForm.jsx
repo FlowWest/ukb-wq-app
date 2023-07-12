@@ -7,7 +7,6 @@ import {
   AuthenticationDetails,
 } from "amazon-cognito-identity-js"
 import * as AWS from "aws-sdk"
-// import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { UserContext } from "../../gatsby-browser"
 
 const LoginForm = () => {
