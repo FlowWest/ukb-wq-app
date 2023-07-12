@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react"
-import {
-  Button,
-  Grid,
-  Dropdown,
-  Pagination,
-  Modal,
-  Form,
-} from "semantic-ui-react"
+import { Button, Grid, Dropdown, Pagination, Modal } from "semantic-ui-react"
 import Layout from "../components/Layout"
 import SEO from "../components/Seo"
 import DataDownloadCard from "../components/DataDownloadCard"
@@ -18,12 +11,20 @@ import UploadReportForm from "../components/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
 import * as AWS from "aws-sdk"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { filter, escapeRegExp } from "lodash"
 
 const ReportsPage = ({ data }) => {
   const { user } = useContext(UserContext)
   const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
-
   const [isTabletScreenSize, setIsTabletScreenSize] = useState(false)
+  const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
+  const allReports = data.allReportsMetadataCsv.nodes
+
+  const [filteredReports, setFilteredReports] = useState(
+    allReports.sort((a, b) => +b.year - +a.year)
+  )
+  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
+  const [currentSearchFilterString, setCurrentSearchFilterString] = useState("")
 
   useEffect(() => {
     const handleResize = (e) => {
@@ -40,16 +41,6 @@ const ReportsPage = ({ data }) => {
     }
   }, [])
 
-  const [searchFilteredReports, setSearchFilteredReports] = useState(
-    data.allReportsMetadataCsv.nodes
-  )
-
-  const [filteredReports, setFilteredReports] = useState(
-    data.allReportsMetadataCsv.nodes.sort((a, b) => +b.year - +a.year)
-  )
-
-  const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
-
   const reportTypeOptions = data.allReportsMetadataCsv.distinct.map(
     (reportType, index) => ({
       key: index,
@@ -58,34 +49,31 @@ const ReportsPage = ({ data }) => {
     })
   )
 
-  const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
-
   const reportVisibilityFilterOptions = [
     {
       key: "all",
       value: "All Reports",
       text: "All Reports",
-      filter: function (reports) {
-        return reports
-      },
     },
     {
       key: "active",
       value: "Active Reports",
       text: "Active Reports",
-      filter: function (reports) {
-        return reports.filter((report) => +report.year % 2 === 1)
-      },
     },
     {
       key: "hidden",
       value: "Hidden Reports",
       text: "Hidden Reports",
-      filter: function (reports) {
-        return reports.filter((report) => +report.year % 2 === 0)
-      },
     },
   ]
+
+  useEffect(() => {
+    setReportVisibilityFilterMethod(
+      user
+        ? reportVisibilityFilterOptions.at(0)
+        : reportVisibilityFilterOptions.at(1)
+    )
+  }, [user])
 
   const [reportVisibilityFilterMethod, setReportVisibilityFilterMethod] =
     useState(
@@ -110,42 +98,14 @@ const ReportsPage = ({ data }) => {
   }
 
   const reportTypeChangeHandler = (event, { value }) => {
-    const searchFilteredReportsCopy = sortMethod.sort([
-      ...searchFilteredReports,
-    ])
-    if (value.length > 0) {
-      setFilteredReports(
-        searchFilteredReportsCopy.filter((report) =>
-          value.includes(report.type)
-        )
-      )
-    } else {
-      setFilteredReports(searchFilteredReportsCopy)
-    }
-
     setCurrentReportTypeFilters(value)
   }
 
   const reportVisibilityChangeHandler = (event, { value }) => {
-    switch (value) {
-      case "All Reports":
-        setFilteredReports(sortMethod.sort(searchFilteredReports))
-        break
-      case "Active Reports":
-        setFilteredReports(
-          sortMethod
-            .sort(searchFilteredReports)
-            .filter((report) => +report.year % 2 === 1)
-        )
-        break
-      case "Hidden Reports":
-        setFilteredReports(
-          sortMethod
-            .sort(searchFilteredReports)
-            .filter((report) => +report.year % 2 === 0)
-        )
-        break
-    }
+    const selectedReportVisibilityFilter = reportVisibilityFilterOptions.find(
+      (option) => option.value === value
+    )
+    setReportVisibilityFilterMethod(selectedReportVisibilityFilter)
   }
 
   const sortMethodChangeHandler = useCallback(
@@ -188,40 +148,51 @@ const ReportsPage = ({ data }) => {
   )
 
   // search query changes
+  // report type filter changes
+  // visibility filter changes
+
+  // filter on all data
   useEffect(() => {
-    if (currentReportTypeFilters.length > 0) {
-      setFilteredReports(
-        searchFilteredReports.filter((report) =>
-          currentReportTypeFilters.includes(report.type)
-        )
-      )
-    } else {
-      user
-        ? setFilteredReports(sortMethod.sort(searchFilteredReports))
-        : setFilteredReports(
-            sortMethod
-              .sort(searchFilteredReports)
-              .filter((report) => report.year % 2 === 1)
+    let filteredReportsArray = allReports
+
+    if (reportVisibilityFilterMethod) {
+      switch (reportVisibilityFilterMethod.key) {
+        case "all":
+          filteredReportsArray = allReports
+          break
+        case "active":
+          filteredReportsArray = allReports.filter(
+            (report) => report.active === "TRUE"
           )
+          break
+        case "hidden":
+          filteredReportsArray = allReports.filter(
+            (report) => report.active === "FALSE"
+          )
+          break
+      }
     }
-  }, [searchFilteredReports, currentReportTypeFilters, user])
 
-  const testUpload = async () => {
-    AWS
-    const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+    if (currentSearchFilterString) {
+      const re = new RegExp(escapeRegExp(currentSearchFilterString), "i")
+      const isMatch = (result) => re.test(`${result.title} ${result.authors}`)
 
-    const command = new PutObjectCommand({
-      Bucket: "klamath-water-quality-app",
-      Key: "hello-s3-2.txt",
-      Body: "Hello S3!",
-    })
-    try {
-      const response = await client.send(command)
-      console.log(response)
-    } catch (err) {
-      console.error(err)
+      filteredReportsArray = filter(filteredReportsArray, isMatch)
     }
-  }
+
+    if (currentReportTypeFilters.length > 0) {
+      filteredReportsArray = filteredReportsArray.filter((report) =>
+        currentReportTypeFilters.includes(report.type)
+      )
+    }
+
+    setFilteredReports(filteredReportsArray)
+  }, [
+    reportVisibilityFilterMethod,
+    currentSearchFilterString,
+    currentReportTypeFilters,
+    allReports,
+  ])
 
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
@@ -240,12 +211,9 @@ const ReportsPage = ({ data }) => {
           </Grid.Column>
         )}
         <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 4 : 8}>
-          {/* <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 7 : 8}> */}
           <ReportSearch
-            sortMethod={sortMethod}
-            setSearchFilteredReports={setSearchFilteredReports}
-            allData={data.allReportsMetadataCsv.nodes}
             className="filter-input-field"
+            setCurrentSearchFilterString={setCurrentSearchFilterString}
           />
         </Grid.Column>
         <Grid.Column mobile={16} tablet={4} computer={user ? 3 : 4}>
@@ -296,15 +264,6 @@ const ReportsPage = ({ data }) => {
           </Modal>
         )}
       </Grid>
-      {/* <Button
-        mobile={2}
-        computer={2}
-        tablet={2}
-        color="blue"
-        icon="upload"
-        content={isTabletScreenSize ? null : "test"}
-        onClick={testUpload}
-      /> */}
       <Grid
         container
         columns={3}
@@ -342,6 +301,7 @@ export const query = graphql`
         organization
         title
         type
+        active
       }
     }
   }
