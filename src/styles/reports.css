@@ -59,9 +59,37 @@ Filter Container and Input Styles
 }
 
 .report-card {
-  /* width: 350px !important; */
   cursor: pointer;
   height: 300px;
+  position: relative;
+}
+
+.report-cta {
+  z-index: 1;
+}
+
+.report-card-hidden::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  position: absolute;
+}
+
+.report-card-hidden::after {
+  color: hsla(0, 0%, 85%, 0.5);
+  font-size: 4rem;
+  position: absolute;
+  content: "HIDDEN" !important;
+  overflow: visible !important;
+  visibility: inherit !important;
+  height: calc(100% - 58px) !important;
+  width: 100% !important;
+  display: flex !important;
+  rotate: -45deg;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 .ui.cards > .card > .content > .meta + .description {

@@ -1,9 +1,12 @@
-import React, { useState, useContext } from "react"
-import { Card, Button, Icon, Dropdown, Modal } from "semantic-ui-react"
+import React, { useContext } from "react"
+import { Card, Button, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 
 const DataDownloadCard = ({ reportMetaData }) => {
+  const reportIsActive = reportMetaData.active === "TRUE"
+  console.log("🚀 ~ DataDownloadCard ~ reportIsActive:", reportIsActive)
+
   const { user } = useContext(UserContext)
   const authorsArray = reportMetaData.authors.split(",")
 
@@ -19,8 +22,12 @@ const DataDownloadCard = ({ reportMetaData }) => {
   }
 
   return (
-    <Card color="blue" link fluid className="report-card">
-      {/* <Card className="report-card" color="blue" link > */}
+    <Card
+      color="blue"
+      link
+      fluid
+      className={`report-card ${reportIsActive ? "" : "report-card-hidden"}`}
+    >
       <Card.Content>
         <Card.Header as="h6" className="report-card-header">
           {reportMetaData.title}
@@ -46,6 +53,7 @@ const DataDownloadCard = ({ reportMetaData }) => {
           target="_blank"
           rel="noreferrer"
           basic
+          className="report-cta"
         >
           View
         </Button>
@@ -60,6 +68,15 @@ const DataDownloadCard = ({ reportMetaData }) => {
             text=" "
             upward
             options={[
+              {
+                key: "toggle visibility",
+                value: "toggle visibility",
+                text: (
+                  <Dropdown.Item>
+                    Mark as {reportIsActive ? "Visible" : "Hidden"}
+                  </Dropdown.Item>
+                ),
+              },
               {
                 key: "delete",
                 value: "delete",
