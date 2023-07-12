@@ -11,13 +11,13 @@ const formatDate = (date) =>
 
 const WeeklyUploadTable = ({ data }) => {
   return (
-    <Grid container>
+    <Grid container className="weekly-upload-table">
       <Header as="h1">{data.header}</Header>
       <Table striped color="blue">
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Release Date</Table.HeaderCell>
-            <Table.HeaderCell>Download</Table.HeaderCell>
+            <Table.HeaderCell width={10}>Release Date</Table.HeaderCell>
+            <Table.HeaderCell>View Document</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -26,7 +26,7 @@ const WeeklyUploadTable = ({ data }) => {
               <Table.Cell>{formatDate(upload.uploadDate)}</Table.Cell>
               <Table.Cell>
                 <Link to={upload.link}>
-                  <Icon name="download" size="large" />
+                  <Icon name="external" size="large" />
                 </Link>
               </Table.Cell>
             </Table.Row>
