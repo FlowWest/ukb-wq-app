@@ -4,6 +4,10 @@
   width: inherit;
 }
 
+.edit-report-form-container {
+  padding: 1.5rem;
+}
+
 /* 
 Filter Container and Input Styles
 */
@@ -28,10 +32,6 @@ Filter Container and Input Styles
   position: absolute;
   bottom: 15px;
   right: 15px;
-}
-
-.ui.card.report-card {
-  /* margin: 10px !important; */
 }
 
 .report-card-header {
@@ -59,21 +59,90 @@ Filter Container and Input Styles
 }
 
 .report-card {
-  /* width: 350px !important; */
   cursor: pointer;
   height: 300px;
+  position: relative;
+}
+
+.report-cta {
+  z-index: 1;
+}
+
+.report-card-hidden::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  position: absolute;
+}
+
+.report-card-hidden::after {
+  color: hsla(0, 0%, 85%, 0.5);
+  font-size: 4rem;
+  position: absolute;
+  content: "HIDDEN" !important;
+  overflow: visible !important;
+  visibility: inherit !important;
+  height: calc(100% - 58px) !important;
+  width: 100% !important;
+  display: flex !important;
+  rotate: -45deg;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 .ui.cards > .card > .content > .meta + .description {
   padding-bottom: 10px;
 }
 
-.filter-input-field {
-  /* margin-bottom: 2rem; */
-}
-
 .report-search-input.ui.search .prompt {
   border-radius: 0.28571429rem !important;
+}
+
+.card-action-buttons {
+  display: flex;
+}
+.card-action-buttons a:first-child {
+  flex-grow: 1;
+}
+
+/* input wrapper */
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  background: hsl(0, 0%, 98%);
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid hsl(0, 0%, 80%);
+  top: 5px;
+}
+.custom-datepicker-container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px 0 0 1px;
+  width: 15px;
+  height: 15px;
+  top: -8px;
+  right: 19px;
+  background: inherit;
+
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkbox-field {
+  margin-bottom: 1em;
 }
 
 @media only screen and (max-width: 690px) {

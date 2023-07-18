@@ -1,9 +1,9 @@
 import React from "react"
 import { Grid } from "semantic-ui-react"
-import Footer from "./footer"
+import Footer from "./Footer"
 import ResponsiveContainer from "./ResponsiveContainer"
 
-export default ({ children, pageInfo }) => (
+const Layout = ({ children, pageInfo }) => (
   <ResponsiveContainer pageName={pageInfo?.pageName}>
     <Grid>
       <Grid.Column className={pageInfo?.pageName !== "index" ? "mt-5" : ""}>
@@ -13,3 +13,5 @@ export default ({ children, pageInfo }) => (
     </Grid>
   </ResponsiveContainer>
 )
+
+export default Layout

@@ -2,21 +2,23 @@ import React from "react"
 import { StaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
 
-export default () => (
+const FlowwwestLogo = () => (
   <StaticQuery
     query={graphql`
       query {
-        file(relativePath: { eq: "klamathtribes1200-BW.png" }) {
+        file(relativePath: { eq: "flowwest-logo.png" }) {
           childImageSharp {
-            fixed(width: 500) {
+            fixed(width: 100) {
               ...GatsbyImageSharpFixed_noBase64
             }
           }
         }
       }
     `}
-    render={data => (
-      <Img fixed={data.file.childImageSharp.fixed} alt="Klamath Logo" />
+    render={(data) => (
+      <Img fixed={data.file.childImageSharp.fixed} alt="FlowWest Logo" />
     )}
   />
 )
+
+export default FlowwwestLogo

@@ -1,16 +1,16 @@
 import React from "react"
 import { Grid, Card, Header, Segment } from "semantic-ui-react"
-import Layout from "../components/layout"
-import HomeImageGallery from "../components/homeImageGallery"
-import SEO from "../components/seo"
+import Layout from "../components/Layout"
+import HomeImageGallery from "../components/HomeImageGallery"
+import SEO from "../components/Seo"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import "semantic-ui-css/semantic.min.css"
 
-export default ({ data }) => {
+const IndexPage = ({ data }) => {
   const imagesArray = data.allFile.edges
   const imagesObject = {}
-  imagesArray.forEach(image => {
+  imagesArray.forEach((image) => {
     imagesObject[image.node.name] = image.node
   })
 
@@ -73,15 +73,15 @@ export default ({ data }) => {
                 Since 2006 the Sprague River Water Quality Lab (SRWQL) has
                 allowed the Klamath Tribes to analyze all water nutrients, water
                 chemistry, and algal toxin samples in-house. The lab worked
-                closely with the U.S. Geological Survey’s National Water Quality
-                Lab to complete a laboratory evaluation project comparing the
-                data split between the two labs. The lab has been accredited
-                through the National Environmental Lab Accreditation Program and
-                Oregon Environmental Lab Accreditation Program. The SRWQL
-                utilizes state-of-the-art automated discrete analyzer technology
-                with the Thermo Fisher Aquakem 250. The lab also uses E-friendly
-                methods that employ chemicals that are less toxic to the
-                environment.
+                closely with the U.S. Geological Survey&apos;s National Water
+                Quality Lab to complete a laboratory evaluation project
+                comparing the data split between the two labs. The lab has been
+                accredited through the National Environmental Lab Accreditation
+                Program and Oregon Environmental Lab Accreditation Program. The
+                SRWQL utilizes state-of-the-art automated discrete analyzer
+                technology with the Thermo Fisher Aquakem 250. The lab also uses
+                E-friendly methods that employ chemicals that are less toxic to
+                the environment.
               </p>
             </Grid.Column>
             <Grid.Column computer={10} mobile={16}>
@@ -128,3 +128,5 @@ export const query = graphql`
     }
   }
 `
+
+export default IndexPage

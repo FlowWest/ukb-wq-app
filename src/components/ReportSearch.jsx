@@ -2,15 +2,11 @@ import _ from "lodash"
 import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
-export default ({ setSearchFilteredReports, allData, sortMethod }) => {
-
+const ReportSearch = ({ setCurrentSearchFilterString }) => {
   const initialState = {
     loading: false,
-    results: [],
     value: "",
   }
-
-  const allDataCopy = [...allData]
 
   function searchReducer(state, action) {
     switch (action.type) {
@@ -19,7 +15,7 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
       case "START_SEARCH":
         return { ...state, loading: true, value: action.query }
       case "FINISH_SEARCH":
-        return { ...state, loading: false, results: action.results }
+        return { ...state, loading: false }
       case "UPDATE_SELECTION":
         return { ...state, value: action.selection }
 
@@ -29,32 +25,24 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
   }
 
   const [searchState, dispatch] = useReducer(searchReducer, initialState)
-  const { loading, results, value } = searchState
+  const { loading, value } = searchState
 
   const timeoutRef = useRef()
 
   const handleSearchChange = (e, data) => {
-    
     clearTimeout(timeoutRef.current)
     dispatch({ type: "START_SEARCH", query: data.value })
-    
+
     timeoutRef.current = setTimeout(() => {
+      setCurrentSearchFilterString(data.value)
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
-        setSearchFilteredReports(sortMethod.sort(allDataCopy))
-     
 
-       
         return
       }
-      
-      const re = new RegExp(_.escapeRegExp(data.value), "i")
-      const isMatch = result => re.test(`${result.title} ${result.authors}`)
-      setSearchFilteredReports(sortMethod.sort(_.filter(allDataCopy, isMatch)))
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: sortMethod.sort(_.filter(allDataCopy, isMatch)),
       })
     }, 300)
   }
@@ -67,9 +55,9 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
 
   return (
     <Search
-    fluid
-    className="report-search-input"
-     input={{ icon: 'search', iconPosition: 'left' }}
+      fluid
+      className="report-search-input"
+      input={{ icon: "search", iconPosition: "left" }}
       loading={loading}
       onResultSelect={(e, data) =>
         dispatch({
@@ -78,11 +66,11 @@ export default ({ setSearchFilteredReports, allData, sortMethod }) => {
         })
       }
       onSearchChange={handleSearchChange}
-      results={results}
       open={false}
       value={value}
-                          placeholder='Search by Title'
-
+      placeholder="Search by Title or Author"
     />
   )
 }
+
+export default ReportSearch

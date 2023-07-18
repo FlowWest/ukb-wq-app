@@ -1,0 +1,35 @@
+.admin-tab-panel {
+  height: calc(100vh - 1rem);
+}
+.admin-tab-content {
+  margin-top: 1rem !important;
+  margin-right: 1rem !important;
+}
+
+.admin-menu-popup {
+  width: 500px !important;
+  padding: 1rem !important;
+}
+
+.admin-menu::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  width: 0;
+  bottom: -1.5rem;
+  right: 5px;
+  rotate: 270deg;
+  border: 10px solid transparent;
+  border-right-color: #f5f5f5;
+}
+
+.admin-menu-icon {
+  margin-right: 1rem;
+}
+.admin-menu-item-icon {
+  margin-right: 0.5rem;
+}
+
+.admin-menu-icon-wrapper {
+  margin-right: 1rem;
+}
