@@ -72,7 +72,7 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
         },
   })
 
-  const editForm = variant === "edit"
+  const editForm = !!report
 
   const handleFormSubmit = async (data) => {
     console.log("🚀 ~ handleFormSubmit ~ data:", data)
