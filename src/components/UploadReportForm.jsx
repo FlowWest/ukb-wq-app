@@ -1,14 +1,46 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
-import { Form, Button } from "semantic-ui-react"
+import { Form, Button, Checkbox } from "semantic-ui-react"
 import DataUploader from "./DataUploader"
 import reportTypeDropdownOptions from "../helpers/reportTypeOptions"
-import { uploadReportSchema } from "../helpers/validationSchemas"
+import {
+  uploadReportSchema,
+  editReportSchema,
+} from "../helpers/validationSchemas"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as AWS from "aws-sdk"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
-const UploadReportForm = ({ onClose }) => {
+const DatePickerContainer = ({ children }) => (
+  <div className="custom-datepicker-container">
+    <div style={{ position: "relative" }}>{children}</div>
+  </div>
+)
+
+const UploadReportForm = ({ onClose, variant, report = null }) => {
+  const [showEndYear, setShowEndYear] = useState(
+    report?.endyear.length === 4 || false
+  )
+
+  const formatDate = useCallback((year) => {
+    const date = year ? new Date(`${year}T00:00:00-05:00`) : ""
+    return date
+  }, [])
+
+  const parseYear = useCallback((date) => {
+    const dateString = new Date(date).toDateString()
+    const year = dateString.split(" ").at(3)
+    return year
+  }, [])
+
+  const handleCheckboxToggle = useCallback((checked) => {
+    setShowEndYear(checked)
+    setValue("addEndYear", checked)
+    if (!checked) setValue("endYear", null)
+  }, [])
+
   const {
     control,
     handleSubmit,
@@ -17,17 +49,34 @@ const UploadReportForm = ({ onClose }) => {
     clearErrors,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(uploadReportSchema),
-    defaultValues: {
-      title: "",
-      location: "",
-      authors: "",
-      type: "",
-      file: null,
-    },
+    resolver: yupResolver(report ? editReportSchema : uploadReportSchema),
+    defaultValues: report
+      ? {
+          title: report.title,
+          year: report.year,
+          endYear: report.endyear,
+          addEndYear: !!report.endyear,
+          location: report.location,
+          authors: report.authors,
+          type: report.type,
+        }
+      : {
+          title: "",
+          year: "",
+          endYear: null,
+          addEndYear: false,
+          location: "",
+          authors: "",
+          type: "",
+          file: null,
+        },
   })
 
+  const editForm = variant === "edit"
+
   const handleFormSubmit = async (data) => {
+    console.log("🚀 ~ handleFormSubmit ~ data:", data)
+
     const reader = new FileReader()
 
     reader.onabort = () => console.log("file reading was aborted")
@@ -53,16 +102,18 @@ const UploadReportForm = ({ onClose }) => {
       }
     }
     reader.readAsArrayBuffer(data.file)
-
-    // onClose()
   }
+
   const handleSelectChange = (event, option) => {
     setValue("type", option.value)
     clearErrors("type")
   }
 
   return (
-    <Form onSubmit={handleSubmit(handleFormSubmit)}>
+    <Form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className={editForm ? "edit-report-form-container" : ""}
+    >
       <Controller
         name="title"
         control={control}
@@ -79,7 +130,77 @@ const UploadReportForm = ({ onClose }) => {
           </>
         )}
       />
+      <Controller
+        name="year"
+        control={control}
+        render={({ field }) => (
+          <>
+            <DatePicker
+              calendarContainer={DatePickerContainer}
+              selected={formatDate(getValues("year"))}
+              onChange={(date) => {
+                clearErrors("year")
+                setValue("year", parseYear(date))
+              }}
+              showYearPicker
+              dateFormat="yyyy"
+              customInput={
+                <Form.Input
+                  label="Year"
+                  {...field}
+                  className={errors.year ? "form-error-input" : ""}
+                />
+              }
+            />
 
+            {errors.year && (
+              <p className="form-error-message">{errors.year.message}</p>
+            )}
+          </>
+        )}
+      />
+      {showEndYear && (
+        <Controller
+          name="endYear"
+          control={control}
+          render={({ field }) => (
+            <>
+              <DatePicker
+                calendarContainer={DatePickerContainer}
+                selected={formatDate(getValues("endYear"))}
+                onChange={(date) => {
+                  clearErrors("endYear")
+                  setValue("endYear", parseYear(date))
+                }}
+                showYearPicker
+                dateFormat="yyyy"
+                customInput={
+                  <Form.Input
+                    label="End Year"
+                    {...field}
+                    className={errors.endYear ? "form-error-input" : ""}
+                  />
+                }
+              />
+
+              {errors.endYear && (
+                <p className="form-error-message">{errors.endYear.message}</p>
+              )}
+            </>
+          )}
+        />
+      )}
+      {/* <Controller
+        name="addEndYear"
+        control={control}
+        render={({ field }) => <Checkbox label="Add End Year" {...field} />}
+      /> */}
+      <Checkbox
+        className="checkbox-field"
+        label="Add End Year"
+        checked={showEndYear}
+        onChange={(e, { checked }) => handleCheckboxToggle(checked)}
+      />
       <Controller
         name="location"
         control={control}
@@ -130,27 +251,31 @@ const UploadReportForm = ({ onClose }) => {
           </>
         )}
       />
-      <Controller
-        name="file"
-        control={control}
-        render={({ field }) => (
-          <>
-            <DataUploader
-              setValue={setValue}
-              getValues={getValues}
-              clearErrors={clearErrors}
-              error={errors.file}
-              {...field}
-            />
-            {errors.file && (
-              <p className="form-error-message">{errors.file.message}</p>
-            )}
-          </>
-        )}
-      />
-      <Button type="submit">Submit</Button>
-      <Button type="button" negative onClick={onClose}>
+      {!editForm && (
+        <Controller
+          name="file"
+          control={control}
+          render={({ field }) => (
+            <>
+              <DataUploader
+                setValue={setValue}
+                getValues={getValues}
+                clearErrors={clearErrors}
+                error={errors.file}
+                {...field}
+              />
+              {errors.file && (
+                <p className="form-error-message">{errors.file.message}</p>
+              )}
+            </>
+          )}
+        />
+      )}
+      <Button type="button" color="red" inverted onClick={onClose}>
         Cancel
+      </Button>
+      <Button type="submit" positive>
+        Submit
       </Button>
     </Form>
   )

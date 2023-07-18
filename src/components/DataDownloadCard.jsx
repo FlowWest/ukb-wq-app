@@ -1,12 +1,12 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { Card, Button, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
+import UploadReportForm from "./UploadReportForm"
 
 const DataDownloadCard = ({ reportMetaData }) => {
+  const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
-  console.log("🚀 ~ DataDownloadCard ~ reportIsActive:", reportIsActive)
-
   const { user } = useContext(UserContext)
   const authorsArray = reportMetaData.authors.split(",")
 
@@ -22,81 +22,112 @@ const DataDownloadCard = ({ reportMetaData }) => {
   }
 
   return (
-    <Card
-      color="blue"
-      link
-      fluid
-      className={`report-card ${reportIsActive ? "" : "report-card-hidden"}`}
-    >
-      <Card.Content>
-        <Card.Header as="h6" className="report-card-header">
-          {reportMetaData.title}
-        </Card.Header>
-        <Card.Meta className="report-card-subheader">
-          {formatTextCasing(reportMetaData.type)}
-        </Card.Meta>
-        <Card.Description>
-          <strong>Author(s)</strong>: {generateAuthorsString(authorsArray)}{" "}
-          <br />
-          <strong>Location</strong>: {reportMetaData.location} <br />
-          <strong>Year</strong>: {reportMetaData.year}{" "}
-          {reportMetaData.endyear !== "NA"
-            ? ` - ${reportMetaData.endyear}`
-            : null}
-          <br />
-        </Card.Description>
-      </Card.Content>
-      <Card.Content extra className="card-action-buttons">
-        <Button
-          as="a"
-          href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${reportMetaData.filename}`}
-          target="_blank"
-          rel="noreferrer"
-          basic
-          className="report-cta"
-        >
-          View
-        </Button>
-        {user && (
-          <Dropdown
-            button
+    <>
+      <Card
+        color="blue"
+        link
+        fluid
+        className={`report-card ${reportIsActive ? "" : "report-card-hidden"}`}
+      >
+        <Card.Content>
+          <Card.Header as="h6" className="report-card-header">
+            {reportMetaData.title}
+          </Card.Header>
+          <Card.Meta className="report-card-subheader">
+            {formatTextCasing(reportMetaData.type)}
+          </Card.Meta>
+          <Card.Description>
+            <strong>Author(s)</strong>: {generateAuthorsString(authorsArray)}{" "}
+            <br />
+            <strong>Location</strong>: {reportMetaData.location} <br />
+            <strong>Year</strong>: {reportMetaData.year}{" "}
+            {reportMetaData.endyear !== "NA"
+              ? ` - ${reportMetaData.endyear}`
+              : null}
+            <br />
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra className="card-action-buttons">
+          <Button
+            as="a"
+            href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${reportMetaData.filename}`}
+            target="_blank"
+            rel="noreferrer"
             basic
-            className="button icon"
-            direction="left"
-            floating
-            icon="vertical ellipsis"
-            text=" "
-            upward
-            options={[
-              {
-                key: "toggle visibility",
-                value: "toggle visibility",
-                text: (
-                  <Dropdown.Item>
-                    Mark as {reportIsActive ? "Visible" : "Hidden"}
-                  </Dropdown.Item>
-                ),
-              },
-              {
-                key: "delete",
-                value: "delete",
-                text: (
-                  <Modal
-                    trigger={<Dropdown.Item>Delete Report</Dropdown.Item>}
-                    header="Delete Report"
-                    content="Are you sure you would like to delete this report?"
-                    actions={[
-                      "Cancel",
-                      { key: "delete", content: "Delete", negative: true },
-                    ]}
-                  />
-                ),
-              },
-            ]}
+            className="report-cta"
+          >
+            View
+          </Button>
+          {user && (
+            <Dropdown
+              button
+              basic
+              className="button icon"
+              direction="left"
+              floating
+              icon="vertical ellipsis"
+              text=" "
+              upward
+              options={[
+                {
+                  key: "edit report",
+                  value: "edit report",
+                  text: (
+                    <Dropdown.Item onClick={() => setEditReportModalOpen(true)}>
+                      Edit Report Details
+                    </Dropdown.Item>
+                  ),
+                },
+                {
+                  key: "toggle visibility",
+                  value: "toggle visibility",
+                  text: (
+                    <Modal
+                      size="tiny"
+                      trigger={
+                        <Dropdown.Item>
+                          Mark as {reportIsActive ? "Hidden" : "Visible"}
+                        </Dropdown.Item>
+                      }
+                      header={`Toggle Report Visibility (${
+                        reportIsActive ? "Hidden" : "Visible"
+                      })`}
+                      content={`${
+                        reportIsActive
+                          ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
+                          : "Setting the report visibility status to visible will allow visitors to view the content of the report."
+                      } Do you wish to proceed?`}
+                      actions={[
+                        "Cancel",
+                        { key: "delete", content: "Delete", negative: true },
+                      ]}
+                    />
+                  ),
+                },
+              ]}
+            />
+          )}
+        </Card.Content>
+      </Card>
+      <Modal
+        open={editReportModalOpen}
+        onOpen={() => setEditReportModalOpen(true)}
+        onClose={() => setEditReportModalOpen(false)}
+        header="Edit Report"
+        size="tiny"
+        content={
+          <UploadReportForm
+            variant="edit"
+            report={reportMetaData}
+            onClose={() => setEditReportModalOpen(false)}
           />
-        )}
-      </Card.Content>
-    </Card>
+        }
+        // actions={[
+        //   "Cancel",
+        //   { key: "delete", content: "Delete", negative: true },
+        // ]}
+      />
+    </>
   )
 }
 

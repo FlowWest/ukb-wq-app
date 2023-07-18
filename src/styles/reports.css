@@ -4,6 +4,10 @@
   width: inherit;
 }
 
+.edit-report-form-container {
+  padding: 1.5rem;
+}
+
 /* 
 Filter Container and Input Styles
 */
@@ -30,9 +34,9 @@ Filter Container and Input Styles
   right: 15px;
 }
 
-.ui.card.report-card {
-  /* margin: 10px !important; */
-}
+/* .ui.card.report-card {
+  margin: 10px !important;
+} */
 
 .report-card-header {
   margin-bottom: 0.5rem !important;
@@ -96,9 +100,9 @@ Filter Container and Input Styles
   padding-bottom: 10px;
 }
 
-.filter-input-field {
-  /* margin-bottom: 2rem; */
-}
+/* .filter-input-field {
+  margin-bottom: 2rem;
+} */
 
 .report-search-input.ui.search .prompt {
   border-radius: 0.28571429rem !important;
@@ -109,6 +113,44 @@ Filter Container and Input Styles
 }
 .card-action-buttons a:first-child {
   flex-grow: 1;
+}
+
+/* input wrapper */
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  background: hsl(0, 0%, 98%);
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid hsl(0, 0%, 80%);
+  top: 5px;
+}
+.custom-datepicker-container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px 0 0 1px;
+  width: 15px;
+  height: 15px;
+  top: -8px;
+  right: 19px;
+  background: inherit;
+
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkbox-field {
+  margin-bottom: 1em;
 }
 
 @media only screen and (max-width: 690px) {
