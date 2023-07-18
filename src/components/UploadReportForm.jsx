@@ -25,7 +25,7 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
   )
 
   const formatDate = useCallback((year) => {
-    const date = year ? new Date(`${year}T00:00:00-05:00`) : ""
+    const date = year ? new Date(`01-01-${year}`) : ""
     return date
   }, [])
 
@@ -143,6 +143,8 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
                 setValue("year", parseYear(date))
               }}
               showYearPicker
+              maxDate={new Date(`01-01-${new Date().getFullYear()}`)}
+              minDate={new Date(`01-01-1955`)}
               dateFormat="yyyy"
               customInput={
                 <Form.Input
@@ -173,6 +175,8 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
                   setValue("endYear", parseYear(date))
                 }}
                 showYearPicker
+                maxDate={new Date(`01-01-${new Date().getFullYear()}`)}
+                minDate={new Date(`01-01-1955`)}
                 dateFormat="yyyy"
                 customInput={
                   <Form.Input
@@ -190,11 +194,6 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
           )}
         />
       )}
-      {/* <Controller
-        name="addEndYear"
-        control={control}
-        render={({ field }) => <Checkbox label="Add End Year" {...field} />}
-      /> */}
       <Checkbox
         className="checkbox-field"
         label="Add End Year"
@@ -223,7 +222,7 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
         render={({ field }) => (
           <>
             <Form.Input
-              label="Authors"
+              label="Authors (Commas can be used to separate multiple authors)"
               {...field}
               className={errors.authors ? "form-error-input" : ""}
             />
