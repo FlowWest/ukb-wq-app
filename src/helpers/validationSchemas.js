@@ -44,3 +44,8 @@ export const editReportSchema = yup
     type: yup.string().label("Report Type").required(),
   })
   .required()
+
+export const LoginFormSchema = yup.object().shape({
+  username: yup.string().label("Username").email().required(),
+  password: yup.string().label("Password").required(),
+})

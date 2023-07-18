@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { Form } from "semantic-ui-react"
 import { Controller, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { LoginFormSchema } from "../helpers/validationSchemas"
 import {
   CognitoUserPool,
   CognitoUser,
@@ -10,16 +12,28 @@ import * as AWS from "aws-sdk"
 import { UserContext } from "../../gatsby-browser"
 
 const LoginForm = () => {
-  const [loginError, setLoginError] = useState(null)
+  const [invalidCredentialsError, setInvalidCredentialsError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { handleSubmit, control } = useForm({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+  } = useForm({
     defaultValues: { username: "", password: "" },
+    resolver: yupResolver(LoginFormSchema),
   })
 
   const { user, setUser } = useContext(UserContext)
+  const watchUsername = watch("username")
+  const watchPassword = watch("password")
+
+  useEffect(() => {
+    if (invalidCredentialsError) setInvalidCredentialsError(null)
+  }, [watchUsername, watchPassword])
 
   const handleLoginFormSubmit = async (data) => {
-    setLoginError(null)
+    setInvalidCredentialsError(null)
     setIsSubmitting(true)
     const { username, password } = data
 
@@ -38,8 +52,8 @@ const LoginForm = () => {
           authenticationData
         )
         const poolData = {
-          UserPoolId: "us-west-1_Nls27cjWb", // Your user pool id here
-          ClientId: "2vmqo3efbr8jhlar14bar3jjhb", // Your client id here
+          UserPoolId: process.env.GATSBY_COGNITO_USER_POOL_ID, // Your user pool id here
+          ClientId: process.env.GATSBY_COGNITO_CLIENT_ID, // Your client id here
         }
         const userPool = new CognitoUserPool(poolData)
         const userData = {
@@ -49,27 +63,18 @@ const LoginForm = () => {
         const cognitoUser = new CognitoUser(userData)
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: function (result) {
-            sessionStorage.setItem("admin-cookie", "example-cookie")
-
             //POTENTIAL: Region needs to be set if not already set previously elsewhere.
             AWS.config.region = "us-west-1"
 
             AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-              IdentityPoolId: "us-west-1:9f54e56a-e04e-48b0-a11c-8d7ff4158e6f", // your identity pool id here
+              IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
               Logins: {
                 // Change the key below according to the specific region your user pool is in.
-                "cognito-idp.us-west-1.amazonaws.com/us-west-1_Nls27cjWb":
+                [`cognito-idp.us-west-1.amazonaws.com/${process.env.GATSBY_COGNITO_USER_POOL_ID}`]:
                   result.getIdToken().getJwtToken(),
               },
             })
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-              IdentityPoolId: "us-west-1:9f54e56a-e04e-48b0-a11c-8d7ff4158e6f", // your identity pool id here
-              Logins: {
-                // Change the key below according to the specific region your user pool is in.
-                "cognito-idp.us-west-1.amazonaws.com/us-west-1_Nls27cjWb":
-                  result.getIdToken().getJwtToken(),
-              },
-            })
+
             const cognitoUserEmail =
               cognitoUser.signInUserSession.idToken.payload.email
             setUser({ ...cognitoUser, email: cognitoUserEmail })
@@ -88,7 +93,7 @@ const LoginForm = () => {
           onFailure: function (err) {
             const error = new Error(err)
             console.log(error.message)
-            setLoginError(error.message.split(":")[1])
+            setInvalidCredentialsError(error.message.split(":")[1])
             setIsSubmitting(false)
           },
 
@@ -128,6 +133,9 @@ const LoginForm = () => {
               icon="user"
               iconPosition="left"
             />
+            {errors?.username && (
+              <p className="form-error-message">{errors.username.message}</p>
+            )}
           </>
         )}
       />
@@ -135,18 +143,25 @@ const LoginForm = () => {
         name="password"
         control={control}
         render={({ field }) => (
-          <Form.Input
-            {...field}
-            id="form-input-control-password"
-            label="Password"
-            placeholder="Password"
-            type="password"
-            icon="key"
-            iconPosition="left"
-          />
+          <>
+            <Form.Input
+              {...field}
+              id="form-input-control-password"
+              label="Password"
+              placeholder="Password"
+              type="password"
+              icon="key"
+              iconPosition="left"
+            />
+            {errors?.password && (
+              <p className="form-error-message">{errors.password.message}</p>
+            )}
+          </>
         )}
       />
-      {loginError && <p className="form-error-message">{loginError}</p>}
+      {invalidCredentialsError && (
+        <p className="form-error-message">{invalidCredentialsError}</p>
+      )}
 
       <Form.Button
         color="vk"

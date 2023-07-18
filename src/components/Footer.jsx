@@ -21,7 +21,6 @@ export const Footer = () => {
   const handleLogout = () => {
     setLoggingOut(true)
     setTimeout(() => {
-      sessionStorage.removeItem("admin-cookie")
       setUser(null)
       setLoggingOut(false)
     }, 1000)
