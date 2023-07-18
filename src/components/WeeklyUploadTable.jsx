@@ -25,7 +25,7 @@ const WeeklyUploadTable = ({ data }) => {
             <Table.Row key={upload.uploadDate}>
               <Table.Cell>{formatDate(upload.uploadDate)}</Table.Cell>
               <Table.Cell>
-                <Link to={upload.link}>
+                <Link to={upload.link} target="_blank">
                   <Icon name="external" size="large" />
                 </Link>
               </Table.Cell>
