@@ -122,10 +122,6 @@ const DataDownloadCard = ({ reportMetaData }) => {
             onClose={() => setEditReportModalOpen(false)}
           />
         }
-        // actions={[
-        //   "Cancel",
-        //   { key: "delete", content: "Delete", negative: true },
-        // ]}
       />
     </>
   )

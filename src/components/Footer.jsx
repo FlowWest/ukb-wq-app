@@ -63,20 +63,6 @@ export const Footer = () => {
                       <em>{user.email}</em>
                     </Menu.Item>
                     <Divider />
-                    <Menu.Item link>
-                      <Icon.Group className="admin-menu-item-icon">
-                        <Icon name="file alternate outline" />
-                        <Icon name="upload" corner />
-                      </Icon.Group>
-                      Upload Report
-                    </Menu.Item>
-                    <Menu.Item link>
-                      <Icon.Group className="admin-menu-item-icon">
-                        <Icon name="globe" />
-                        <Icon name="upload" corner />
-                      </Icon.Group>
-                      Upload Resource
-                    </Menu.Item>
                     <Menu.Item link onClick={handleLogout}>
                       <Icon.Group className="admin-menu-item-icon">
                         <Icon name="log out" />
