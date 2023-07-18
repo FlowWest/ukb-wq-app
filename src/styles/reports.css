@@ -34,10 +34,6 @@ Filter Container and Input Styles
   right: 15px;
 }
 
-/* .ui.card.report-card {
-  margin: 10px !important;
-} */
-
 .report-card-header {
   margin-bottom: 0.5rem !important;
   font-size: 1.15rem !important;
@@ -99,10 +95,6 @@ Filter Container and Input Styles
 .ui.cards > .card > .content > .meta + .description {
   padding-bottom: 10px;
 }
-
-/* .filter-input-field {
-  margin-bottom: 2rem;
-} */
 
 .report-search-input.ui.search .prompt {
   border-radius: 0.28571429rem !important;
