@@ -209,7 +209,7 @@ const ReportsPage = () => {
       <SEO title="Water Quality Reports" />
       <Grid container>
         {user && (
-          <Grid.Column computer={3}>
+          <Grid.Column mobile={16} tablet={4} computer={3}>
             <Dropdown
               fluid
               placeholder="All Reports"
@@ -220,13 +220,13 @@ const ReportsPage = () => {
             />
           </Grid.Column>
         )}
-        <Grid.Column mobile={16} tablet={user ? 6 : 8} computer={user ? 4 : 8}>
+        <Grid.Column mobile={16} tablet={user ? 12 : 8} computer={user ? 4 : 8}>
           <ReportSearch
             className="filter-input-field"
             setCurrentSearchFilterString={setCurrentSearchFilterString}
           />
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={4} computer={user ? 3 : 4}>
+        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
           <Dropdown
             fluid
             placeholder="Report Type"
@@ -238,7 +238,7 @@ const ReportsPage = () => {
             className="filter-input-field"
           />
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={4} computer={user ? 3 : 4}>
+        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
           <Dropdown
             placeholder="Sort by"
             fluid
@@ -255,7 +255,7 @@ const ReportsPage = () => {
             onOpen={() => setUploadReportModalOpen(true)}
             onClose={() => setUploadReportModalOpen(false)}
             trigger={
-              <Grid.Column mobile={16} computer={3} tablet={2}>
+              <Grid.Column mobile={16} computer={3} tablet={4}>
                 <Button
                   color="blue"
                   icon="upload"
