@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as AWS from "aws-sdk"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import DatePicker from "react-datepicker"
+import Papa from "papaparse"
 import "react-datepicker/dist/react-datepicker.css"
 
 const DatePickerContainer = ({ children }) => (
@@ -19,7 +20,12 @@ const DatePickerContainer = ({ children }) => (
   </div>
 )
 
-const UploadReportForm = ({ onClose, variant, report = null }) => {
+const UploadReportForm = ({
+  onClose,
+  allReports,
+  getAllReports,
+  report = null,
+}) => {
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
   )
@@ -86,7 +92,7 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
       const binaryStr = reader.result
 
       const client = new S3Client({ ...AWS.config, region: "us-west-2" })
-      const command = new PutObjectCommand({
+      const pdfCommand = new PutObjectCommand({
         Bucket: process.env.GATSBY_S3_BUCKET,
         Key: data.file.name,
         Body: binaryStr,
@@ -95,8 +101,45 @@ const UploadReportForm = ({ onClose, variant, report = null }) => {
         ACL: "public-read",
       })
       try {
-        const response = await client.send(command)
+        const response = await client.send(pdfCommand)
         console.log(response)
+
+        // if existing report
+        // replace exisitng report in allReports
+        // unparse
+        // putobject
+        if (editForm) {
+        } else {
+          // else new report
+          // add new report data to allReports
+          // uparse
+          // put object
+          const newReport = {
+            title: data.title,
+            year: data.year,
+            endyear: data.endYear || "NA",
+            filename: data.file.name,
+            location: data.location || "NA",
+            authors: data.authors,
+            type: data.type,
+            active: "TRUE",
+          }
+          const updatedReportsArray = [...allReports, newReport]
+          const updatedCsv = Papa.unparse(updatedReportsArray)
+          const csvCommand = new PutObjectCommand({
+            Bucket: process.env.GATSBY_S3_BUCKET,
+            Key: "reportsMetadata.csv",
+            Body: updatedCsv,
+            ContentType: "text/csv",
+            StorageClass: "STANDARD",
+            ACL: "public-read",
+          })
+
+          const csvResponse = await client.send(csvCommand)
+          console.log(csvResponse)
+          await getAllReports()
+          onClose()
+        }
       } catch (err) {
         console.error(err)
       }

@@ -4,7 +4,7 @@ import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "./UploadReportForm"
 
-const DataDownloadCard = ({ reportMetaData }) => {
+const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext)
@@ -117,9 +117,10 @@ const DataDownloadCard = ({ reportMetaData }) => {
         size="tiny"
         content={
           <UploadReportForm
-            variant="edit"
             report={reportMetaData}
             onClose={() => setEditReportModalOpen(false)}
+            allReports={allReports}
+            getAllReports={getAllReports}
           />
         }
       />

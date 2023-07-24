@@ -27,30 +27,7 @@ const ReportsPage = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        fetch(
-          "https://klamath-water-quality-app.s3.us-west-2.amazonaws.com/reportsMetadata.csv"
-        )
-          .then((response) => response.text())
-          .then((value) => {
-            const { data } = Papa.parse(value)
-            const headers = data.shift()
-
-            const reportsData = orderBy(
-              data.map((row) => {
-                const obj = {}
-
-                row.forEach((value, index) => {
-                  obj[headers[index]] = value
-                })
-
-                return obj
-              }),
-              ["startYear"],
-              ["desc"]
-            )
-            console.log("reportsdata", reportsData)
-            setAllReports(reportsData)
-          })
+        await getAllReports()
       } catch (error) {
         console.error(error)
       }
@@ -204,6 +181,34 @@ const ReportsPage = () => {
     allReports,
   ])
 
+  const getAllReports = async () => {
+    try {
+      const response = await fetch(
+        "https://klamath-water-quality-app.s3.us-west-2.amazonaws.com/reportsMetadata.csv"
+      )
+      const text = await response.text()
+      const { data } = Papa.parse(text)
+      const headers = data.shift()
+
+      const reportsData = orderBy(
+        data.map((row) => {
+          const obj = {}
+
+          row.forEach((value, index) => {
+            obj[headers[index]] = value
+          })
+
+          return obj
+        }),
+        ["startYear"],
+        ["desc"]
+      )
+      setAllReports(reportsData)
+    } catch (error) {
+      throw error``
+    }
+  }
+
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
@@ -269,6 +274,8 @@ const ReportsPage = () => {
             <Modal.Content>
               <UploadReportForm
                 onClose={() => setUploadReportModalOpen(false)}
+                allReports={allReports}
+                getAllReports={getAllReports}
               />
             </Modal.Content>
           </Modal>
@@ -283,7 +290,11 @@ const ReportsPage = () => {
       >
         {paginatedReports.map((report, index) => (
           <Grid.Column key={index}>
-            <DataDownloadCard reportMetaData={report} />
+            <DataDownloadCard
+              allReports={allReports}
+              getAllReports={getAllReports}
+              reportMetaData={report}
+            />
           </Grid.Column>
         ))}
       </Grid>
