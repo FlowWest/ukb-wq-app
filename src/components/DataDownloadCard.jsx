@@ -6,6 +6,7 @@ import UploadReportForm from "./UploadReportForm"
 
 const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
+  const [reportIsHidden, setReportIsHidden] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext)
   const authorsArray = reportMetaData.authors.split(",")
@@ -27,8 +28,14 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
         color="blue"
         link
         fluid
-        className={`report-card ${reportIsActive ? "" : "report-card-hidden"}`}
+        className={`report-card ${!reportIsHidden ? "" : "report-card-hidden"}`}
       >
+        {/* <Card
+        color="blue"
+        link
+        fluid
+        className={`report-card ${reportIsActive ? "" : "report-card-hidden"}`}
+      > */}
         <Card.Content>
           <Card.Header as="h6" className="report-card-header">
             {reportMetaData.title}
@@ -86,24 +93,57 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
                       size="tiny"
                       trigger={
                         <Dropdown.Item>
-                          Mark as {reportIsActive ? "Hidden" : "Visible"}
+                          Mark as {!reportIsHidden ? "Hidden" : "Visible"}
                         </Dropdown.Item>
                       }
                       header={`Toggle Report Visibility (${
-                        reportIsActive ? "Hidden" : "Visible"
+                        !reportIsHidden ? "Hidden" : "Visible"
                       })`}
                       content={`${
-                        reportIsActive
+                        !reportIsHidden
                           ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
                           : "Setting the report visibility status to visible will allow visitors to view the content of the report."
                       } Do you wish to proceed?`}
                       actions={[
                         "Cancel",
-                        { key: "delete", content: "Delete", negative: true },
+                        {
+                          key: "proceed",
+                          content: "Proceed",
+                          negative: !reportIsHidden,
+                          positive: reportIsHidden,
+                          onClick: () =>
+                            setReportIsHidden((prevState) => !prevState),
+                        },
                       ]}
                     />
                   ),
                 },
+                // {
+                //   key: "toggle visibility",
+                //   value: "toggle visibility",
+                //   text: (
+                //     <Modal
+                //       size="tiny"
+                //       trigger={
+                //         <Dropdown.Item>
+                //           Mark as {reportIsActive ? "Hidden" : "Visible"}
+                //         </Dropdown.Item>
+                //       }
+                //       header={`Toggle Report Visibility (${
+                //         reportIsActive ? "Hidden" : "Visible"
+                //       })`}
+                //       content={`${
+                //         reportIsActive
+                //           ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
+                //           : "Setting the report visibility status to visible will allow visitors to view the content of the report."
+                //       } Do you wish to proceed?`}
+                //       actions={[
+                //         "Cancel",
+                //         { key: "delete", content: "Delete", negative: true },
+                //       ]}
+                //     />
+                //   ),
+                // },
               ]}
             />
           )}
