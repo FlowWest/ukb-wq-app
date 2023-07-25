@@ -29,6 +29,7 @@ const UploadReportForm = ({
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
   )
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const formatDate = useCallback((year) => {
     const date = year ? new Date(`01-01-${year}`) : ""
@@ -81,6 +82,7 @@ const UploadReportForm = ({
   const editForm = !!report
 
   const handleFormSubmit = async (data) => {
+    setIsSubmitting(true)
     console.log("🚀 ~ handleFormSubmit ~ data:", data)
 
     const reader = new FileReader()
@@ -142,6 +144,8 @@ const UploadReportForm = ({
         }
       } catch (err) {
         console.error(err)
+      } finally {
+        setIsSubmitting(false)
       }
     }
     reader.readAsArrayBuffer(data.file)
@@ -156,6 +160,7 @@ const UploadReportForm = ({
     <Form
       onSubmit={handleSubmit(handleFormSubmit)}
       className={editForm ? "edit-report-form-container" : ""}
+      loading={isSubmitting}
     >
       <Controller
         name="title"

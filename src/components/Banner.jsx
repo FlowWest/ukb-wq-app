@@ -86,6 +86,17 @@ const Banner = ({ mobile, pageName }) => {
           }
         }
       }
+      resources: file(
+        relativePath: {
+          eq: "Sprague_River_above_dam_by_taylor_tupper_copy.jpg"
+        }
+      ) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
       about: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
         childImageSharp {
           fluid(quality: 90, maxWidth: 1540) {
