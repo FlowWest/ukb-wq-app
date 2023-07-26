@@ -8,8 +8,8 @@ import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "../components/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
-import Papa from "papaparse"
 import { filter, escapeRegExp, orderBy } from "lodash"
+import * as AWS from "aws-sdk"
 
 const ReportsPage = () => {
   const { user } = useContext(UserContext)
@@ -183,29 +183,25 @@ const ReportsPage = () => {
 
   const getAllReports = async () => {
     try {
-      const response = await fetch(
-        "https://klamath-water-quality-app.s3.us-west-2.amazonaws.com/reportsMetadata.csv"
-      )
-      const text = await response.text()
-      const { data } = Papa.parse(text)
-      const headers = data.shift()
+      AWS.config.region = "us-west-1"
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+      })
+      // Create a DynamoDB DocumentClient
+      const docClient = new AWS.DynamoDB.DocumentClient()
 
-      const reportsData = orderBy(
-        data.map((row) => {
-          const obj = {}
+      // Specify the table name
+      const tableName = "reports_metadata"
+      const params = {
+        TableName: tableName,
+      }
+      const result = await docClient.scan(params).promise()
+      const items = result.Items
 
-          row.forEach((value, index) => {
-            obj[headers[index]] = value
-          })
-
-          return obj
-        }),
-        ["startYear"],
-        ["desc"]
-      )
+      const reportsData = orderBy(items, ["year"], ["desc"])
       setAllReports(reportsData)
     } catch (error) {
-      throw error``
+      throw error
     }
   }
 
