@@ -23,6 +23,7 @@ const ReportsPage = () => {
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
   const [currentSearchFilterString, setCurrentSearchFilterString] = useState("")
   const [reportTypeOptions, setReportTypeOptions] = useState([])
+  const [getReportsError, setGetReportsError] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -183,10 +184,12 @@ const ReportsPage = () => {
 
   const getAllReports = async () => {
     try {
-      AWS.config.region = "us-west-1"
-      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
-      })
+      if (!AWS.config.credentials) {
+        AWS.config.region = "us-west-1"
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+        })
+      }
       // Create a DynamoDB DocumentClient
       const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -200,107 +203,129 @@ const ReportsPage = () => {
 
       const reportsData = orderBy(items, ["year"], ["desc"])
       setAllReports(reportsData)
+      setGetReportsError(false)
     } catch (error) {
-      throw error
+      setGetReportsError(true)
+      // throw error
     }
   }
 
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
-      <Grid container>
-        {user && (
-          <Grid.Column mobile={16} tablet={4} computer={3}>
-            <Dropdown
-              fluid
-              placeholder="All Reports"
-              selection
-              onChange={reportVisibilityChangeHandler}
-              options={reportVisibilityFilterOptions}
-              className="filter-input-field"
-            />
-          </Grid.Column>
-        )}
-        <Grid.Column mobile={16} tablet={user ? 12 : 8} computer={user ? 4 : 8}>
-          <ReportSearch
-            className="filter-input-field"
-            setCurrentSearchFilterString={setCurrentSearchFilterString}
-          />
-        </Grid.Column>
-        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
-          <Dropdown
-            fluid
-            placeholder="Report Type"
-            search
-            selection
-            multiple
-            onChange={reportTypeChangeHandler}
-            options={reportTypeOptions}
-            className="filter-input-field"
-          />
-        </Grid.Column>
-        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
-          <Dropdown
-            placeholder="Sort by"
-            fluid
-            selection
-            onChange={sortMethodChangeHandler}
-            options={reportSortingOptions}
-            className="filter-input-field"
-          />
-        </Grid.Column>
-        {user && (
-          <Modal
-            closeIcon
-            open={uploadReportModalOpen}
-            onOpen={() => setUploadReportModalOpen(true)}
-            onClose={() => setUploadReportModalOpen(false)}
-            trigger={
-              <Grid.Column mobile={16} computer={3} tablet={4}>
-                <Button
-                  color="blue"
-                  icon="upload"
-                  content={isTabletScreenSize ? null : "Upload"}
+      {getReportsError ? (
+        <Grid container className="error-message">
+          Error retrieving reports. Please refresh the page to try again.
+        </Grid>
+      ) : (
+        <>
+          <Grid container>
+            {user && (
+              <Grid.Column mobile={16} tablet={4} computer={3}>
+                <Dropdown
                   fluid
+                  placeholder="All Reports"
+                  selection
+                  onChange={reportVisibilityChangeHandler}
+                  options={reportVisibilityFilterOptions}
+                  className="filter-input-field"
                 />
               </Grid.Column>
-            }
-          >
-            <Modal.Header>Upload Report</Modal.Header>
-            <Modal.Content>
-              <UploadReportForm
-                onClose={() => setUploadReportModalOpen(false)}
-                allReports={allReports}
-                getAllReports={getAllReports}
+            )}
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 12 : 8}
+              computer={user ? 4 : 8}
+            >
+              <ReportSearch
+                className="filter-input-field"
+                setCurrentSearchFilterString={setCurrentSearchFilterString}
               />
-            </Modal.Content>
-          </Modal>
-        )}
-      </Grid>
-      <Grid
-        container
-        columns={3}
-        doubling
-        stackable
-        className="mobile-grid-container"
-      >
-        {paginatedReports.map((report, index) => (
-          <Grid.Column key={index}>
-            <DataDownloadCard
-              allReports={allReports}
-              getAllReports={getAllReports}
-              reportMetaData={report}
+            </Grid.Column>
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 6 : 4}
+              computer={user ? 3 : 4}
+            >
+              <Dropdown
+                fluid
+                placeholder="Report Type"
+                search
+                selection
+                multiple
+                onChange={reportTypeChangeHandler}
+                options={reportTypeOptions}
+                className="filter-input-field"
+              />
+            </Grid.Column>
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 6 : 4}
+              computer={user ? 3 : 4}
+            >
+              <Dropdown
+                placeholder="Sort by"
+                fluid
+                selection
+                onChange={sortMethodChangeHandler}
+                options={reportSortingOptions}
+                className="filter-input-field"
+              />
+            </Grid.Column>
+            {user && (
+              <Modal
+                closeIcon
+                open={uploadReportModalOpen}
+                onOpen={() => setUploadReportModalOpen(true)}
+                onClose={() => setUploadReportModalOpen(false)}
+                trigger={
+                  <Grid.Column mobile={16} computer={3} tablet={4}>
+                    <Button
+                      color="blue"
+                      icon="upload"
+                      content={isTabletScreenSize ? null : "Upload"}
+                      fluid
+                    />
+                  </Grid.Column>
+                }
+              >
+                <Modal.Header>Upload Report</Modal.Header>
+                <Modal.Content>
+                  <UploadReportForm
+                    onClose={() => setUploadReportModalOpen(false)}
+                    allReports={allReports}
+                    getAllReports={getAllReports}
+                  />
+                </Modal.Content>
+              </Modal>
+            )}
+          </Grid>
+          <Grid
+            container
+            columns={3}
+            doubling
+            stackable
+            className="mobile-grid-container"
+          >
+            {paginatedReports.map((report, index) => (
+              <Grid.Column key={index}>
+                <DataDownloadCard
+                  allReports={allReports}
+                  getAllReports={getAllReports}
+                  reportMetaData={report}
+                />
+              </Grid.Column>
+            ))}
+          </Grid>
+          <Grid container>
+            <Pagination
+              defaultActivePage={currentPage}
+              totalPages={numberOfPages}
+              onPageChange={handlePaginationPageChange}
             />
-          </Grid.Column>
-        ))}
-      </Grid>
-      <Grid container>
-        <Pagination
-          defaultActivePage={currentPage}
-          totalPages={numberOfPages}
-          onPageChange={handlePaginationPageChange}
-        />
-      </Grid>
+          </Grid>
+        </>
+      )}
     </Layout>
   )
 }

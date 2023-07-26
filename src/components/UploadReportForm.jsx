@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as AWS from "aws-sdk"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import DatePicker from "react-datepicker"
-import Papa from "papaparse"
+import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 
 const DatePickerContainer = ({ children }) => (
@@ -125,20 +125,17 @@ const UploadReportForm = ({
             authors: data.authors,
             type: data.type,
             active: "TRUE",
+            report_uuid: uuidv4(),
           }
-          const updatedReportsArray = [...allReports, newReport]
-          const updatedCsv = Papa.unparse(updatedReportsArray)
-          const csvCommand = new PutObjectCommand({
-            Bucket: process.env.GATSBY_S3_BUCKET,
-            Key: "reportsMetadata.csv",
-            Body: updatedCsv,
-            ContentType: "text/csv",
-            StorageClass: "STANDARD",
-            ACL: "public-read",
-          })
+          AWS.config.update({ region: "us-west-1" })
+          const docClient = new AWS.DynamoDB.DocumentClient()
+          const tableName = "reports_metadata"
+          const params = {
+            TableName: tableName,
+            Item: newReport,
+          }
+          await docClient.put(params).promise()
 
-          const csvResponse = await client.send(csvCommand)
-          console.log(csvResponse)
           await getAllReports()
           onClose()
         }
