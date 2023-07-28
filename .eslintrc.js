@@ -6,7 +6,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended", "react-app"],
+  extends: ["airbnb", "plugin:prettier/recommended"],
   overrides: [
     {
       env: {
