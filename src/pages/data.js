@@ -1,7 +1,7 @@
 import React from "react"
 import { Grid } from "semantic-ui-react"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import SEO from "../components/Seo"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 
