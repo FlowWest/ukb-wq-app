@@ -115,6 +115,7 @@ const ReportsPage = () => {
 
   const reportTypeChangeHandler = (event, { value }) => {
     setCurrentReportTypeFilters(value)
+    setCurrentPage(1)
   }
 
   const reportVisibilityChangeHandler = (event, { value }) => {
@@ -122,6 +123,7 @@ const ReportsPage = () => {
       (option) => option.value === value
     )
     setReportVisibilityFilterMethod(selectedReportVisibilityFilter)
+    setCurrentPage(1)
   }
 
   const sortMethodChangeHandler = useCallback(
@@ -240,6 +242,7 @@ const ReportsPage = () => {
               <ReportSearch
                 className="filter-input-field"
                 setCurrentSearchFilterString={setCurrentSearchFilterString}
+                setCurrentPage={setCurrentPage}
               />
             </Grid.Column>
             <Grid.Column
@@ -307,8 +310,8 @@ const ReportsPage = () => {
             stackable
             className="mobile-grid-container"
           >
-            {paginatedReports.map((report, index) => (
-              <Grid.Column key={index}>
+            {paginatedReports.map((report) => (
+              <Grid.Column key={report.report_uuid}>
                 <DataDownloadCard
                   allReports={allReports}
                   getAllReports={getAllReports}
@@ -319,7 +322,8 @@ const ReportsPage = () => {
           </Grid>
           <Grid container>
             <Pagination
-              defaultActivePage={currentPage}
+              activePage={currentPage}
+              defaultActivePage={1}
               totalPages={numberOfPages}
               onPageChange={handlePaginationPageChange}
             />

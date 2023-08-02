@@ -56,13 +56,13 @@ const UploadReportForm = ({
     clearErrors,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(report ? editReportSchema : uploadReportSchema),
-    defaultValues: report
+    resolver: yupResolver(!!report ? editReportSchema : uploadReportSchema),
+    defaultValues: !!report
       ? {
           title: report.title,
           year: report.year,
-          endYear: report.endyear,
-          addEndYear: !!report.endyear,
+          endYear: report.endyear === "NA" ? null : report.endyear,
+          addEndYear: !(report.endyear === "NA"),
           location: report.location,
           authors: report.authors,
           type: report.type,
@@ -83,10 +83,45 @@ const UploadReportForm = ({
 
   const handleFormSubmit = async (data) => {
     setIsSubmitting(true)
-    console.log("🚀 ~ handleFormSubmit ~ data:", data)
+    AWS.config.update({ region: "us-west-1" })
+    const docClient = new AWS.DynamoDB.DocumentClient()
+    const tableName = "reports_metadata"
+
+    if (editForm) {
+      try {
+        const params = {
+          TableName: tableName,
+          Key: { report_uuid: report.report_uuid },
+          UpdateExpression:
+            "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
+          ExpressionAttributeNames: {
+            "#title": "title",
+            "#year": "year",
+            "#endyear": "endyear",
+            "#location": "location",
+            "#authors": "authors",
+            "#type": "type",
+          },
+          ExpressionAttributeValues: {
+            ":title": data.title,
+            ":year": data.year,
+            ":endyear": data.endYear || "NA",
+            ":location": data.location || "NA",
+            ":authors": data.authors,
+            ":type": data.type,
+          },
+        }
+        await docClient.update(params).promise()
+      } catch (error) {
+        console.log("🚀 ~ handleFormSubmit ~ error:", error)
+      } finally {
+        setIsSubmitting(false)
+        await getAllReports()
+        onClose()
+      }
+    }
 
     const reader = new FileReader()
-
     reader.onabort = () => console.log("file reading was aborted")
     reader.onerror = () => console.log("file reading has failed")
     reader.onload = async () => {
@@ -103,49 +138,42 @@ const UploadReportForm = ({
         ACL: "public-read",
       })
       try {
-        const response = await client.send(pdfCommand)
-        console.log(response)
-
         // if existing report
         // replace exisitng report in allReports
         // unparse
         // putobject
-        if (editForm) {
-        } else {
-          // else new report
-          // add new report data to allReports
-          // uparse
-          // put object
-          const newReport = {
-            title: data.title,
-            year: data.year,
-            endyear: data.endYear || "NA",
-            filename: data.file.name,
-            location: data.location || "NA",
-            authors: data.authors,
-            type: data.type,
-            active: "TRUE",
-            report_uuid: uuidv4(),
-          }
-          AWS.config.update({ region: "us-west-1" })
-          const docClient = new AWS.DynamoDB.DocumentClient()
-          const tableName = "reports_metadata"
-          const params = {
-            TableName: tableName,
-            Item: newReport,
-          }
-          await docClient.put(params).promise()
 
-          await getAllReports()
-          onClose()
+        const response = await client.send(pdfCommand)
+        console.log(response)
+        // else new report
+        // add new report data to allReports
+        // uparse
+        // put object
+        const newReport = {
+          title: data.title,
+          year: data.year,
+          endyear: data.endYear || "NA",
+          filename: data.file.name,
+          location: data.location || "NA",
+          authors: data.authors,
+          type: data.type,
+          active: "TRUE",
+          report_uuid: uuidv4(),
         }
+        const params = {
+          TableName: tableName,
+          Item: newReport,
+        }
+        await docClient.put(params).promise()
       } catch (err) {
         console.error(err)
       } finally {
+        reader.readAsArrayBuffer(data.file)
         setIsSubmitting(false)
+        await getAllReports()
+        onClose()
       }
     }
-    reader.readAsArrayBuffer(data.file)
   }
 
   const handleSelectChange = (event, option) => {
