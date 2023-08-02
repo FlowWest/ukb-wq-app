@@ -8,6 +8,12 @@ module.exports = {
     author: `The Klamath Tribes`,
   },
   plugins: [
+    {
+      resolve: "gatsby-plugin-react-leaflet",
+      options: {
+        linkStyles: true, // (default: true) Enable/disable loading stylesheets via CDN
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -37,7 +43,7 @@ module.exports = {
         path: `${__dirname}/src/data/`,
       },
     },
-     {
+    {
       resolve: "gatsby-plugin-prettier-eslint",
       options: {
         prettier: {
