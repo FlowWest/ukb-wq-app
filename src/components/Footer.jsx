@@ -13,12 +13,34 @@ import {
 import FlowWestLogo from "./FlowwestLogo"
 import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
+import {
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from "amazon-cognito-identity-js"
 
 export const Footer = () => {
   const { user, setUser } = useContext(UserContext)
+  console.log("🚀 ~ Footer ~ user:", user)
+
   const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = () => {
+    try {
+      const poolData = {
+        UserPoolId: process.env.GATSBY_COGNITO_USER_POOL_ID, // Your user pool id here
+        ClientId: process.env.GATSBY_COGNITO_CLIENT_ID, // Your client id here
+      }
+      const userPool = new CognitoUserPool(poolData)
+      const userData = {
+        Username: user.email,
+        Pool: userPool,
+      }
+      const cognitoUser = new CognitoUser(userData)
+      cognitoUser.signOut()
+    } catch (error) {
+      throw new Error(error.message)
+    }
     setLoggingOut(true)
     setTimeout(() => {
       setUser(null)

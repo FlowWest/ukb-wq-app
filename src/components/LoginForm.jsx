@@ -61,6 +61,7 @@ const LoginForm = () => {
           Pool: userPool,
         }
         const cognitoUser = new CognitoUser(userData)
+
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: function (result) {
             //POTENTIAL: Region needs to be set if not already set previously elsewhere.
@@ -77,8 +78,8 @@ const LoginForm = () => {
 
             const cognitoUserEmail =
               cognitoUser.signInUserSession.idToken.payload.email
-            setUser({ ...cognitoUser, email: cognitoUserEmail })
-
+            const loggedUser = { ...cognitoUser, email: cognitoUserEmail }
+            setUser(loggedUser)
             //call refresh method in order to authenticate user and get new temp credentials
             AWS.config.credentials.refresh(async (error) => {
               if (error) {
