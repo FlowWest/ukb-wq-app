@@ -82,97 +82,94 @@ const UploadReportForm = ({
   const editForm = !!report
 
   const handleFormSubmit = async (data) => {
-    setIsSubmitting(true)
-    AWS.config.update({ region: "us-west-1" })
-    const docClient = new AWS.DynamoDB.DocumentClient()
-    const tableName = "reports_metadata"
+    try {
+      setIsSubmitting(true)
+      AWS.config.update({ region: "us-west-1" })
+      const docClient = new AWS.DynamoDB.DocumentClient()
+      const tableName = "reports_metadata"
 
-    if (editForm) {
-      try {
-        const params = {
-          TableName: tableName,
-          Key: { report_uuid: report.report_uuid },
-          UpdateExpression:
-            "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
-          ExpressionAttributeNames: {
-            "#title": "title",
-            "#year": "year",
-            "#endyear": "endyear",
-            "#location": "location",
-            "#authors": "authors",
-            "#type": "type",
-          },
-          ExpressionAttributeValues: {
-            ":title": data.title,
-            ":year": data.year,
-            ":endyear": data.endYear || "NA",
-            ":location": data.location || "NA",
-            ":authors": data.authors,
-            ":type": data.type,
-          },
+      if (editForm) {
+        try {
+          const params = {
+            TableName: tableName,
+            Key: { report_uuid: report.report_uuid },
+            UpdateExpression:
+              "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
+            ExpressionAttributeNames: {
+              "#title": "title",
+              "#year": "year",
+              "#endyear": "endyear",
+              "#location": "location",
+              "#authors": "authors",
+              "#type": "type",
+            },
+            ExpressionAttributeValues: {
+              ":title": data.title,
+              ":year": data.year,
+              ":endyear": data.endYear || "NA",
+              ":location": data.location || "NA",
+              ":authors": data.authors,
+              ":type": data.type,
+            },
+          }
+          await docClient.update(params).promise()
+        } catch (error) {
+          console.log("🚀 ~ handleFormSubmit ~ error:", error)
+        } finally {
+          setIsSubmitting(false)
+          await getAllReports()
+          onClose()
         }
-        await docClient.update(params).promise()
-      } catch (error) {
-        console.log("🚀 ~ handleFormSubmit ~ error:", error)
-      } finally {
-        setIsSubmitting(false)
-        await getAllReports()
-        onClose()
       }
-    }
 
-    const reader = new FileReader()
-    reader.onabort = () => console.log("file reading was aborted")
-    reader.onerror = () => console.log("file reading has failed")
-    reader.onload = async () => {
-      // Do whatever you want with the file contents
-      const binaryStr = reader.result
+      const reader = new FileReader()
+      reader.readAsArrayBuffer(data.file)
+      reader.onabort = () => console.log("file reading was aborted")
+      reader.onerror = () => console.log("file reading has failed")
+      reader.onload = async () => {
+        // Do whatever you want with the file contents
+        const binaryStr = reader.result
 
-      const client = new S3Client({ ...AWS.config, region: "us-west-2" })
-      const pdfCommand = new PutObjectCommand({
-        Bucket: process.env.GATSBY_S3_BUCKET,
-        Key: data.file.name,
-        Body: binaryStr,
-        ContentType: "application/pdf",
-        StorageClass: "STANDARD_IA",
-        ACL: "public-read",
-      })
-      try {
-        // if existing report
-        // replace exisitng report in allReports
-        // unparse
-        // putobject
+        const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+        const pdfCommand = new PutObjectCommand({
+          Bucket: process.env.GATSBY_S3_BUCKET,
+          Key: data.file.name,
+          Body: binaryStr,
+          ContentType: "application/pdf",
+          StorageClass: "STANDARD_IA",
+          ACL: "public-read",
+        })
+        console.log("onload")
+        try {
+          const response = await client.send(pdfCommand)
+          console.log(response)
 
-        const response = await client.send(pdfCommand)
-        console.log(response)
-        // else new report
-        // add new report data to allReports
-        // uparse
-        // put object
-        const newReport = {
-          title: data.title,
-          year: data.year,
-          endyear: data.endYear || "NA",
-          filename: data.file.name,
-          location: data.location || "NA",
-          authors: data.authors,
-          type: data.type,
-          active: "TRUE",
-          report_uuid: uuidv4(),
+          const newReport = {
+            title: data.title,
+            year: data.year,
+            endyear: data.endYear || "NA",
+            filename: data.file.name,
+            location: data.location || "NA",
+            authors: data.authors,
+            type: data.type,
+            active: "TRUE",
+            report_uuid: uuidv4(),
+          }
+          const params = {
+            TableName: tableName,
+            Item: newReport,
+          }
+          await docClient.put(params).promise()
+        } catch (err) {
+          console.error(err)
+        } finally {
+          setIsSubmitting(false)
+          await getAllReports()
+          onClose()
         }
-        const params = {
-          TableName: tableName,
-          Item: newReport,
-        }
-        await docClient.put(params).promise()
-      } catch (err) {
-        console.error(err)
-      } finally {
-        reader.readAsArrayBuffer(data.file)
-        setIsSubmitting(false)
-        await getAllReports()
-        onClose()
       }
+    } catch (err) {
+      console.error(err)
     }
   }
 
