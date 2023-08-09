@@ -21,8 +21,6 @@ import {
 
 export const Footer = () => {
   const { user, setUser } = useContext(UserContext)
-  console.log("🚀 ~ Footer ~ user:", user)
-
   const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = () => {
