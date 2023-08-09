@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
+import { UserContext } from "../../gatsby-browser"
 import { createMedia } from "@artsy/fresnel"
 import {
   Accordion,
@@ -13,6 +14,7 @@ import { Link } from "gatsby"
 import Banner from "./Banner"
 import { formatTextCasing } from "../helpers/utils"
 import LoginForm from "./LoginForm"
+import LogoutMenu from "./LogoutMenu"
 
 const { Media, MediaContextProvider } = createMedia({
   breakpoints: {
@@ -68,6 +70,7 @@ const MobileContainer = ({ children, pageName }) => {
   const [sidebarOpen, setSideBarOpen] = useState(false)
   const [accordionExpanded, setAccordionExpanded] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+  const { user } = useContext(UserContext)
   const handleSidebarHide = () => {
     setSideBarOpen(false)
   }
@@ -120,14 +123,16 @@ const MobileContainer = ({ children, pageName }) => {
                 onClick={handleAccordionToggle}
               >
                 <Icon name="dropdown" />
-                Login
+                {user ? "Logout" : "Login"}
               </Menu.Item>
             </Accordion.Title>
             <Accordion.Content
               active={activeIndex === 0}
-              className="responsive-admin-menu-wrapper"
+              className={`responsive-admin-menu-wrapper ${
+                user ? "logout-menu" : "login-form"
+              }`}
             >
-              <LoginForm />
+              {user ? <LogoutMenu user={user} /> : <LoginForm />}
             </Accordion.Content>
           </Accordion>
         </Sidebar>

@@ -39,6 +39,15 @@
 }
 
 .responsive-admin-menu-wrapper {
-  background: hsl(0, 0%, 95%);
   padding: 1rem !important;
+  position: relative;
+}
+
+.responsive-admin-menu-wrapper.login-form {
+  background: hsl(0, 0%, 95%);
+}
+
+.responsive-admin-menu-wrapper.logout-menu .item {
+  font-size: 1.1rem !important;
+  color: hsla(0, 0%, 100%, 0.9) !important;
 }
