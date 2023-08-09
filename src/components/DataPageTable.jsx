@@ -1,6 +1,6 @@
 import React from "react"
 import { Header, Table, Grid, Icon, Pagination } from "semantic-ui-react"
-import { usePagination } from "../hooks"
+import usePagination from "../hooks/usePagination"
 import { Link } from "gatsby"
 
 const formatDate = (date) =>
