@@ -8,11 +8,7 @@
 // import "./src/styles/style.scss"
 import "./src/styles/style.css"
 import React, { createContext, useState, useEffect } from "react"
-import {
-  CognitoUserPool,
-  CognitoUser,
-  AuthenticationDetails,
-} from "amazon-cognito-identity-js"
+import { CognitoUserPool } from "amazon-cognito-identity-js"
 
 export const UserContext = createContext(null)
 
