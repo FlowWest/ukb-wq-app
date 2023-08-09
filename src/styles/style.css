@@ -33,6 +33,16 @@ p {
   border-color: hsl(0, 100%, 40%) !important;
 }
 
+.form-show-password {
+  text-align: right;
+  font-size: small;
+  text-decoration: underline;
+  margin-top: -5px !important;
+  margin-left: auto !important;
+  cursor: pointer;
+  width: fit-content;
+}
+
 @media only screen and (max-width: 767px) {
   .ui.grid .remove-negative-margin.ui.stackable.grid {
     margin-left: 0 !important;

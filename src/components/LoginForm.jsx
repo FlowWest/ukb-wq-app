@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import { Form } from "semantic-ui-react"
+import { Form, Icon, Input } from "semantic-ui-react"
 import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { LoginFormSchema } from "../helpers/validationSchemas"
@@ -14,6 +14,7 @@ import { UserContext } from "../../gatsby-browser"
 const LoginForm = () => {
   const [invalidCredentialsError, setInvalidCredentialsError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const {
     handleSubmit,
     control,
@@ -150,16 +151,23 @@ const LoginForm = () => {
               id="form-input-control-password"
               label="Password"
               placeholder="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               icon="key"
               iconPosition="left"
             />
+            <p
+              className="form-show-password"
+              onClick={() => setShowPassword((prevState) => !prevState)}
+            >
+              {showPassword ? "Hide" : "Show"} Password
+            </p>
             {errors?.password && (
               <p className="form-error-message">{errors.password.message}</p>
             )}
           </>
         )}
       />
+
       {invalidCredentialsError && (
         <p className="form-error-message">{invalidCredentialsError}</p>
       )}
