@@ -33,7 +33,7 @@ p {
   border-color: hsl(0, 100%, 40%) !important;
 }
 
-.form-show-password {
+.form-forgot-password {
   text-align: right;
   font-size: small;
   text-decoration: underline;

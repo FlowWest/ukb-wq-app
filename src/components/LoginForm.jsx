@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import { Form, Icon, Input } from "semantic-ui-react"
+import { Form, Icon, Input, Label } from "semantic-ui-react"
 import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { LoginFormSchema } from "../helpers/validationSchemas"
@@ -154,13 +154,17 @@ const LoginForm = () => {
               type={showPassword ? "text" : "password"}
               icon="key"
               iconPosition="left"
+              action={{
+                basic: true,
+                color: "white",
+                icon: showPassword ? "eye slash outline" : "eye",
+                onClick: (e) => {
+                  e.preventDefault()
+                  setShowPassword((prevState) => !prevState)
+                },
+              }}
             />
-            <p
-              className="form-show-password"
-              onClick={() => setShowPassword((prevState) => !prevState)}
-            >
-              {showPassword ? "Hide" : "Show"} Password
-            </p>
+            <p className="form-forgot-password">Forgot Password</p>
             {errors?.password && (
               <p className="form-error-message">{errors.password.message}</p>
             )}
