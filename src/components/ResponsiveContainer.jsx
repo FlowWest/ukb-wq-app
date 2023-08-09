@@ -1,10 +1,18 @@
 import React, { useState } from "react"
 import { createMedia } from "@artsy/fresnel"
-import { Menu, Sidebar, Segment, Icon, Grid } from "semantic-ui-react"
+import {
+  Accordion,
+  Menu,
+  Sidebar,
+  Segment,
+  Icon,
+  Grid,
+} from "semantic-ui-react"
 import KlamathLogo from "./KlamathLogo"
 import { Link } from "gatsby"
 import Banner from "./Banner"
 import { formatTextCasing } from "../helpers/utils"
+import LoginForm from "./LoginForm"
 
 const { Media, MediaContextProvider } = createMedia({
   breakpoints: {
@@ -46,7 +54,7 @@ const DesktopContainer = ({ children, pageName }) => {
         </Menu.Item>
         <Menu.Item position="left">
           <Link to="/about" className="link-no-style">
-            About
+            <p>About</p>
           </Link>
         </Menu.Item>
       </Menu>
@@ -58,13 +66,25 @@ const DesktopContainer = ({ children, pageName }) => {
 
 const MobileContainer = ({ children, pageName }) => {
   const [sidebarOpen, setSideBarOpen] = useState(false)
-
+  const [accordionExpanded, setAccordionExpanded] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
   const handleSidebarHide = () => {
     setSideBarOpen(false)
   }
-  const handleToggle = () => {
+  const handleSidebarShow = () => {
     setSideBarOpen(true)
   }
+
+  const handleAccordionToggle = () => {
+    if (activeIndex === -1) {
+      setActiveIndex(0)
+      console.log("opened")
+    } else {
+      setActiveIndex(-1)
+      console.log("closed")
+    }
+  }
+  // setAccordionExpanded((prevState) => !prevState)
 
   return (
     <Media as={Sidebar.Pushable} at="mobile">
@@ -93,6 +113,23 @@ const MobileContainer = ({ children, pageName }) => {
           <Link to="/about" className="link-no-style">
             <Menu.Item active={pageName === "about"}>About</Menu.Item>
           </Link>
+          <Accordion>
+            <Accordion.Title active={activeIndex === 0} index={0}>
+              <Menu.Item
+                className="responsive-admin-menu-accordion"
+                onClick={handleAccordionToggle}
+              >
+                <Icon name="dropdown" />
+                Login
+              </Menu.Item>
+            </Accordion.Title>
+            <Accordion.Content
+              active={activeIndex === 0}
+              className="responsive-admin-menu-wrapper"
+            >
+              <LoginForm />
+            </Accordion.Content>
+          </Accordion>
         </Sidebar>
         <Sidebar.Pusher dimmed={sidebarOpen}>
           <Segment
@@ -103,7 +140,7 @@ const MobileContainer = ({ children, pageName }) => {
           >
             <Grid style={{ height: "6rem" }} verticalAlign="middle">
               <Menu inverted pointing secondary size="large">
-                <Menu.Item onClick={handleToggle}>
+                <Menu.Item onClick={handleSidebarShow}>
                   <Icon name="sidebar" />
                 </Menu.Item>
                 <Menu.Item>

@@ -33,3 +33,12 @@
 .admin-menu-icon-wrapper {
   margin-right: 1rem;
 }
+
+.responsive-admin-menu-accordion {
+  font-size: 20px;
+}
+
+.responsive-admin-menu-wrapper {
+  background: hsl(0, 0%, 95%);
+  padding: 1rem !important;
+}
