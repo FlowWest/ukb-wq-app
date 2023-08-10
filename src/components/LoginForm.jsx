@@ -1,9 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import React, { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { Form } from "semantic-ui-react"
-import { LoginFormSchema } from "../helpers/validationSchemas"
+import { Container, Form } from "semantic-ui-react"
+import { loginFormSchema } from "../helpers/validationSchemas"
 import { useAwsLogin } from "../hooks/useAwsAuth"
+import { Link } from "gatsby"
 
 const LoginForm = () => {
   const {
@@ -13,7 +14,7 @@ const LoginForm = () => {
     watch,
   } = useForm({
     defaultValues: { username: "", password: "" },
-    resolver: yupResolver(LoginFormSchema),
+    resolver: yupResolver(loginFormSchema),
   })
 
   const [showPassword, setShowPassword] = useState(false)
@@ -63,17 +64,20 @@ const LoginForm = () => {
                 },
               }}
             />
-            <p className="form-forgot-password">Forgot Password</p>
             {errors?.password && (
               <p className="form-error-message">{errors.password.message}</p>
             )}
+            {invalidCredentialsError && (
+              <p className="form-error-message">{invalidCredentialsError}</p>
+            )}
+            <Container className="form-forgot-password-wrapper">
+              <Link className="form-forgot-password" to="reset-password">
+                Reset Password
+              </Link>
+            </Container>
           </>
         )}
       />
-
-      {invalidCredentialsError && (
-        <p className="form-error-message">{invalidCredentialsError}</p>
-      )}
 
       <Form.Button
         color="vk"
