@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export const usePagination = ({ tableData, itemsPerPage }) => {
+const usePagination = ({ tableData, itemsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const lastIndex = currentPage * itemsPerPage
   const firstIndex = lastIndex - itemsPerPage
@@ -19,3 +19,5 @@ export const usePagination = ({ tableData, itemsPerPage }) => {
     numberOfPages,
   }
 }
+
+export default usePagination
