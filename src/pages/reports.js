@@ -12,7 +12,7 @@ import Papa from "papaparse"
 import { filter, escapeRegExp, orderBy } from "lodash"
 
 const ReportsPage = () => {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext) || {}
   const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
   const [isTabletScreenSize, setIsTabletScreenSize] = useState(false)
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))

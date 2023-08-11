@@ -7,7 +7,7 @@ import UploadReportForm from "./UploadReportForm"
 const DataDownloadCard = ({ reportMetaData }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext) || {}
   const authorsArray = reportMetaData.authors.split(",")
 
   const generateAuthorsString = (authors) => {

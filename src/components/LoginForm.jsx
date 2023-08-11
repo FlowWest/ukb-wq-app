@@ -24,7 +24,7 @@ const LoginForm = () => {
     resolver: yupResolver(LoginFormSchema),
   })
 
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext) || {}
   const watchUsername = watch("username")
   const watchPassword = watch("password")
 
