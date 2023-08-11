@@ -55,11 +55,11 @@ const LoginForm = () => {
               icon="key"
               iconPosition="left"
               action={{
+                type: "button",
                 basic: true,
                 color: "white",
                 icon: showPassword ? "eye slash outline" : "eye",
                 onClick: (e) => {
-                  e.preventDefault()
                   setShowPassword((prevState) => !prevState)
                 },
               }}
@@ -71,7 +71,7 @@ const LoginForm = () => {
               <p className="form-error-message">{invalidCredentialsError}</p>
             )}
             <Container className="form-forgot-password-wrapper">
-              <Link className="form-forgot-password" to="reset-password">
+              <Link className="form-forgot-password" to="/reset-password">
                 Reset Password
               </Link>
             </Container>
