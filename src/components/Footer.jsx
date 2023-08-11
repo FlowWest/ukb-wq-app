@@ -15,7 +15,7 @@ import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
 
 export const Footer = () => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext) || {}
   const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = () => {
