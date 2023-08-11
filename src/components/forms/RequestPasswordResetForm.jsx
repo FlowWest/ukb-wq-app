@@ -4,11 +4,12 @@ import { Form, Icon, Input } from "semantic-ui-react"
 import { Controller, useForm } from "react-hook-form"
 import { requestPasswordResetSchema } from "../../helpers/validationSchemas"
 
-const RequestPasswordResetForm = ({ onSubmit }) => {
+const RequestPasswordResetForm = ({ onSubmit, awsErrorMessage }) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
+
     watch,
     getValues,
   } = useForm({
@@ -20,7 +21,8 @@ const RequestPasswordResetForm = ({ onSubmit }) => {
       <Icon name="unlock alternate" size="massive" />
       <p className="reset-password-header">Forgot Password?</p>
       <p className="reset-password-subheader">
-        No worries, we'll send reset instructions
+        Enter the email associated with your account and we'll send a
+        verification code so you can reset your password.
       </p>
       <Form onSubmit={handleSubmit(() => onSubmit(getValues("email")))}>
         <Controller
@@ -32,6 +34,9 @@ const RequestPasswordResetForm = ({ onSubmit }) => {
               <Input {...field} />
               {!!errors.email && (
                 <p className="form-error-message mt">{errors.email.message}</p>
+              )}
+              {!!awsErrorMessage && (
+                <p className="form-error-message mt">{awsErrorMessage}</p>
               )}
             </Form.Field>
           )}

@@ -142,3 +142,72 @@ export const useAwsLogout = () => {
 
   return { loggingOut, handleLogout }
 }
+
+export const useAwsPasswordReset = () => {
+  const [awsErrorMessage, setAwsErrorMessage] = useState("")
+  const poolData = {
+    UserPoolId: process.env.GATSBY_COGNITO_USER_POOL_ID, // Your user pool id here
+    ClientId: process.env.GATSBY_COGNITO_CLIENT_ID, // Your client id here
+  }
+  const userPool = new CognitoUserPool(poolData)
+
+  async function requestAwsPasswordReset(email) {
+    setAwsErrorMessage("")
+    try {
+      const userData = {
+        Username: email,
+        Pool: userPool,
+      }
+      const cognitoUser = new CognitoUser(userData)
+
+      // call forgotPassword on cognitoUser
+      return new Promise((resolve, reject) => {
+        cognitoUser.forgotPassword({
+          onSuccess: function (result) {
+            resolve(result)
+          },
+          onFailure: function (err) {
+            setAwsErrorMessage(err.message)
+            reject(err.message)
+          },
+        })
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  async function handlePasswordResetVerification(
+    email,
+    verificationCode,
+    newPassword
+  ) {
+    try {
+      const userData = {
+        Username: email,
+        Pool: userPool,
+      }
+      const cognitoUser = new CognitoUser(userData)
+
+      // call confirmPassword on cognitoUser
+      return new Promise((resolve, reject) => {
+        cognitoUser.confirmPassword(verificationCode, newPassword, {
+          onSuccess: function (result) {
+            resolve(result)
+          },
+          onFailure: function (error) {
+            reject(error)
+          },
+        })
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  return {
+    requestAwsPasswordReset,
+    handlePasswordResetVerification,
+    awsErrorMessage,
+  }
+}

@@ -6,28 +6,45 @@ import KlamathLogo from "../components/KlamathLogo"
 import SEO from "../components/Seo"
 import RequestPasswordResetForm from "../components/forms/RequestPasswordResetForm"
 import RequestPasswordVerificationForm from "../components/forms/RequestPasswordVerificationForm"
-import SetNewPasswordForm from "../components/forms/SetNewPasswordForm"
-import { useForm } from "react-hook-form"
+import { useAwsPasswordReset } from "../hooks/useAwsAuth"
 
 const ResetPasswordPage = () => {
   const [enteredEmail, setEnteredEmail] = useState("")
   const [activeTab, setActiveTab] = useState(0)
+  const {
+    requestAwsPasswordReset,
+    handlePasswordResetVerification,
+    awsErrorMessage,
+  } = useAwsPasswordReset()
 
-  const handlePasswordResetRequest = (value) => {
-    console.log("🚀 ~ handlePasswordResetRequest ~ values:", value)
+  const handleFormReset = () => setActiveTab(0)
+
+  const handlePasswordResetRequest = async (value) => {
     setEnteredEmail(value)
-    setActiveTab(1)
+
+    try {
+      const passwordResetResult = await requestAwsPasswordReset(value)
+      setActiveTab(1)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-  const handleVerificationCodeSubmit = (value) => {
-    console.log("🚀 ~ handleVerificationCodeSubmit ~ value:", value)
-    setActiveTab(2)
-  }
-  const handleNewPasswordSubmit = (value) => {
-    console.log("🚀 ~ handleVerificationCodeSubmit ~ value:", value)
-    setActiveTab(3)
-    setTimeout(() => {
-      navigate("/")
-    }, 2500)
+  const handleNewPasswordSubmit = async (value) => {
+    try {
+      const { verificationCode, newPassword } = value
+      const newPasswordResult = await handlePasswordResetVerification(
+        enteredEmail,
+        verificationCode,
+        newPassword
+      )
+
+      setActiveTab(2)
+      setTimeout(() => {
+        navigate("/")
+      }, 2500)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
 
   return (
@@ -45,21 +62,18 @@ const ResetPasswordPage = () => {
               {activeTab === 0 && (
                 <RequestPasswordResetForm
                   onSubmit={handlePasswordResetRequest}
+                  awsErrorMessage={awsErrorMessage}
                 />
               )}
               {activeTab === 1 && (
                 <RequestPasswordVerificationForm
-                  onSubmit={handleVerificationCodeSubmit}
+                  onSubmit={handleNewPasswordSubmit}
                   enteredEmail={enteredEmail}
+                  awsErrorMessage={awsErrorMessage}
+                  resetForm={handleFormReset}
                 />
               )}
               {activeTab === 2 && (
-                <SetNewPasswordForm
-                  onSubmit={handleNewPasswordSubmit}
-                  enteredEmail={enteredEmail}
-                />
-              )}
-              {activeTab === 3 && (
                 <>
                   <Icon
                     name="check circle outline"
@@ -79,8 +93,8 @@ const ResetPasswordPage = () => {
 
             <Progress
               size="tiny"
-              color={activeTab === 3 ? "green" : "blue"}
-              percent={activeTab === 3 ? 100 : 33 * activeTab}
+              color={activeTab === 2 ? "green" : "blue"}
+              percent={50 * activeTab}
             />
             <Link to="/">
               <Icon name="left arrow" /> Back to Homepage
