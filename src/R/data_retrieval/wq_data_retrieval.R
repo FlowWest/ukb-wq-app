@@ -25,7 +25,7 @@ col_select <- function(data) {
            provider_name)
 }
 
-get_wqp_data <- function(start_date, end_date, organization) {
+get_wqp_data <- function(start_date, end_date, organization, parameter = NULL) {
   
   # Set the URL for the API endpoint
   url <- "https://www.waterqualitydata.us/data/Result/search?"
@@ -37,6 +37,7 @@ get_wqp_data <- function(start_date, end_date, organization) {
     startDateLo = start_date,
     startDateHi = end_date,
     dataProfile = "narrowResult",
+    characteristicName = parameter,
     providers = "STORET" # we know that klamath tribes only has Storet data - TODO trouble shoot having this item as a list 
   )
   
@@ -104,10 +105,11 @@ get_wqp_data <- function(start_date, end_date, organization) {
 start_date <- "01-01-2000"
 end_date <- "02-02-2000"
 organization <- "KLAMATHTRIBES_WQX"
+parameter <- "Ammonia-nitrogen"
 
 start_time <- Sys.time()
 
-all_data <- get_wqp_data(start_date, end_date, organization)
+all_data <- get_wqp_data(start_date, end_date, organization, parameter)
 
 end_time <- Sys.time()
 total_time <- end_time - start_time
@@ -118,7 +120,7 @@ print(total_time)
 ## exploration
 
 ### downloaded directly from WQP:
-all_data <- read_csv('../../../../Downloads/narrowresult 3.csv') |>  col_select()
+all_data <- read_csv('../../../../../../Downloads/narrowresult 3.csv') |>  col_select()
 
 params <- unique(all_data$characteristic_name)
 print(params)
