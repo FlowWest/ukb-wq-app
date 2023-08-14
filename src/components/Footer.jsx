@@ -1,30 +1,12 @@
 import React, { useContext, useState } from "react"
-import {
-  Segment,
-  Grid,
-  Icon,
-  Divider,
-  Button,
-  Menu,
-  Popup,
-  Dimmer,
-  Loader,
-} from "semantic-ui-react"
+import { Segment, Grid, Icon, Divider, Button, Popup } from "semantic-ui-react"
 import FlowWestLogo from "./FlowwestLogo"
 import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
+import LogoutMenu from "./LogoutMenu"
 
 export const Footer = () => {
   const { user, setUser } = useContext(UserContext) || {}
-  const [loggingOut, setLoggingOut] = useState(false)
-
-  const handleLogout = () => {
-    setLoggingOut(true)
-    setTimeout(() => {
-      setUser(null)
-      setLoggingOut(false)
-    }, 1000)
-  }
 
   return (
     <Segment
@@ -51,24 +33,7 @@ export const Footer = () => {
               style={Object.keys(user).length ? { padding: 0 } : null}
               content={
                 Object.keys(user).length ? (
-                  <Menu secondary fluid vertical>
-                    <Dimmer active={loggingOut} inverted>
-                      <Loader>Logging Out</Loader>
-                    </Dimmer>
-                    <Menu.Item>
-                      <b>Logged in as</b>
-                    </Menu.Item>
-                    <Menu.Item fitted="vertically">
-                      <em>{user.email}</em>
-                    </Menu.Item>
-                    <Divider />
-                    <Menu.Item link onClick={handleLogout}>
-                      <Icon.Group className="admin-menu-item-icon">
-                        <Icon name="log out" />
-                      </Icon.Group>
-                      Logout
-                    </Menu.Item>
-                  </Menu>
+                  <LogoutMenu user={user} />
                 ) : (
                   <LoginForm />
                 )

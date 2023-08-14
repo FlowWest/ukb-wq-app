@@ -53,7 +53,35 @@ export const editReportSchema = yup
   })
   .required()
 
-export const LoginFormSchema = yup.object().shape({
+export const loginFormSchema = yup.object().shape({
   username: yup.string().label("Username").email().required(),
   password: yup.string().label("Password").required(),
+})
+
+export const requestPasswordResetSchema = yup.object().shape({
+  email: yup.string().email().required().label("Email"),
+  // verificationCode: yup.string().required(),
+})
+export const passwordResetVerificationSchema = yup.object().shape({
+  verificationCode: yup
+    .string()
+    .required()
+    .min(6, "Verification Code must be 6 characters")
+    .max(6, "Verification Code must be 6 characters")
+    .label("Verification Code"),
+  newPassword: yup.string().min(8).required().label("New Password"),
+  confirmPassword: yup
+    .string()
+    .min(8)
+    .required()
+    .label("Confirm Password")
+    .oneOf([yup.ref("newPassword"), null], "Passwords do not match"),
+})
+export const setNewPasswordSchema = yup.object().shape({
+  newPassword: yup.string().min(8).required().label("New Password"),
+  confirmPassword: yup
+    .string()
+    .min(8)
+    .required()
+    .oneOf([yup.ref("newPassword"), null], "Passwords do not match"),
 })
