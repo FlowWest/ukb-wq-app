@@ -85,7 +85,7 @@ const ReportsPage = () => {
 
   useEffect(() => {
     setReportVisibilityFilterMethod(
-      user
+      Object.keys(user).length
         ? reportVisibilityFilterOptions.at(0)
         : reportVisibilityFilterOptions.at(1)
     )
@@ -222,7 +222,7 @@ const ReportsPage = () => {
       ) : (
         <>
           <Grid container>
-            {user && (
+            {Object.keys(user).length > 0 && (
               <Grid.Column mobile={16} tablet={4} computer={3}>
                 <Dropdown
                   fluid
@@ -236,8 +236,8 @@ const ReportsPage = () => {
             )}
             <Grid.Column
               mobile={16}
-              tablet={user ? 12 : 8}
-              computer={user ? 4 : 8}
+              tablet={Object.keys(user).length ? 12 : 8}
+              computer={Object.keys(user).length ? 4 : 8}
             >
               <ReportSearch
                 className="filter-input-field"
@@ -247,8 +247,8 @@ const ReportsPage = () => {
             </Grid.Column>
             <Grid.Column
               mobile={16}
-              tablet={user ? 6 : 4}
-              computer={user ? 3 : 4}
+              tablet={Object.keys(user).length ? 6 : 4}
+              computer={Object.keys(user).length ? 3 : 4}
             >
               <Dropdown
                 fluid
@@ -263,8 +263,8 @@ const ReportsPage = () => {
             </Grid.Column>
             <Grid.Column
               mobile={16}
-              tablet={user ? 6 : 4}
-              computer={user ? 3 : 4}
+              tablet={Object.keys(user).length ? 6 : 4}
+              computer={Object.keys(user).length ? 3 : 4}
             >
               <Dropdown
                 placeholder="Sort by"
@@ -275,7 +275,7 @@ const ReportsPage = () => {
                 className="filter-input-field"
               />
             </Grid.Column>
-            {user && (
+            {Object.keys(user).length > 0 && (
               <Modal
                 closeIcon
                 open={uploadReportModalOpen}

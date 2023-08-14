@@ -84,7 +84,7 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
           >
             View
           </Button>
-          {user && (
+          {Object.keys(user).length > 0 && (
             <Dropdown
               button
               basic
