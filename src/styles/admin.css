@@ -33,3 +33,21 @@
 .admin-menu-icon-wrapper {
   margin-right: 1rem;
 }
+
+.responsive-admin-menu-accordion {
+  font-size: 20px;
+}
+
+.responsive-admin-menu-wrapper {
+  padding: 1rem !important;
+  position: relative;
+}
+
+.responsive-admin-menu-wrapper.login-form {
+  background: hsl(0, 0%, 95%);
+}
+
+.responsive-admin-menu-wrapper.logout-menu .item {
+  font-size: 1.1rem !important;
+  color: hsla(0, 0%, 100%, 0.9) !important;
+}
