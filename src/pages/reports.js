@@ -8,8 +8,8 @@ import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "../components/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
-import Papa from "papaparse"
 import { filter, escapeRegExp, orderBy } from "lodash"
+import * as AWS from "aws-sdk"
 
 const ReportsPage = () => {
   const { user } = useContext(UserContext) || {}
@@ -23,34 +23,12 @@ const ReportsPage = () => {
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
   const [currentSearchFilterString, setCurrentSearchFilterString] = useState("")
   const [reportTypeOptions, setReportTypeOptions] = useState([])
+  const [getReportsError, setGetReportsError] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       try {
-        fetch(
-          "https://klamath-water-quality-app.s3.us-west-2.amazonaws.com/reportsMetadata.csv"
-        )
-          .then((response) => response.text())
-          .then((value) => {
-            const { data } = Papa.parse(value)
-            const headers = data.shift()
-
-            const reportsData = orderBy(
-              data.map((row) => {
-                const obj = {}
-
-                row.forEach((value, index) => {
-                  obj[headers[index]] = value
-                })
-
-                return obj
-              }),
-              ["startYear"],
-              ["desc"]
-            )
-            console.log("reportsdata", reportsData)
-            setAllReports(reportsData)
-          })
+        await getAllReports()
       } catch (error) {
         console.error(error)
       }
@@ -137,6 +115,7 @@ const ReportsPage = () => {
 
   const reportTypeChangeHandler = (event, { value }) => {
     setCurrentReportTypeFilters(value)
+    setCurrentPage(1)
   }
 
   const reportVisibilityChangeHandler = (event, { value }) => {
@@ -144,6 +123,7 @@ const ReportsPage = () => {
       (option) => option.value === value
     )
     setReportVisibilityFilterMethod(selectedReportVisibilityFilter)
+    setCurrentPage(1)
   }
 
   const sortMethodChangeHandler = useCallback(
@@ -204,96 +184,152 @@ const ReportsPage = () => {
     allReports,
   ])
 
+  const getAllReports = async () => {
+    try {
+      if (!AWS.config.credentials) {
+        AWS.config.region = "us-west-1"
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+        })
+      }
+      // Create a DynamoDB DocumentClient
+      const docClient = new AWS.DynamoDB.DocumentClient()
+
+      // Specify the table name
+      const tableName = "reports_metadata"
+      const params = {
+        TableName: tableName,
+      }
+      const result = await docClient.scan(params).promise()
+      const items = result.Items
+
+      const reportsData = orderBy(items, ["year"], ["desc"])
+      setAllReports(reportsData)
+      setGetReportsError(false)
+    } catch (error) {
+      setGetReportsError(true)
+      // throw error
+    }
+  }
+
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
-      <Grid container>
-        {user && (
-          <Grid.Column mobile={16} tablet={4} computer={3}>
-            <Dropdown
-              fluid
-              placeholder="All Reports"
-              selection
-              onChange={reportVisibilityChangeHandler}
-              options={reportVisibilityFilterOptions}
-              className="filter-input-field"
-            />
-          </Grid.Column>
-        )}
-        <Grid.Column mobile={16} tablet={user ? 12 : 8} computer={user ? 4 : 8}>
-          <ReportSearch
-            className="filter-input-field"
-            setCurrentSearchFilterString={setCurrentSearchFilterString}
-          />
-        </Grid.Column>
-        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
-          <Dropdown
-            fluid
-            placeholder="Report Type"
-            search
-            selection
-            multiple
-            onChange={reportTypeChangeHandler}
-            options={reportTypeOptions}
-            className="filter-input-field"
-          />
-        </Grid.Column>
-        <Grid.Column mobile={16} tablet={user ? 6 : 4} computer={user ? 3 : 4}>
-          <Dropdown
-            placeholder="Sort by"
-            fluid
-            selection
-            onChange={sortMethodChangeHandler}
-            options={reportSortingOptions}
-            className="filter-input-field"
-          />
-        </Grid.Column>
-        {user && (
-          <Modal
-            closeIcon
-            open={uploadReportModalOpen}
-            onOpen={() => setUploadReportModalOpen(true)}
-            onClose={() => setUploadReportModalOpen(false)}
-            trigger={
-              <Grid.Column mobile={16} computer={3} tablet={4}>
-                <Button
-                  color="blue"
-                  icon="upload"
-                  content={isTabletScreenSize ? null : "Upload"}
+      {getReportsError ? (
+        <Grid container className="error-message">
+          Error retrieving reports. Please refresh the page to try again.
+        </Grid>
+      ) : (
+        <>
+          <Grid container>
+            {user && (
+              <Grid.Column mobile={16} tablet={4} computer={3}>
+                <Dropdown
                   fluid
+                  placeholder="All Reports"
+                  selection
+                  onChange={reportVisibilityChangeHandler}
+                  options={reportVisibilityFilterOptions}
+                  className="filter-input-field"
                 />
               </Grid.Column>
-            }
-          >
-            <Modal.Header>Upload Report</Modal.Header>
-            <Modal.Content>
-              <UploadReportForm
-                onClose={() => setUploadReportModalOpen(false)}
+            )}
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 12 : 8}
+              computer={user ? 4 : 8}
+            >
+              <ReportSearch
+                className="filter-input-field"
+                setCurrentSearchFilterString={setCurrentSearchFilterString}
+                setCurrentPage={setCurrentPage}
               />
-            </Modal.Content>
-          </Modal>
-        )}
-      </Grid>
-      <Grid
-        container
-        columns={3}
-        doubling
-        stackable
-        className="mobile-grid-container"
-      >
-        {paginatedReports.map((report, index) => (
-          <Grid.Column key={index}>
-            <DataDownloadCard reportMetaData={report} />
-          </Grid.Column>
-        ))}
-      </Grid>
-      <Grid container>
-        <Pagination
-          defaultActivePage={currentPage}
-          totalPages={numberOfPages}
-          onPageChange={handlePaginationPageChange}
-        />
-      </Grid>
+            </Grid.Column>
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 6 : 4}
+              computer={user ? 3 : 4}
+            >
+              <Dropdown
+                fluid
+                placeholder="Report Type"
+                search
+                selection
+                multiple
+                onChange={reportTypeChangeHandler}
+                options={reportTypeOptions}
+                className="filter-input-field"
+              />
+            </Grid.Column>
+            <Grid.Column
+              mobile={16}
+              tablet={user ? 6 : 4}
+              computer={user ? 3 : 4}
+            >
+              <Dropdown
+                placeholder="Sort by"
+                fluid
+                selection
+                onChange={sortMethodChangeHandler}
+                options={reportSortingOptions}
+                className="filter-input-field"
+              />
+            </Grid.Column>
+            {user && (
+              <Modal
+                closeIcon
+                open={uploadReportModalOpen}
+                onOpen={() => setUploadReportModalOpen(true)}
+                onClose={() => setUploadReportModalOpen(false)}
+                trigger={
+                  <Grid.Column mobile={16} computer={3} tablet={4}>
+                    <Button
+                      color="blue"
+                      icon="upload"
+                      content={isTabletScreenSize ? null : "Upload"}
+                      fluid
+                    />
+                  </Grid.Column>
+                }
+              >
+                <Modal.Header>Upload Report</Modal.Header>
+                <Modal.Content>
+                  <UploadReportForm
+                    onClose={() => setUploadReportModalOpen(false)}
+                    allReports={allReports}
+                    getAllReports={getAllReports}
+                  />
+                </Modal.Content>
+              </Modal>
+            )}
+          </Grid>
+          <Grid
+            container
+            columns={3}
+            doubling
+            stackable
+            className="mobile-grid-container"
+          >
+            {paginatedReports.map((report) => (
+              <Grid.Column key={report.report_uuid}>
+                <DataDownloadCard
+                  allReports={allReports}
+                  getAllReports={getAllReports}
+                  reportMetaData={report}
+                />
+              </Grid.Column>
+            ))}
+          </Grid>
+          <Grid container>
+            <Pagination
+              activePage={currentPage}
+              defaultActivePage={1}
+              totalPages={numberOfPages}
+              onPageChange={handlePaginationPageChange}
+            />
+          </Grid>
+        </>
+      )}
     </Layout>
   )
 }
