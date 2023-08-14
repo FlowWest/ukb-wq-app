@@ -30,9 +30,9 @@ export const Footer = () => {
           <div className="admin-menu-icon-wrapper">
             <Popup
               className="admin-menu-popup"
-              style={Object.keys(user).length ? { padding: 0 } : null}
+              style={user && Object.keys(user).length ? { padding: 0 } : null}
               content={
-                Object.keys(user).length ? (
+                user && Object.keys(user).length ? (
                   <LogoutMenu user={user} />
                 ) : (
                   <LoginForm />
