@@ -48,9 +48,9 @@ export const Footer = () => {
           <div className="admin-menu-icon-wrapper">
             <Popup
               className="admin-menu-popup"
-              style={user ? { padding: 0 } : null}
+              style={Object.keys(user).length ? { padding: 0 } : null}
               content={
-                user ? (
+                Object.keys(user).length ? (
                   <Menu secondary fluid vertical>
                     <Dimmer active={loggingOut} inverted>
                       <Loader>Logging Out</Loader>
