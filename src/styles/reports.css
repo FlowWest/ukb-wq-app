@@ -150,3 +150,9 @@ Filter Container and Input Styles
     margin-left: 0rem !important;
   }
 }
+
+.error-message {
+  color: #ff3838;
+  font-size: 1.5rem;
+  height: 62px;
+}

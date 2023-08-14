@@ -2,7 +2,7 @@ const reportTypeDropdownOptions = [
   {
     key: "tmdl",
     text: "TMDL",
-    value: "tmdl",
+    value: "TMDL",
     content: "TMDL",
   },
   {
