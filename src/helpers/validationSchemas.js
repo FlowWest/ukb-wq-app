@@ -15,8 +15,10 @@ export const uploadReportSchema = yup
         then: (schema) => schema.required(),
       })
       .test("greater than", "End year must be greater than Year", function () {
-        const { year, endYear } = this.parent
-        return +endYear > +year
+        const { year, endYear, addEndYear } = this.parent
+        if (addEndYear) {
+          return +endYear > +year
+        } else return true
       }),
     location: yup.string().label("Location").required().trim(),
     authors: yup.string().label("Authors").required().trim(),
@@ -38,8 +40,14 @@ export const editReportSchema = yup
       .when("addEndYear", {
         is: true,
         then: (schema) => schema.required(),
+      })
+      .test("greater than", "End year must be greater than Year", function () {
+        const { year, endYear, addEndYear } = this.parent
+        if (addEndYear) {
+          return +endYear > +year
+        } else return true
       }),
-    location: yup.string().label("Location").required().trim(),
+    location: yup.string().label("Location").trim(),
     authors: yup.string().label("Authors").required().trim(),
     type: yup.string().label("Report Type").required(),
   })

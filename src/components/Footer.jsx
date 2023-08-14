@@ -1,27 +1,12 @@
 import React, { useContext, useState } from "react"
-import {
-  Segment,
-  Grid,
-  Icon,
-  Divider,
-  Button,
-  Menu,
-  Popup,
-  Dimmer,
-  Loader,
-} from "semantic-ui-react"
+import { Segment, Grid, Icon, Divider, Button, Popup } from "semantic-ui-react"
 import FlowWestLogo from "./FlowwestLogo"
 import LoginForm from "./LoginForm"
 import { UserContext } from "../../gatsby-browser"
-import {
-  CognitoUserPool,
-  CognitoUser,
-  AuthenticationDetails,
-} from "amazon-cognito-identity-js"
 import LogoutMenu from "./LogoutMenu"
 
 export const Footer = () => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext) || {}
 
   return (
     <Segment
@@ -45,8 +30,14 @@ export const Footer = () => {
           <div className="admin-menu-icon-wrapper">
             <Popup
               className="admin-menu-popup"
-              style={user ? { padding: 0 } : null}
-              content={user ? <LogoutMenu user={user} /> : <LoginForm />}
+              style={Object.keys(user).length ? { padding: 0 } : null}
+              content={
+                Object.keys(user).length ? (
+                  <LogoutMenu user={user} />
+                ) : (
+                  <LoginForm />
+                )
+              }
               on="click"
               pinned
               position="top right"

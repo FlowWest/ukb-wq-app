@@ -20,7 +20,9 @@ const sortingOptions = [
     value: "Title - A-Z",
     text: "Title - A-Z",
     sort: function (reports) {
-      return reports.sort((a, b) => (a.title > b.title ? 1 : -1))
+      return reports.sort((a, b) =>
+        a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
+      )
     },
   },
   {
@@ -28,7 +30,9 @@ const sortingOptions = [
     value: "Title - Z-A",
     text: "Title - Z-A",
     sort: function (reports) {
-      return reports.sort((a, b) => (a.title < b.title ? 1 : -1))
+      return reports.sort((a, b) =>
+        a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
+      )
     },
   },
 ]

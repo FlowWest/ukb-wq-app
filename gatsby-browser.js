@@ -10,10 +10,10 @@ import "./src/styles/style.css"
 import React, { createContext, useState, useEffect } from "react"
 import { CognitoUserPool } from "amazon-cognito-identity-js"
 
-export const UserContext = createContext(null)
+export const UserContext = createContext({})
 
 const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState({})
 
   useEffect(() => {
     const poolData = {
