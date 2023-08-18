@@ -194,9 +194,6 @@ const LoginForm = () => {
                   {newPasswordErrors.confirmPassword.message}
                 </p>
               )}
-              {/* {!!awsErrorMessage && (
-                <p className="form-error-message mt">{awsErrorMessage}</p>
-              )} */}
             </Form.Field>
           )}
         />
