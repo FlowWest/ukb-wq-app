@@ -80,7 +80,7 @@ const LoginForm = () => {
               action={{
                 type: "button",
                 basic: true,
-                color: "white",
+                color: "grey",
                 icon: showPassword ? "eye slash outline" : "eye",
                 onClick: (e) => {
                   setShowPassword((prevState) => !prevState)

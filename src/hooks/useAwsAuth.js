@@ -116,14 +116,14 @@ export const useAwsLogin = (watch) => {
               userAttributes,
               {
                 onSuccess: (result) => {
-                  console.log("🚀 ~ awsEmailLogin ~ result:", result)
-                  AWS.config.credentials.refresh(async (error) => {
-                    if (error) {
-                      console.error(error)
-                    } else {
-                      console.log("Successfully logged!")
-                    }
-                  })
+                  const cognitoUserEmail =
+                    cognitoUser.signInUserSession.idToken.payload.email
+                  const loggedUser = {
+                    ...cognitoUser,
+                    email: cognitoUserEmail,
+                  }
+                  setUser(loggedUser)
+                  setTempUserObject({})
                 },
                 onFailure: function (error) {
                   console.log("🚀 ~ awsEmailLogin ~ error:", error)
