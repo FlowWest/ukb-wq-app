@@ -117,13 +117,13 @@ const LoginForm = () => {
     <>
       <Form
         key={"newPassword"}
-        onSubmit={newPasswordHandleSubmit(
+        onSubmit={newPasswordHandleSubmit(() => {
           tempUserObject.changePassword(
             newPassword,
             tempUserObject.cognitoUser,
             tempUserObject.userAttributes
           )
-        )}
+        })}
       >
         <p
           style={{
