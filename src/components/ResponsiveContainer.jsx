@@ -26,8 +26,7 @@ const { Media, MediaContextProvider } = createMedia({
 
 const DesktopContainer = ({ children, pageName }) => {
   return (
-    <>
-      {/* <Media greaterThan="mobile"> */}
+    <Media greaterThan="mobile">
       <Menu
         pointing={true}
         secondary={true}
@@ -63,8 +62,7 @@ const DesktopContainer = ({ children, pageName }) => {
       </Menu>
       <Banner pageName={pageName} />
       {children}
-      {/* </Media> */}
-    </>
+    </Media>
   )
 }
 
@@ -168,11 +166,10 @@ const MobileContainer = ({ children, pageName }) => {
 
 const ResponsiveContainer = ({ children, pageName }) => {
   return (
-    // <MediaContextProvider>
-    //   <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
-    //   <MobileContainer pageName={pageName}>{children}</MobileContainer>
-    // </MediaContextProvider>
-    <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
+    <MediaContextProvider>
+      <DesktopContainer pageName={pageName}>{children}</DesktopContainer>
+      <MobileContainer pageName={pageName}>{children}</MobileContainer>
+    </MediaContextProvider>
   )
 }
 
