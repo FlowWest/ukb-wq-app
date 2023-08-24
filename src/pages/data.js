@@ -13,23 +13,6 @@ export default ({ data }) => {
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
       <Grid container style={{ padding: "4em 0" }}>
-        {/* <Grid.Row>
-          <p>
-            The Klamath Tribes water quality data can be downloaded from the
-            National Water Quality Monitoring Council Water Quality Portal.{" "}
-          </p>
-          <p>
-            Search the portal by Organization ID: KLAMATHTRIBES_WQX
-            <br />
-            <a
-              href="https://www.waterqualitydata.us/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              https://www.waterqualitydata.us/
-            </a>
-          </p>
-        </Grid.Row> */}
         <Grid.Row columns={2}>
           <Grid.Column>
             <DataInfoBlock data={data} />
@@ -52,17 +35,17 @@ export default ({ data }) => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={8}>
-            <DataMap />
+            <DataMap data={data.allTruncatedKlamathDataCsv.edges} />
           </Grid.Column>
           <Grid.Column width={8}>
             <LineChart />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{ marginBottom: 25 }}>
-          <DataPageTable data={data} />
+          <DataPageTable data={data.allTruncatedKlamathDataCsv.edges} />
         </Grid.Row>
 
-        <Grid.Row columns={2} divided="horizontally">
+        <Grid.Row columns={2} divided>
           <Grid.Column width={2}>
             <a
               href="https://www.waterqualitydata.us/"
@@ -135,6 +118,29 @@ export const query = graphql`
         fluid(maxWidth: 100, quality: 100) {
           ...GatsbyImageSharpFluid_noBase64
           ...GatsbyImageSharpFluidLimitPresentationSize
+        }
+      }
+    }
+    allTruncatedKlamathDataCsv {
+      edges {
+        node {
+          organization_identifier
+          activity_start_date
+          activity_start_time_time
+          activity_start_time_time_zone_code
+          monitoring_location_identifier
+          characteristic_name
+          result_sample_fraction_text
+          result_measure_value
+          result_measure_measure_unit_code
+          result_status_identifier
+          result_analytical_method_method_name
+          provider_name
+          monitoring_location_name
+          monitoring_location_type_name
+          huc_eight_digit_code
+          latitude_measure
+          longitude_measure
         }
       }
     }
