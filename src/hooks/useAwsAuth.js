@@ -90,25 +90,13 @@ export const useAwsLogin = (watch) => {
             setIsSubmitting(false)
           },
 
-          newPasswordRequired: function (userAttributes, requiredAttributes) {
-            // User was signed up by an admin and must provide new
-            // password and required attributes, if any, to complete
-            // authentication.
+          newPasswordRequired: function (userAttributes) {
             setTempUserObject({
               isFirstLogin: true,
               cognitoUser,
               userAttributes: { email: userAttributes.email },
               changePassword: this.changePassword,
             })
-            // the api doesn't accept this field back
-            //delete userAttributes.email_verified
-
-            // store userAttributes on global variable
-            // const sessionUserAttributes = userAttributes
-            // cognitoUser.completeNewPasswordChallenge(
-            //   "Klamath123!",
-            //   sessionUserAttributes
-            // )
           },
           changePassword: function (newPassword, cognitoUser, userAttributes) {
             cognitoUser.completeNewPasswordChallenge(
@@ -116,17 +104,17 @@ export const useAwsLogin = (watch) => {
               userAttributes,
               {
                 onSuccess: (result) => {
-                  console.log("🚀 ~ awsEmailLogin ~ result:", result)
-                  AWS.config.credentials.refresh(async (error) => {
-                    if (error) {
-                      console.error(error)
-                    } else {
-                      console.log("Successfully logged!")
-                    }
-                  })
+                  const cognitoUserEmail =
+                    cognitoUser.signInUserSession.idToken.payload.email
+                  const loggedUser = {
+                    ...cognitoUser,
+                    email: cognitoUserEmail,
+                  }
+                  setUser(loggedUser)
+                  setTempUserObject({})
                 },
                 onFailure: function (error) {
-                  console.log("🚀 ~ awsEmailLogin ~ error:", error)
+                  throw new Error(error)
                 },
               }
             )

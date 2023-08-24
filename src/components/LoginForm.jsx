@@ -80,7 +80,7 @@ const LoginForm = () => {
               action={{
                 type: "button",
                 basic: true,
-                color: "white",
+                color: "grey",
                 icon: showPassword ? "eye slash outline" : "eye",
                 onClick: (e) => {
                   setShowPassword((prevState) => !prevState)
@@ -194,9 +194,6 @@ const LoginForm = () => {
                   {newPasswordErrors.confirmPassword.message}
                 </p>
               )}
-              {/* {!!awsErrorMessage && (
-                <p className="form-error-message mt">{awsErrorMessage}</p>
-              )} */}
             </Form.Field>
           )}
         />
