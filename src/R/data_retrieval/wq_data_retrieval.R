@@ -22,7 +22,7 @@ col_select <- function(data) {
            result_measure_measure_unit_code,
            result_status_identifier,
            result_analytical_method_method_name,
-           provider_name)
+           provider_name) |> distinct()
 }
 
 get_wqp_data <- function(start_date, end_date, organization, parameter = NULL) {
@@ -116,22 +116,3 @@ total_time <- end_time - start_time
 print(total_time)
 
 
-# Explore all data pull from WQP ------------------------------------------
-## exploration
-
-### downloaded directly from WQP:
-all_data <- read_csv('../../../../../../Downloads/narrowresult 3.csv') |>  col_select()
-
-params <- unique(all_data$characteristic_name)
-print(params)
-
-sites <- unique(all_data$monitoring_location_identifier)
-print(sites)
-
-min_date <- min(all_data$activity_start_date)
-print(min_date)
-
-max_date <- max(all_data$activity_start_date)
-print(max_date)
-
-write_csv(all_data, "all_klamath_data_on_wqp.csv")
