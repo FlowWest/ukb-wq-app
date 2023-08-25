@@ -17,8 +17,8 @@ export const calcMapCenter = (monitoringLocations) => {
   const longValues = []
 
   monitoringLocations.forEach((location) => {
-    latValues.push(+location.node.latitude_measure)
-    longValues.push(+location.node.longitude_measure)
+    latValues.push(+location.latitude_measure)
+    longValues.push(+location.longitude_measure)
   })
 
   const avgLat = sum(latValues) / monitoringLocations.length

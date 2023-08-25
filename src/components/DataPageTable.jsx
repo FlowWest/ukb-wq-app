@@ -1,8 +1,6 @@
 import React, { useState } from "react"
-import { Header, Table, Grid, Icon, Pagination } from "semantic-ui-react"
+import { Grid, Header, Icon, Pagination, Table } from "semantic-ui-react"
 import usePagination from "../hooks/usePagination"
-import { Link } from "gatsby"
-import { node } from "prop-types"
 
 const formatDate = (date) =>
   Intl.DateTimeFormat("en-us", {
@@ -27,7 +25,6 @@ const DataPageTable = ({ data }) => {
     numberOfPages,
     paginatedItems,
   } = usePagination({ tableData: data, itemsPerPage: 9 })
-  console.log("🚀 ~ DataPageTable ~ paginatedItems:", paginatedItems)
 
   const generateKey = (monitoringLocationIdentifier, index) =>
     `${monitoringLocationIdentifier}${Math.ceil(Math.random() + index)}`
