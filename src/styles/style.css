@@ -10,6 +10,7 @@
 @import "resources.css";
 @import "data-uploader.css";
 @import "reset-password.css";
+@import "data.css";
 
 main {
   min-width: 100vw;
