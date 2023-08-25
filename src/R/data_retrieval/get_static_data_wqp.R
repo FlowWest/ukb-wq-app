@@ -76,3 +76,61 @@ stns <- all_data_update |>
             min_date = min(activity_start_date),
             max_date = max(activity_start_date)) |> 
   write_csv("data/monitoring_station_locations_v08242023.csv")
+
+# example plots -----------------------------------------------------------
+all_data_update |> 
+  filter(characteristic_name == "Dissolved oxygen (DO)") |> 
+  filter(monitoring_location_identifier == "KLAMATHTRIBES_WQX-KL0008") |> 
+  ggplot() +
+  geom_line(aes(x = activity_start_date, y = result_measure_value)) +
+  theme_minimal() + 
+  facet_grid(~paste0("Site: ", monitoring_location_identifier)) +
+  ylab(paste0(unique(all_data_update$characteristic_name), " (", unique(all_data_update$result_measure_measure_unit_code), ")")) +
+  xlab("date") +
+  ggsave("figs/dissolved_oyxgen_example.png")
+
+
+all_data_update |> 
+  filter(characteristic_name == "Ammonia-nitrogen") |> 
+  filter(monitoring_location_identifier == "KLAMATHTRIBES_WQX-KL0008") |> 
+  ggplot() +
+  geom_line(aes(x = activity_start_date, y = result_measure_value)) +
+  theme_minimal() + 
+  facet_grid(~paste0("Site: ", monitoring_location_identifier)) +
+  ylab(paste0('Ammonia-nitrogen', " (", 'ug/L', ")")) +
+  xlab("date") +
+  ggsave("figs/Ammonia-nitrogen_example.png")
+
+
+all_data_update |> 
+  filter(characteristic_name == "Gage Height") |> 
+  filter(monitoring_location_identifier == "KLAMATHTRIBES_WQX-SR0080") |> 
+  ggplot() +
+  geom_line(aes(x = activity_start_date, y = result_measure_value)) +
+  theme_minimal() + 
+  facet_grid(~paste0("Site: ", monitoring_location_identifier)) +
+  ylab(paste0('Gage Height', " (", 'ft', ")")) +
+  xlab("date") +
+  ggsave("figs/gage_height_example.png")
+
+all_data_update |> 
+  filter(characteristic_name == "Chlorophyll a") |> 
+  filter(monitoring_location_identifier == "KLAMATHTRIBES_WQX-KL0008") |> 
+  ggplot() +
+  geom_line(aes(x = activity_start_date, y = result_measure_value)) +
+  theme_minimal() + 
+  facet_grid(~paste0("Site: ", monitoring_location_identifier)) +
+  ylab(paste0('Chlorophyll a', " (", 'ug/L', ")")) +
+  xlab("date") +
+  ggsave("figs/chlorophyll_a_example.png")
+
+all_data_update |> 
+  filter(characteristic_name == "Silica") |> 
+  filter(monitoring_location_identifier == "KLAMATHTRIBES_WQX-KL0008") |> 
+  ggplot() +
+  geom_line(aes(x = activity_start_date, y = result_measure_value)) +
+  theme_minimal() + 
+  facet_grid(~paste0("Site: ", monitoring_location_identifier)) +
+  ylab(paste0('Silica', " (", 'ug/L', ")")) +
+  xlab("date") +
+  ggsave("figs/silica_example.png")
