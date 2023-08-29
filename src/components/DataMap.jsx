@@ -29,8 +29,8 @@ const DataMap = ({ data, setMap, markerRef }) => {
     <MapContainer
       style={{ height: "600px" }}
       center={center}
-      zoom={9}
-      scrollWheelZoom={false}
+      zoom={8}
+      //scrollWheelZoom={false}
       ref={setMap}
     >
       <TileLayer
@@ -57,7 +57,7 @@ const DataMap = ({ data, setMap, markerRef }) => {
               <PopupDetail title="Latitude:" content={lat} />
               <PopupDetail title="Latitude:" content={lng} />
               <PopupDetail
-                title="Parameters:"
+                title="Characteristics Collected:"
                 content={
                   <List bulleted>
                     {params.map((param) => (
