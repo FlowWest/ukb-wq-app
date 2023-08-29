@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,27 +21,16 @@ ChartJS.register(
   Legend
 )
 
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      // display: false,
-      position: "top",
-    },
-    title: {
-      display: false,
-      text: "Chart.js Line Chart",
-    },
-  },
+var years = []
+
+// Loop through the years and add them to the array
+for (var year = 1980; year <= 1990; year++) {
+  years.push(year)
 }
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"]
-
 var chartDatasets = []
 
-// Create 30 datasets with sample data
-for (var i = 1; i <= 30; i++) {
+//Create 30 datasets with sample data
+for (var i = 1; i <= 1; i++) {
   var dataset = {
     label: `Dataset ${i}`,
     borderColor: getRandomColor(),
@@ -67,13 +56,92 @@ function generateRandomData(numPoints) {
   return data
 }
 
-const data = {
-  labels,
-  datasets: chartDatasets,
-}
+const LineChart = ({ selectedMonitoringLocation, data: data2 }) => {
+  console.log("🚀 ~ LineChart ~ data:", data2)
+  const [data, setData] = useState({
+    labels: years,
+    datasets: [
+      {
+        //label: "All Locations",
+        borderColor: getRandomColor(),
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        data: [],
+      },
+    ],
+  })
+  const chartRef = useRef(null)
 
-const LineChart = () => {
-  return <Line options={options} data={data} />
+  useEffect(() => {
+    const filteredData = data2.filter(
+      (data) =>
+        data.node.monitoring_location_identifier ===
+        selectedMonitoringLocation?.monitoring_location_identifier
+    )
+    // if (Boolean(filteredData.length)) {
+    const transformedDataset = [
+      {
+        label: selectedMonitoringLocation?.monitoring_location_identifier,
+
+        borderColor: getRandomColor(),
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        data: Boolean(filteredData.length)
+          ? filteredData.map((data) => +data.node.result_measure_value)
+          : [0, 0, 0, 0, 0, 0, 0, 0],
+      },
+    ]
+    console.log("🚀 ~ useEffect ~ transformedDataset:", transformedDataset)
+
+    setData({ labels: years, datasets: transformedDataset })
+    const chart = chartRef.current
+    chart.update()
+    console.log(
+      "🚀 ~ LineChart ~ selectedMonitoringLocation:",
+      selectedMonitoringLocation
+    )
+    // }
+  }, [selectedMonitoringLocation])
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: { y: { suggestedMin: 0, suggestedMax: 1 } },
+    plugins: {
+      legend: {
+        display: selectedMonitoringLocation,
+        position: "top",
+      },
+      title: {
+        display: false,
+      },
+    },
+  }
+
+  return (
+    <React.Fragment
+      style={{
+        position: "relative",
+      }}
+    >
+      <Line ref={chartRef} options={options} data={data} />
+      {!selectedMonitoringLocation && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            background: "hsla(0,0%,0%,.5",
+            position: "absolute",
+          }}
+        >
+          <p style={{ fontSize: "1.5rem", color: "white" }}>
+            Select monitoring location to display chart data
+          </p>
+        </div>
+      )}
+    </React.Fragment>
+  )
 }
 
 export default LineChart
