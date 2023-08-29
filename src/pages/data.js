@@ -9,6 +9,7 @@ import DataPageTable from "../components/DataPageTable"
 import LineChart from "../components/LineChart"
 import DataMap from "../components/DataMap"
 export default ({ data }) => {
+  console.log("data", data)
   return (
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
@@ -136,6 +137,28 @@ export const query = graphql`
           ...GatsbyImageSharpFluid_noBase64
           ...GatsbyImageSharpFluidLimitPresentationSize
         }
+      }
+    }
+    allKlamathDataCsv {
+      nodes {
+        organization_identifier
+        organization_formal_name
+        activity_start_date
+        activity_start_time_time
+        activity_start_time_time_zone_code
+        monitoring_location_identifier
+        characteristic_name
+        subject_taxonomic_name
+        result_measure_value
+        result_measure_measure_unit_code
+        result_status_identifier
+        result_analytical_method_method_name
+        provider_name
+        monitoring_location_name
+        monitoring_location_type_name
+        huc_eight_digit_code
+        latitude_measure
+        longitude_measure
       }
     }
   }
