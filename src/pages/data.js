@@ -176,28 +176,6 @@ export const query = graphql`
         }
       }
     }
-    allKlamathDataCsv {
-      nodes {
-        organization_identifier
-        organization_formal_name
-        activity_start_date
-        activity_start_time_time
-        activity_start_time_time_zone_code
-        monitoring_location_identifier
-        characteristic_name
-        subject_taxonomic_name
-        result_measure_value
-        result_measure_measure_unit_code
-        result_status_identifier
-        result_analytical_method_method_name
-        provider_name
-        monitoring_location_name
-        monitoring_location_type_name
-        huc_eight_digit_code
-        latitude_measure
-        longitude_measure
-      }
-    }
     allTruncatedKlamathDataCsv {
       edges {
         node {
@@ -234,3 +212,28 @@ export const query = graphql`
     }
   }
 `
+
+/*
+    allKlamathDataCsv {
+      nodes {
+        organization_identifier
+        organization_formal_name
+        activity_start_date
+        activity_start_time_time
+        activity_start_time_time_zone_code
+        monitoring_location_identifier
+        characteristic_name
+        subject_taxonomic_name
+        result_measure_value
+        result_measure_measure_unit_code
+        result_status_identifier
+        result_analytical_method_method_name
+        provider_name
+        monitoring_location_name
+        monitoring_location_type_name
+        huc_eight_digit_code
+        latitude_measure
+        longitude_measure
+      }
+    }
+*/
