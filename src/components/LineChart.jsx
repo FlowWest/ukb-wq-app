@@ -26,7 +26,7 @@ const options = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false,
+      // display: false,
       position: "top",
     },
     title: {
@@ -38,22 +38,38 @@ const options = {
 
 const labels = ["January", "February", "March", "April", "May", "June", "July"]
 
+var chartDatasets = []
+
+// Create 30 datasets with sample data
+for (var i = 1; i <= 30; i++) {
+  var dataset = {
+    label: `Dataset ${i}`,
+    borderColor: getRandomColor(),
+    backgroundColor: "rgba(0, 0, 0, 0)", // Transparent background
+    data: generateRandomData(10), // Generate an array of 10 random data points
+  }
+  chartDatasets.push(dataset)
+}
+
+// Function to generate random color
+function getRandomColor() {
+  return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
+    Math.random() * 256
+  )}, ${Math.floor(Math.random() * 256)}, 1)`
+}
+
+// Function to generate an array of random data points
+function generateRandomData(numPoints) {
+  var data = []
+  for (var i = 0; i < numPoints; i++) {
+    data.push(Math.random() * 100) // Generate random data between 0 and 100
+  }
+  return data
+}
+
 const data = {
   labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [2, 22, 21, 31, 4, 7, 10, 5],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [1, 8, 25, 17, 17, 11, 4, 2],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
+  datasets: chartDatasets,
 }
 
 const LineChart = () => {
