@@ -12,8 +12,11 @@ import SEO from "../components/Seo"
 import { calcMapCenter } from "../helpers/utils"
 
 export const DataPage = ({ data }) => {
+  // console.log("🚀 ~ DataPage ~ data:", data)
+
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
-  const selectedMonitoringLocation = useRef(null)
+  const [selectedMonitoringLocation, setSelectedMonitoringLocation] =
+    useState(null)
   const [map, setMap] = useState(null)
   const markerRef = useRef([])
 
@@ -26,56 +29,23 @@ export const DataPage = ({ data }) => {
     if (index === null) {
       const center = calcMapCenter(monitoringLocations)
       map.closePopup()
-      map.flyTo(center, 9)
+      map.flyTo(center, 8)
     } else {
       const markerPosition = [
-        marker[index].current._latlng.lat + 0.0068,
+        marker[index].current._latlng.lat + 0.03,
         marker[index].current._latlng.lng,
       ]
       marker[index].current.openPopup()
-      map.flyTo(markerPosition, 15)
+      map.flyTo(markerPosition, 13)
     }
   }
 
-  const friendOptions = [
-    {
-      key: "Jenny Hess",
-      text: "Jenny Hess",
-      value: "Jenny Hess",
-    },
-    {
-      key: "Elliot Fu",
-      text: "Elliot Fu",
-      value: "Elliot Fu",
-    },
-    {
-      key: "Stevie Feliciano",
-      text: "Stevie Feliciano",
-      value: "Stevie Feliciano",
-    },
-    {
-      key: "Christian",
-      text: "Christian",
-      value: "Christian",
-    },
-    {
-      key: "Matt",
-      text: "Matt",
-      value: "Matt",
-    },
-    {
-      key: "Justen Kitsune",
-      text: "Justen Kitsune",
-      value: "Justen Kitsune",
-    },
-  ]
   const monitoringLocationOptions = monitoringLocations.map((node, index) => ({
     key: node.monitoring_location_identifier,
     text: node.monitoring_location_identifier,
     value: node.monitoring_location_identifier,
     onClick: () => {
-      //setSelectedMonitoringLocation(node)
-      selectedMonitoringLocation.current = node
+      setSelectedMonitoringLocation(node)
       onSelectShowMarker(index)
     },
   }))
@@ -134,7 +104,7 @@ export const DataPage = ({ data }) => {
                           value: "All Locations",
                           key: "All Locations",
                           onClick: () => {
-                            selectedMonitoringLocation.current = null
+                            setSelectedMonitoringLocation(null)
                             onSelectShowMarker(null)
                           },
                         },
@@ -145,7 +115,10 @@ export const DataPage = ({ data }) => {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <LineChart />
+                <LineChart
+                  selectedMonitoringLocation={selectedMonitoringLocation}
+                  data={data.allTruncatedKlamathDataCsv.edges}
+                />
               </Grid.Row>
             </Grid>
           </Grid.Column>
