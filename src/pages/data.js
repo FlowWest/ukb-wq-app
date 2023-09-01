@@ -9,46 +9,22 @@ import DataPageTable from "../components/DataPageTable"
 import Layout from "../components/Layout"
 import LineChart from "../components/LineChart"
 import SEO from "../components/Seo"
-import { calcMapCenter } from "../helpers/utils"
 
 export const DataPage = ({ data }) => {
-  // console.log("🚀 ~ DataPage ~ data:", data)
+  console.log("🚀 ~ DataPage ~ data:", data)
 
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
-  const [selectedMonitoringLocation, setSelectedMonitoringLocation] =
-    useState(null)
+  useState(null)
+  const [selectedFilters, setSelectedFilters] = useState({
+    monitoringLocation: null,
+    characteristicName: "",
+    startYear: "",
+    endYear: "",
+  })
+  console.log("🚀 ~ DataPage ~ selectedFilters:", selectedFilters)
+
   const [map, setMap] = useState(null)
   const markerRef = useRef([])
-
-  const onSelectShowMarker = (index) => {
-    if (!map) {
-      return
-    }
-    const marker = markerRef.current
-
-    if (index === null) {
-      const center = calcMapCenter(monitoringLocations)
-      map.closePopup()
-      map.flyTo(center, 8)
-    } else {
-      const markerPosition = [
-        marker[index].current._latlng.lat + 0.03,
-        marker[index].current._latlng.lng,
-      ]
-      marker[index].current.openPopup()
-      map.flyTo(markerPosition, 13)
-    }
-  }
-
-  const monitoringLocationOptions = monitoringLocations.map((node, index) => ({
-    key: node.monitoring_location_identifier,
-    text: node.monitoring_location_identifier,
-    value: node.monitoring_location_identifier,
-    onClick: () => {
-      setSelectedMonitoringLocation(node)
-      onSelectShowMarker(index)
-    },
-  }))
 
   return (
     <Layout pageInfo={{ pageName: "data" }}>
@@ -76,12 +52,17 @@ export const DataPage = ({ data }) => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={16} style={{ marginBottom: 25, zIndex: 1100 }}>
-            <DataPageFilters />
+            <DataPageFilters
+              monitoringLocations={monitoringLocations}
+              setSelectedFilters={setSelectedFilters}
+              map={map}
+              markerRef={markerRef}
+            />
           </Grid.Column>
           <Grid.Column width={6}>
             <DataMap
               data={monitoringLocations}
-              selectedMonitoringLocation={selectedMonitoringLocation}
+              selectedMonitoringLocation={selectedFilters.monitoringLocation}
               map={map}
               setMap={setMap}
               markerRef={markerRef}
@@ -89,34 +70,11 @@ export const DataPage = ({ data }) => {
           </Grid.Column>
           <Grid.Column width={10}>
             <Grid style={{ height: 600 }}>
-              <Grid.Row columns={1}>
-                <Grid.Column>
-                  <Form.Field>
-                    <label>Filter Monitoring Location</label>
-                    <Dropdown
-                      placeholder="Select Parameter"
-                      fluid
-                      selection
-                      defaultValue="All Locations"
-                      options={[
-                        {
-                          text: "All Locations",
-                          value: "All Locations",
-                          key: "All Locations",
-                          onClick: () => {
-                            setSelectedMonitoringLocation(null)
-                            onSelectShowMarker(null)
-                          },
-                        },
-                        ...monitoringLocationOptions,
-                      ]}
-                    />
-                  </Form.Field>
-                </Grid.Column>
-              </Grid.Row>
               <Grid.Row>
                 <LineChart
-                  selectedMonitoringLocation={selectedMonitoringLocation}
+                  selectedMonitoringLocation={
+                    selectedFilters.monitoringLocation
+                  }
                   data={data.allTruncatedKlamathDataCsv.edges}
                 />
               </Grid.Row>
@@ -208,6 +166,28 @@ export const query = graphql`
         params
         min_date
         max_date
+      }
+    }
+    allKlamathDataCsv {
+      nodes {
+        organization_identifier
+        organization_formal_name
+        activity_start_date
+        activity_start_time_time
+        activity_start_time_time_zone_code
+        monitoring_location_identifier
+        characteristic_name
+        subject_taxonomic_name
+        result_measure_value
+        result_measure_measure_unit_code
+        result_status_identifier
+        result_analytical_method_method_name
+        provider_name
+        monitoring_location_name
+        monitoring_location_type_name
+        huc_eight_digit_code
+        latitude_measure
+        longitude_measure
       }
     }
   }
