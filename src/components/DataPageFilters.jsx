@@ -1,75 +1,70 @@
 import React from "react"
-import { Dropdown, Grid, Button, Form, Segment } from "semantic-ui-react"
+import { Dropdown, Grid, Button, Form, Segment, Popup } from "semantic-ui-react"
 import { useForm, Controller } from "react-hook-form"
 import { calcMapCenter } from "../helpers/utils"
+import { useState } from "react"
+import dayjs from "dayjs"
+import isBetween from "dayjs/plugin/isBetween"
+import DatePicker from "react-datepicker"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { dataFiltersSchema } from "../helpers/validationSchemas"
 
-var yearsOptions = []
+dayjs.extend(isBetween)
 
-// Loop through the years and add them to the array
-for (var year = 1980; year <= 2023; year++) {
-  yearsOptions.push({ text: year, key: year, value: year })
+function filterDateRange(startDate, endDate, dateString) {
+  const isWithinRange = dayjs(dateString).isBetween(
+    dayjs(`${startDate || "1980-01-01"}`),
+    dayjs(`${endDate || dayjs().year()}`),
+    null,
+    "[]"
+  )
+
+  return isWithinRange
 }
 
-const characteristicNameOptions = [
-  {
-    key: "Count",
-    text: "Count",
-    value: "Count",
-  },
-  {
-    key: "Total Sample Weight",
-    text: "Total Sample Weight",
-    value: "Total Sample Weight",
-  },
-  {
-    key: "Phytoplankton Density",
-    text: "Phytoplankton Density",
-    value: "Phytoplankton Density",
-  },
-]
+function mapFlyToDefaultView(monitoringLocations, map) {
+  const center = calcMapCenter(monitoringLocations)
+  map.closePopup()
+  map.flyTo(center, 8)
+}
 
 const DataPageFilters = ({
   monitoringLocations,
   setSelectedFilters,
   map,
   markerRef,
+  allKlamathData,
+  setFilteredKlamathData,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    getValues,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, watch, control, reset, getValues } = useForm({
     defaultValues: {
-      startRange: "",
-      endRange: "",
+      startDate: "",
+      endDate: "",
       characteristicName: "",
       monitoringLocation: "",
     },
+    resolver: yupResolver(dataFiltersSchema),
   })
+  const monitoringLocationValue = watch("monitoringLocation")
+  const startDateValue = watch("startDate")
+  const endDateValue = watch("endDate")
+
   const onSubmit = (data) => {
     setSelectedFilters(data)
-    // const onSelectShowMarker = (index) => {
+    const {
+      monitoringLocation: monitoringLocationValue,
+      characteristicName: characteristicNameValue,
+    } = data
     if (!map) {
       return
     }
     const marker = markerRef.current
     const selectedMonitoringLocationIndex = monitoringLocations
       .map((location) => location.monitoring_location_identifier)
-      .indexOf(getValues("monitoringLocation"))
-    console.log(
-      "🚀 ~ //onSelectShowMarker ~ selectedMonitoringLocationIndex:",
-      selectedMonitoringLocationIndex
-    )
-
-    console.log("🚀 ~ //onSelectShowMarker ~ marker:", marker)
+      .indexOf(monitoringLocationValue)
 
     if (selectedMonitoringLocationIndex === -1) {
-      const center = calcMapCenter(monitoringLocations)
-      map.closePopup()
-      map.flyTo(center, 8)
+      mapFlyToDefaultView(monitoringLocations, map)
     } else {
       const markerPosition = [
         marker[selectedMonitoringLocationIndex].current._latlng.lat + 0.03,
@@ -77,18 +72,75 @@ const DataPageFilters = ({
       ]
       marker[selectedMonitoringLocationIndex].current.openPopup()
       map.flyTo(markerPosition, 13)
+
+      const filteredTableData = allKlamathData
+        .filter((data) => {
+          const isWithinDateRange = filterDateRange(
+            startDateValue,
+            endDateValue,
+            data.activity_start_date
+          )
+          return (
+            isWithinDateRange &&
+            data.monitoring_location_identifier === monitoringLocationValue &&
+            data.characteristic_name === characteristicNameValue
+          )
+        })
+        .sort((a, b) =>
+          a.activity_start_date > b.activity_start_date ? 1 : -1
+        )
+
+      setFilteredKlamathData(filteredTableData)
     }
+  }
+
+  const handleResetFilters = () => {
+    const defaultValues = {
+      startDate: "",
+      endDate: "",
+      characteristicName: "",
+      monitoringLocation: null,
+    }
+    setFilteredKlamathData(allKlamathData)
+    setSelectedFilters(defaultValues)
+
+    reset(defaultValues)
+    mapFlyToDefaultView(monitoringLocations, map)
   }
 
   const monitoringLocationOptions = monitoringLocations.map((node, index) => ({
     key: node.monitoring_location_identifier,
     text: node.monitoring_location_identifier,
     value: node.monitoring_location_identifier,
-    // onClick: () => {
-    //   setSelectedMonitoringLocation(node)
-    //   onSelectShowMarker(index)
-    // },
   }))
+
+  const [characteristicNameOptions, setCharacteristicNameOptions] = useState([])
+
+  function generateCharacteristicNameOptions(monitoringLocationValue) {
+    const selectedMonitoringLocation = monitoringLocations
+      .filter(
+        (ml) => monitoringLocationValue === ml.monitoring_location_identifier
+      )
+      .at(0)
+
+    const characteristicNames = selectedMonitoringLocation?.params.split(",")
+
+    const fieldOptions = characteristicNames.map((name) => {
+      const itemWithCharacteristicName = allKlamathData.find(
+        (data) =>
+          monitoringLocationValue === data.monitoring_location_identifier &&
+          data.characteristic_name === name
+      )
+
+      return {
+        key: name,
+        text: name,
+        value: name,
+        disabled: !itemWithCharacteristicName,
+      }
+    })
+    setCharacteristicNameOptions(fieldOptions)
+  }
 
   return (
     <Segment>
@@ -98,29 +150,28 @@ const DataPageFilters = ({
             <Controller
               name="monitoringLocation"
               control={control}
-              render={({ field }) => (
-                <Form.Field {...field}>
-                  <label>Filter Monitoring Location</label>
-                  <Dropdown
-                    placeholder="Select Parameter"
-                    fluid
-                    selection
-                    defaultValue="All Locations"
-                    options={[
-                      {
-                        text: "All Locations",
-                        value: "All Locations",
-                        key: "All Locations",
-                        // onClick: () => {
-                        //   setSelectedMonitoringLocation(null)
-                        //   onSelectShowMarker(null)
-                        // },
-                      },
-                      ...monitoringLocationOptions,
-                    ]}
-                    onChange={(e, { value }) => field.onChange(value)}
-                  />
-                </Form.Field>
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Form.Field {...field}>
+                    <label>Filter Monitoring Location</label>
+                    <Dropdown
+                      placeholder="Select Monitoring Location"
+                      fluid
+                      selection
+                      value={getValues("monitoringLocation") || ""}
+                      options={monitoringLocationOptions}
+                      onChange={(e, { value }) => {
+                        field.onChange(value)
+                        generateCharacteristicNameOptions(value)
+                      }}
+                    />
+                  </Form.Field>
+                  {error && (
+                    <p className="form-error-message  no-margin">
+                      {error.message}
+                    </p>
+                  )}
+                </>
               )}
             />
           </Grid.Column>
@@ -128,60 +179,117 @@ const DataPageFilters = ({
             <Controller
               name="characteristicName"
               control={control}
-              render={({ field }) => (
-                <Form.Field {...field}>
-                  <label>Characteristic Name</label>
-                  <Dropdown
-                    placeholder="Select Parameter"
-                    fluid
-                    selection
-                    options={characteristicNameOptions}
-                    onChange={(e, { value }) => field.onChange(value)}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Popup
+                    content="Select Monitoring Location to enable field"
+                    disabled={monitoringLocationValue}
+                    trigger={
+                      <Form.Field {...field}>
+                        <label>Characteristic Name</label>
+                        <Dropdown
+                          disabled={!monitoringLocationValue}
+                          placeholder="Select Characteristic Name"
+                          fluid
+                          selection
+                          options={characteristicNameOptions}
+                          onChange={(e, { value }) => field.onChange(value)}
+                        />
+                      </Form.Field>
+                    }
                   />
-                </Form.Field>
+                  {error && (
+                    <p className="form-error-message  no-margin">
+                      {error.message}
+                    </p>
+                  )}
+                </>
               )}
             />
           </Grid.Column>
 
-          <Grid.Column width={6}>
+          <Grid.Column width={5}>
             <Controller
-              name="startRange"
+              name="startDate"
               control={control}
-              render={({ field }) => (
-                <Form.Field {...field}>
-                  <label>Start Year</label>
-                  <Dropdown
-                    placeholder="Select Start Year"
-                    fluid
-                    selection
-                    options={yearsOptions}
-                    onChange={(e, { value }) => field.onChange(value)}
-                  />
-                </Form.Field>
+              render={({ field, fieldState: { error } }) => (
+                <DatePicker
+                  showMonthDropdown
+                  showYearDropdown
+                  yearDropdownItemNumber={100}
+                  scrollableYearDropdown
+                  style={{ marginBottom: 0 }}
+                  selected={field.value}
+                  onChange={(date) => {
+                    field.onChange(new Date(date))
+                  }}
+                  minDate={new Date(`1980-01-01T12:00`)}
+                  maxDate={new Date()}
+                  customInput={
+                    <Form.Input
+                      label="Start Date (optional)"
+                      {...field}
+                      className={error ? "form-error-input" : ""}
+                    />
+                  }
+                />
               )}
             />
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column width={5}>
             <Controller
-              name="endRange"
+              name="endDate"
               control={control}
-              render={({ field }) => (
-                <Form.Field {...field}>
-                  <label>Start Year</label>
-                  <Dropdown
-                    placeholder="Select Start Year"
-                    fluid
-                    selection
-                    options={yearsOptions}
-                    onChange={(e, { value }) => field.onChange(value)}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <DatePicker
+                    minDate={new Date(`1955-01-01T12:00`)}
+                    maxDate={new Date()}
+                    showYearDropdown
+                    showMonthDropdown
+                    yearDropdownItemNumber={100}
+                    year
+                    scrollableYearDropdown
+                    selected={field.value}
+                    onChange={(date) => {
+                      field.onChange(new Date(date))
+                    }}
+                    customInput={
+                      <Form.Input
+                        style={{ marginBottom: "1rem" }}
+                        label="End Date (optional)"
+                        {...field}
+                        className={error ? "form-error-input" : ""}
+                      />
+                    }
                   />
-                </Form.Field>
+
+                  {error && (
+                    <p className="form-error-message  no-margin">
+                      {error.message}
+                    </p>
+                  )}
+                </>
               )}
             />
           </Grid.Column>
           <Grid.Column
-            width={4}
-            style={{ display: "flex", alignItems: "flex-end" }}
+            width={3}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <Button
+              fluid
+              basic
+              color="blue"
+              type="button"
+              onClick={handleResetFilters}
+            >
+              Reset
+            </Button>
+          </Grid.Column>
+          <Grid.Column
+            width={3}
+            style={{ display: "flex", alignItems: "center" }}
           >
             <Button fluid color="blue">
               Filter
