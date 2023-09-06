@@ -111,7 +111,6 @@ Filter Container and Input Styles
 .react-datepicker-wrapper {
   display: block;
   width: 100%;
-  margin-bottom: 1em;
 }
 
 .custom-datepicker-container {
