@@ -8,8 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  TimeScale,
 } from "chart.js"
 import { Line } from "react-chartjs-2"
+import dayjs from "dayjs"
+import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 
 ChartJS.register(
   CategoryScale,
@@ -18,48 +21,47 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  TimeScale
 )
 
-var years = []
+function generateYearLabels(startDate, endDate) {
+  let years = []
+  const startYear = dayjs(startDate || "1980-1-1").year()
+  const endYear = dayjs(endDate || Date.now()).year()
 
-// Loop through the years and add them to the array
-for (var year = 1980; year <= 1990; year++) {
-  years.push(year)
+  // Loop through the years and add them to the array
+  for (let year = startYear; year <= endYear; year++) {
+    years.push(year)
+  }
+  console.log("🚀 ~ generateYearLabels ~ years:", years)
+  return years
 }
-var chartDatasets = []
 
 //Create 30 datasets with sample data
-for (var i = 1; i <= 1; i++) {
-  var dataset = {
-    label: `Dataset ${i}`,
-    borderColor: getRandomColor(),
-    backgroundColor: "rgba(0, 0, 0, 0)", // Transparent background
-    data: generateRandomData(10), // Generate an array of 10 random data points
-  }
-  chartDatasets.push(dataset)
-}
+// x
 
 // Function to generate random color
 function getRandomColor() {
-  return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
-    Math.random() * 256
-  )}, ${Math.floor(Math.random() * 256)}, 1)`
+  return `hsla(${Math.floor(Math.random() * 256)}, 100%, 30%, 1)`
 }
 
 // Function to generate an array of random data points
-function generateRandomData(numPoints) {
-  var data = []
-  for (var i = 0; i < numPoints; i++) {
-    data.push(Math.random() * 100) // Generate random data between 0 and 100
-  }
-  return data
-}
+// function generateRandomData(numPoints) {
+//   var data = []
+//   for (var i = 0; i < numPoints; i++) {
+//     data.push(Math.random() * 100) // Generate random data between 0 and 100
+//   }
+//   return data
+// }
 
-const LineChart = ({ selectedMonitoringLocation, data: data2 }) => {
-  console.log("🚀 ~ LineChart ~ data:", data2)
-  const [data, setData] = useState({
-    labels: years,
+const LineChart = ({ selectedFilters, data }) => {
+  console.log("🚀 ~ LineChart ~ data:", data)
+  console.log("🚀 ~ LineChart ~ selectedFilters:", selectedFilters)
+
+  const [chartData, setChartData] = useState({
+    labels: [],
+    // labels: generateYearLabels(new Date("1980-1-1"), Date.now()),
     datasets: [
       {
         //label: "All Locations",
@@ -72,42 +74,47 @@ const LineChart = ({ selectedMonitoringLocation, data: data2 }) => {
   const chartRef = useRef(null)
 
   useEffect(() => {
-    const filteredData = data2.filter(
+    const filteredData = data.filter(
       (data) =>
-        data.node.monitoring_location_identifier ===
-        selectedMonitoringLocation?.monitoring_location_identifier
+        data.monitoring_location_identifier ===
+        selectedFilters?.monitoringLocation
     )
     // if (Boolean(filteredData.length)) {
     const transformedDataset = [
       {
-        label: selectedMonitoringLocation?.monitoring_location_identifier,
+        label: `${selectedFilters.monitoringLocation} (${selectedFilters.characteristicName})`,
 
         borderColor: getRandomColor(),
         backgroundColor: "rgba(0, 0, 0, 0)",
-        data: Boolean(filteredData.length)
-          ? filteredData.map((data) => +data.node.result_measure_value)
-          : [0, 0, 0, 0, 0, 0, 0, 0],
+        data: filteredData.map((data) => data.result_measure_value),
       },
     ]
-    console.log("🚀 ~ useEffect ~ transformedDataset:", transformedDataset)
 
-    setData({ labels: years, datasets: transformedDataset })
-    const chart = chartRef.current
-    chart.update()
-    console.log(
-      "🚀 ~ LineChart ~ selectedMonitoringLocation:",
-      selectedMonitoringLocation
-    )
+    setChartData({
+      labels: filteredData.map((data) => data.activity_start_date),
+      datasets: transformedDataset,
+    })
     // }
-  }, [selectedMonitoringLocation])
+  }, [data])
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    scales: { y: { suggestedMin: 0, suggestedMax: 1 } },
+    scales: {
+      x: {
+        type: "time",
+        time: {
+          displayFormats: {
+            quarter: "MMM YYYY",
+            unit: "quarter",
+          },
+        },
+      },
+      //y: { suggestedMin: 0, suggestedMax: 1 },
+    },
     plugins: {
       legend: {
-        display: selectedMonitoringLocation,
+        display: selectedFilters?.monitoringLocation,
         position: "top",
       },
       title: {
@@ -122,8 +129,8 @@ const LineChart = ({ selectedMonitoringLocation, data: data2 }) => {
         position: "relative",
       }}
     >
-      <Line ref={chartRef} options={options} data={data} />
-      {!selectedMonitoringLocation && (
+      <Line ref={chartRef} options={options} data={chartData} />
+      {!selectedFilters?.monitoringLocation && (
         <div
           style={{
             display: "flex",

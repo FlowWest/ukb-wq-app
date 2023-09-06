@@ -11,9 +11,9 @@ import LineChart from "../components/LineChart"
 import SEO from "../components/Seo"
 
 export const DataPage = ({ data }) => {
-  console.log("🚀 ~ DataPage ~ data:", data)
-
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
+  const allKlamathData = data.allKlamathDataCsv.nodes
+  const [filteredKlamathData, setFilteredKlamathData] = useState(allKlamathData)
   useState(null)
   const [selectedFilters, setSelectedFilters] = useState({
     monitoringLocation: null,
@@ -21,7 +21,6 @@ export const DataPage = ({ data }) => {
     startYear: "",
     endYear: "",
   })
-  console.log("🚀 ~ DataPage ~ selectedFilters:", selectedFilters)
 
   const [map, setMap] = useState(null)
   const markerRef = useRef([])
@@ -55,6 +54,8 @@ export const DataPage = ({ data }) => {
             <DataPageFilters
               monitoringLocations={monitoringLocations}
               setSelectedFilters={setSelectedFilters}
+              allKlamathData={allKlamathData}
+              setFilteredKlamathData={setFilteredKlamathData}
               map={map}
               markerRef={markerRef}
             />
@@ -72,17 +73,17 @@ export const DataPage = ({ data }) => {
             <Grid style={{ height: 600 }}>
               <Grid.Row>
                 <LineChart
-                  selectedMonitoringLocation={
-                    selectedFilters.monitoringLocation
-                  }
-                  data={data.allTruncatedKlamathDataCsv.edges}
+                  selectedFilters={selectedFilters}
+                  data={filteredKlamathData}
                 />
               </Grid.Row>
             </Grid>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{ marginBottom: 25 }}>
-          <DataPageTable data={data.allTruncatedKlamathDataCsv.edges} />
+          <DataPageTable
+            data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
+          />
         </Grid.Row>
 
         <Grid.Row columns={2} divided>
