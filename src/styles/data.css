@@ -1,0 +1,16 @@
+.leaflet-popup-title {
+  font-size: 1.2rem !important;
+  margin: 0 !important;
+}
+
+.leaflet-popup-detail-wrapper {
+  display: flex;
+}
+.leaflet-popup-detail-wrapper:not(:last-of-type) {
+  margin-bottom: 5px;
+}
+
+.leaflet-popup-detail-title {
+  width: 100px;
+  font-weight: 500;
+}

@@ -10,6 +10,7 @@
 @import "resources.css";
 @import "data-uploader.css";
 @import "reset-password.css";
+@import "data.css";
 
 main {
   min-width: 100vw;
@@ -28,6 +29,9 @@ p {
   color: hsl(0, 100%, 40%);
   font-size: 1rem;
   margin-block: -0.5rem 1rem !important;
+}
+.form-error-message.no-margin {
+  margin-block: -0.5rem 0 !important;
 }
 
 .form-file-upload-error {

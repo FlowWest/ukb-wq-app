@@ -5,12 +5,14 @@ import {
   CognitoUserPool,
 } from "amazon-cognito-identity-js"
 import * as AWS from "aws-sdk"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../gatsby-browser"
 import { LoginFormSchema } from "../helpers/validationSchemas"
 
 export const useAwsLogin = (watch) => {
+  const [tempUserObject, setTempUserObject] = useState({})
+
   const [invalidCredentialsError, setInvalidCredentialsError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -88,21 +90,35 @@ export const useAwsLogin = (watch) => {
             setIsSubmitting(false)
           },
 
-          // newPasswordRequired: function (userAttributes, requiredAttributes) {
-          //   // User was signed up by an admin and must provide new
-          //   // password and required attributes, if any, to complete
-          //   // authentication.
-
-          //   // the api doesn't accept this field back
-          //   delete userAttributes.email_verified
-
-          //   // store userAttributes on global variable
-          //   const sessionUserAttributes = userAttributes
-          //   cognitoUser.completeNewPasswordChallenge(
-          //     "Klamath123!",
-          //     sessionUserAttributes
-          //   )
-          // },
+          newPasswordRequired: function (userAttributes) {
+            setTempUserObject({
+              isFirstLogin: true,
+              cognitoUser,
+              userAttributes: { email: userAttributes.email },
+              changePassword: this.changePassword,
+            })
+          },
+          changePassword: function (newPassword, cognitoUser, userAttributes) {
+            cognitoUser.completeNewPasswordChallenge(
+              newPassword,
+              userAttributes,
+              {
+                onSuccess: (result) => {
+                  const cognitoUserEmail =
+                    cognitoUser.signInUserSession.idToken.payload.email
+                  const loggedUser = {
+                    ...cognitoUser,
+                    email: cognitoUserEmail,
+                  }
+                  setUser(loggedUser)
+                  setTempUserObject({})
+                },
+                onFailure: function (error) {
+                  throw new Error(error)
+                },
+              }
+            )
+          },
         })
       } catch (error) {
         console.log("error", error)
@@ -110,7 +126,14 @@ export const useAwsLogin = (watch) => {
     }
   }
 
-  return { invalidCredentialsError, isSubmitting, handleLoginFormSubmit }
+  return {
+    invalidCredentialsError,
+    isSubmitting,
+    setIsSubmitting,
+    handleLoginFormSubmit,
+    tempUserObject,
+    setTempUserObject,
+  }
 }
 
 export const useAwsLogout = () => {
