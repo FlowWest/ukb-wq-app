@@ -1,6 +1,6 @@
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { Button, Dropdown, Form, Grid } from "semantic-ui-react"
 import DataInfoBlock from "../components/DataInfoBlock"
 import DataMap from "../components/DataMap"
@@ -9,11 +9,53 @@ import DataPageTable from "../components/DataPageTable"
 import Layout from "../components/Layout"
 import LineChart from "../components/LineChart"
 import SEO from "../components/Seo"
+import axios from "axios"
+import Papa from "papaparse"
 
 export const DataPage = ({ data }) => {
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
-  const allKlamathData = data.allKlamathDataCsv.nodes
+  const [allKlamathData, setAllKlamathData] = useState([])
   const [filteredKlamathData, setFilteredKlamathData] = useState(allKlamathData)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const fetchData = async () => {
+          const fileEdges = data.allFile.edges
+
+          const dataPromises = fileEdges.map(async ({ node }) => {
+            try {
+              const response = await axios.get(node.publicURL)
+              const csvData = await response.data
+              return csvData
+            } catch (error) {
+              console.error(error)
+            }
+          })
+
+          Promise.all(dataPromises)
+            .then((results) => {
+              const combined = results.flatMap((csvData) => {
+                // Process and combine data from CSV files here as needed
+                const parseResults = Papa.parse(csvData, {
+                  /* CSV parsing options */
+                  header: true,
+                })
+                return parseResults.data
+              })
+              setAllKlamathData(combined)
+            })
+            .catch((error) => {
+              console.error("Error fetching or processing CSV data:", error)
+            })
+        }
+        await fetchData()
+      } catch (error) {
+        console.error(error)
+      }
+    })()
+  }, [data])
+
   useState(null)
   const [selectedFilters, setSelectedFilters] = useState({
     monitoringLocation: null,
@@ -127,34 +169,19 @@ export default DataPage
 
 export const query = graphql`
   query {
+    allFile(filter: { name: { regex: "/^klamathData/" } }) {
+      edges {
+        node {
+          name
+          publicURL
+        }
+      }
+    }
     file(relativePath: { eq: "NWQMC_logo.png" }) {
       childImageSharp {
         fluid(maxWidth: 100, quality: 100) {
           ...GatsbyImageSharpFluid_noBase64
           ...GatsbyImageSharpFluidLimitPresentationSize
-        }
-      }
-    }
-    allTruncatedKlamathDataCsv {
-      edges {
-        node {
-          organization_identifier
-          activity_start_date
-          activity_start_time_time
-          activity_start_time_time_zone_code
-          monitoring_location_identifier
-          characteristic_name
-          result_sample_fraction_text
-          result_measure_value
-          result_measure_measure_unit_code
-          result_status_identifier
-          result_analytical_method_method_name
-          provider_name
-          monitoring_location_name
-          monitoring_location_type_name
-          huc_eight_digit_code
-          latitude_measure
-          longitude_measure
         }
       }
     }
@@ -169,52 +196,5 @@ export const query = graphql`
         max_date
       }
     }
-    allKlamathDataCsv {
-      nodes {
-        organization_identifier
-        organization_formal_name
-        activity_start_date
-        activity_start_time_time
-        activity_start_time_time_zone_code
-        monitoring_location_identifier
-        characteristic_name
-        subject_taxonomic_name
-        result_measure_value
-        result_measure_measure_unit_code
-        result_status_identifier
-        result_analytical_method_method_name
-        provider_name
-        monitoring_location_name
-        monitoring_location_type_name
-        huc_eight_digit_code
-        latitude_measure
-        longitude_measure
-      }
-    }
   }
 `
-
-/*
-    allKlamathDataCsv {
-      nodes {
-        organization_identifier
-        organization_formal_name
-        activity_start_date
-        activity_start_time_time
-        activity_start_time_time_zone_code
-        monitoring_location_identifier
-        characteristic_name
-        subject_taxonomic_name
-        result_measure_value
-        result_measure_measure_unit_code
-        result_status_identifier
-        result_analytical_method_method_name
-        provider_name
-        monitoring_location_name
-        monitoring_location_type_name
-        huc_eight_digit_code
-        latitude_measure
-        longitude_measure
-      }
-    }
-*/

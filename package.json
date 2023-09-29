@@ -11,6 +11,7 @@
     "@parcel/watcher": "^2.2.0",
     "amazon-cognito-identity-js": "^6.3.2",
     "aws-sdk": "^2.1437.0",
+    "axios": "^1.5.1",
     "chart.js": "^4.3.3",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "dayjs": "^1.11.9",
