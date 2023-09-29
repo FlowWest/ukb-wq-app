@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  TimeScale,
 } from "chart.js"
 import { Line } from "react-chartjs-2"
+import dayjs from "dayjs"
+import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 
 ChartJS.register(
   CategoryScale,
@@ -18,46 +21,134 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  TimeScale
 )
 
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
-      position: "top",
-    },
-    title: {
-      display: false,
-      text: "Chart.js Line Chart",
-    },
-  },
+function generateYearLabels(startDate, endDate) {
+  let years = []
+  const startYear = dayjs(startDate || "1980-1-1").year()
+  const endYear = dayjs(endDate || Date.now()).year()
+
+  // Loop through the years and add them to the array
+  for (let year = startYear; year <= endYear; year++) {
+    years.push(year)
+  }
+  console.log("🚀 ~ generateYearLabels ~ years:", years)
+  return years
 }
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"]
+//Create 30 datasets with sample data
+// x
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [2, 22, 21, 31, 4, 7, 10, 5],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [1, 8, 25, 17, 17, 11, 4, 2],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
+// Function to generate random color
+function getRandomColor() {
+  return `hsla(${Math.floor(Math.random() * 256)}, 100%, 30%, 1)`
 }
 
-const LineChart = () => {
-  return <Line options={options} data={data} />
+// Function to generate an array of random data points
+// function generateRandomData(numPoints) {
+//   var data = []
+//   for (var i = 0; i < numPoints; i++) {
+//     data.push(Math.random() * 100) // Generate random data between 0 and 100
+//   }
+//   return data
+// }
+
+const LineChart = ({ selectedFilters, data }) => {
+  console.log("🚀 ~ LineChart ~ data:", data)
+  console.log("🚀 ~ LineChart ~ selectedFilters:", selectedFilters)
+
+  const [chartData, setChartData] = useState({
+    labels: [],
+    // labels: generateYearLabels(new Date("1980-1-1"), Date.now()),
+    datasets: [
+      {
+        //label: "All Locations",
+        borderColor: getRandomColor(),
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        data: [],
+      },
+    ],
+  })
+  const chartRef = useRef(null)
+
+  useEffect(() => {
+    const filteredData = data.filter(
+      (data) =>
+        data.monitoring_location_identifier ===
+        selectedFilters?.monitoringLocation
+    )
+    // if (Boolean(filteredData.length)) {
+    const transformedDataset = [
+      {
+        label: `${selectedFilters.monitoringLocation} (${selectedFilters.characteristicName})`,
+
+        borderColor: getRandomColor(),
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        data: filteredData.map((data) => data.result_measure_value),
+      },
+    ]
+
+    setChartData({
+      labels: filteredData.map((data) => data.activity_start_date),
+      datasets: transformedDataset,
+    })
+    // }
+  }, [data])
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: "time",
+        time: {
+          displayFormats: {
+            quarter: "MMM YYYY",
+            unit: "quarter",
+          },
+        },
+      },
+      //y: { suggestedMin: 0, suggestedMax: 1 },
+    },
+    plugins: {
+      legend: {
+        display: selectedFilters?.monitoringLocation,
+        position: "top",
+      },
+      title: {
+        display: false,
+      },
+    },
+  }
+
+  return (
+    <React.Fragment
+      style={{
+        position: "relative",
+      }}
+    >
+      <Line ref={chartRef} options={options} data={chartData} />
+      {!selectedFilters?.monitoringLocation && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            background: "hsla(0,0%,0%,.5",
+            position: "absolute",
+          }}
+        >
+          <p style={{ fontSize: "1.5rem", color: "white" }}>
+            Select monitoring location to display chart data
+          </p>
+        </div>
+      )}
+    </React.Fragment>
+  )
 }
 
 export default LineChart

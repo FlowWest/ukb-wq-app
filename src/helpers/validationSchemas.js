@@ -1,4 +1,8 @@
 import * as yup from "yup"
+import dayjs from "dayjs"
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
+
+dayjs.extend(isSameOrAfter)
 
 export const uploadReportSchema = yup
   .object()
@@ -84,4 +88,23 @@ export const setNewPasswordSchema = yup.object().shape({
     .min(8)
     .required()
     .oneOf([yup.ref("newPassword"), null], "Passwords do not match"),
+})
+
+export const dataFiltersSchema = yup.object().shape({
+  monitoringLocation: yup.string().required().label("Monitoring Location"),
+  characteristicName: yup.string().required().label("Characteristic Name"),
+  startDate: yup.string().label("Start Date"),
+  endDate: yup
+    .string()
+    .label("End Year")
+    .test(
+      "dateIsSameOrAfter",
+      "End Date must be later than Start Date",
+      function (value, fieldState) {
+        const startDateValue = fieldState.parent.startDate
+        if (!startDateValue) return true
+
+        return dayjs(value).isSameOrAfter(startDateValue) || !value
+      }
+    ),
 })

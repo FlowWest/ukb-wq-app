@@ -3,7 +3,6 @@ import { graphql } from "gatsby"
 import { Grid } from "semantic-ui-react"
 import Layout from "../components/Layout"
 import SEO from "../components/Seo"
-import Map from "../components/MapIframe"
 
 const AboutPage = ({ data }) => (
   <Layout pageInfo={{ pageName: "about" }}>
@@ -31,7 +30,6 @@ const AboutPage = ({ data }) => (
           Tribes; the program provides permanent and stable employment in our
           rural indigenous community.
         </p>
-        <Map monitoringLocations={data.allMonitoringLocationsCsv.edges} />{" "}
         <p>
           Upper Klamath Lake sampling occurs every two weeks from May through
           October. Data collected at 10 sites includes zooplankton,

@@ -13,12 +13,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import DatePicker from "react-datepicker"
 import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
-
-const DatePickerContainer = ({ children }) => (
-  <div className="custom-datepicker-container">
-    <div style={{ position: "relative" }}>{children}</div>
-  </div>
-)
+import DatePickerContainer from "./DatePickerContainer"
 
 const UploadReportForm = ({
   onClose,
@@ -268,6 +263,7 @@ const UploadReportForm = ({
         className="checkbox-field"
         label="Add End Year"
         checked={showEndYear}
+        style={{ marginTop: "1rem" }}
         onChange={(e, { checked }) => handleCheckboxToggle(checked)}
       />
       <Controller
