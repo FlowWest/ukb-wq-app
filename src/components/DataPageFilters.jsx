@@ -123,7 +123,9 @@ const DataPageFilters = ({
       )
       .at(0)
 
-    const characteristicNames = selectedMonitoringLocation?.params.split(",")
+    const characteristicNames = selectedMonitoringLocation?.params
+      .split(",")
+      .map((item) => item.trim())
 
     const fieldOptions = characteristicNames.map((name) => {
       const itemWithCharacteristicName = allKlamathData.find(
