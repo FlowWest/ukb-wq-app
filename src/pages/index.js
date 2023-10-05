@@ -19,7 +19,7 @@ const IndexPage = ({ data }) => {
       <Layout pageInfo={{ pageName: "index" }} data={data}>
         <SEO
           title="Home"
-          keywords={[`The Klamath Tribes`, `Water Quality Monitoring`]}
+          keywords={[`Klamath Tribes`, `Water Resources Repository`]}
         />
         <Segment
           style={{ border: "none", boxShadow: "none", margin: "3rem 0rem" }}
