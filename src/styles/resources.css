@@ -34,8 +34,20 @@
   margin-bottom: 1rem;
 }
 
+.resource-upload-description {
+  font-size: 1rem;
+}
+
 .previous-report-weekly-header {
   color: hsl(0, 0%, 50%);
   margin-bottom: 0.5rem;
   text-decoration: underline;
+}
+
+.weekly-upload-card-header {
+  font-size: 1.05rem !important;
+  height: 38px;
+}
+.weekly-upload-card-description {
+  height: 80px;
 }
