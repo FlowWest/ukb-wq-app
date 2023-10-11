@@ -35,7 +35,7 @@ const DataPageTable = ({ data }) => {
     expandedRow === key ? setExpandedRow(null) : setExpandedRow(key)
 
   return (
-    <Grid container className="weekly-upload-table">
+    <Grid className="weekly-upload-table">
       <Header as="h1">{data.header}</Header>
       <Table striped color="blue">
         <Table.Header>
@@ -210,11 +210,14 @@ const DataPageTable = ({ data }) => {
           </Table.Body>
         )}
       </Table>
-      <Pagination
-        totalPages={numberOfPages}
-        onPageChange={handlePaginationPageChange}
-        defaultActivePage={currentPage}
-      />
+      {numberOfPages > 0 && (
+        <Pagination
+          totalPages={numberOfPages}
+          onPageChange={handlePaginationPageChange}
+          defaultActivePage={currentPage}
+          style={{ margin: "auto" }}
+        />
+      )}
     </Grid>
   )
 }

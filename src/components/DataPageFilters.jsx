@@ -146,7 +146,12 @@ const DataPageFilters = ({
     <Segment>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid columns={4}>
-          <Grid.Column width={8} style={{ paddingBottom: 0 }}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={8}
+            style={{ paddingBottom: 0 }}
+          >
             <Controller
               name="monitoringLocation"
               control={control}
@@ -175,7 +180,12 @@ const DataPageFilters = ({
               )}
             />
           </Grid.Column>
-          <Grid.Column width={8} style={{ paddingBottom: 0 }}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={8}
+            style={{ paddingBottom: 0 }}
+          >
             <Controller
               name="characteristicName"
               control={control}
@@ -208,7 +218,7 @@ const DataPageFilters = ({
             />
           </Grid.Column>
 
-          <Grid.Column width={5}>
+          <Grid.Column mobile={8} tablet={5} computer={5}>
             <Controller
               name="startDate"
               control={control}
@@ -236,7 +246,7 @@ const DataPageFilters = ({
               )}
             />
           </Grid.Column>
-          <Grid.Column width={5}>
+          <Grid.Column mobile={8} tablet={5} computer={5}>
             <Controller
               name="endDate"
               control={control}
@@ -274,7 +284,9 @@ const DataPageFilters = ({
             />
           </Grid.Column>
           <Grid.Column
-            width={3}
+            mobile={8}
+            tablet={3}
+            computer={3}
             style={{ display: "flex", alignItems: "center" }}
           >
             <Button
@@ -288,7 +300,9 @@ const DataPageFilters = ({
             </Button>
           </Grid.Column>
           <Grid.Column
-            width={3}
+            mobile={8}
+            tablet={3}
+            computer={3}
             style={{ display: "flex", alignItems: "center" }}
           >
             <Button fluid color="blue">
