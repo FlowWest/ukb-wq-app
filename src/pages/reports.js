@@ -221,7 +221,7 @@ const ReportsPage = () => {
         </Grid>
       ) : (
         <>
-          <Grid container>
+          <Grid container className="grid-container">
             {user && Object.keys(user).length > 0 && (
               <Grid.Column mobile={16} tablet={4} computer={3}>
                 <Dropdown
@@ -308,7 +308,7 @@ const ReportsPage = () => {
             columns={3}
             doubling
             stackable
-            className="mobile-grid-container"
+            className="mobile-grid-container grid-container"
           >
             {paginatedReports.map((report) => (
               <Grid.Column key={report.report_uuid}>
