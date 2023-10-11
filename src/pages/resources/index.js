@@ -4,14 +4,7 @@ import SEO from "../../components/Seo"
 import { Grid, Header, Divider } from "semantic-ui-react"
 import { Link } from "gatsby"
 import WeeklyUploadCard from "../../components/WeeklyUploadCard"
-
-const ResourceUpload = ({ title, description, link }) => (
-  <Grid.Column className="resource-upload-container">
-    <Header className="resource-upload-header">{title}</Header>
-    <p className="resource-upload-description">{description}</p>
-    <Link to={link.to}>{link.label}</Link>
-  </Grid.Column>
-)
+import ResourceQuickLinks from "../../components/ResourceQuickLinks"
 
 export const usbrData = {
   header: "Weekly Bureau of Reclamation FASTA Slides",
@@ -216,64 +209,21 @@ const Resources = () => {
     <Layout pageInfo={{ pageName: "resources" }}>
       <SEO title="Water Quality Resources" />
       <Grid
-        container
-        divided="vertically"
+        fluid
         columns={3}
         stackable
-        className="remove-negative-margin"
+        stretched
+        doubling
+        container
+        className="grid-container"
       >
         <Grid.Row>
           <Header as="h1">Quick Links</Header>
         </Grid.Row>
-        <ResourceUpload
-          title="Bureau of Reclamation Tea Cup"
-          description="Each of the major Reclamation Reservoirs in the basin will be represented by a Tea-Cup Diagram. The level of blue fill in the Tea-Cup represents the level of fill in the reservoir."
-          link={{ to: "#", label: "Link to Bureau of Reclamation Tea Cup" }}
-        />
-        <ResourceUpload
-          title="USGS Upper Klamath Lake Elevations"
-          description="Retrieve current streamflow and other real-time data for one or multiple sites, using sets of flexible, predefined filters, since October 1, 2007."
-          link={{
-            to: "#",
-            label: "Link to USGS Upper Klamath Lake Elevations",
-          }}
-        />
-        <ResourceUpload
-          title="USGS Sprague River Flow and Water Quality"
-          description="Retrieve daily, monthly or annual statistics for sites. Statistics are provided on approved data only for time-series sites."
-          link={{
-            to: "#",
-            label: "Link to USGS Sprague River Flow and Water Quality",
-          }}
-        />
-
-        <ResourceUpload
-          title="USGS Williamson River Flow and Water Quality"
-          description="The service allows searches for USGS sites and site information using a variety of flexible filters. A test tool is also available."
-          link={{
-            to: "#",
-            label: "Link to USGS Williamson River Flow and Water Quality",
-          }}
-        />
-        <ResourceUpload
-          title="USGS Klamath River Basin Water Quality Mapper"
-          description="This map interface represents continuous and discrete water-quality data collected by Bureau of Reclamation and USGS at Klamath Basin sites."
-          link={{
-            to: "https://or.water.usgs.gov/proj/klamath_wq_mapper/",
-            label: "Link to USGS Klamath River Basin Water Quality Mapper",
-          }}
-        />
-        <ResourceUpload
-          title="USGS Upper Klamath Basin Well Mapper"
-          description="This mapper identifies wells that are monitored in the Upper Klamath Basin Oregon and California by USGS, OWRD and CDWR."
-          link={{
-            to: "https://or.water.usgs.gov/projs_dir/klamath_wells/#",
-            label: "Link to UUSGS Upper Klamath Basin Well Mapper",
-          }}
-        />
+        <ResourceQuickLinks />
       </Grid>
       <Divider section />
-      <Grid container stackable doubling className="remove-negative-margin">
+      <Grid container stackable doubling className="grid-container">
         <Grid.Row>
           <Header as="h1">Weekly Reports</Header>
         </Grid.Row>
