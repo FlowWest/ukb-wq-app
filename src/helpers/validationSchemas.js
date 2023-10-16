@@ -4,6 +4,15 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 
 dayjs.extend(isSameOrAfter)
 
+export const uploadResourceSchema = yup
+  .object()
+  .shape({
+    date: yup.string().label("Date").required(),
+    type: yup.string().label("Report Type").required(),
+    file: yup.mixed().required("Please specify a file to upload"),
+  })
+  .required()
+
 export const uploadReportSchema = yup
   .object()
   .shape({
