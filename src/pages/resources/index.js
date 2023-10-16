@@ -1,10 +1,14 @@
-import React from "react"
+import React, { useState, useEffect, useContext } from "react"
+import { UserContext } from "../../../gatsby-browser"
 import Layout from "../../components/Layout"
 import SEO from "../../components/Seo"
-import { Grid, Header, Divider } from "semantic-ui-react"
+import { Grid, Header, Divider, Button, Modal } from "semantic-ui-react"
+import UploadReportForm from "../../components/forms/UploadReportForm"
 import { Link } from "gatsby"
 import WeeklyUploadCard from "../../components/WeeklyUploadCard"
 import ResourceQuickLinks from "../../components/ResourceQuickLinks"
+import useTabletScreenSize from "../../hooks/useTabletScreenSize"
+import UploadResourceForm from "../../components/forms/UploadResourceForm"
 
 export const usbrData = {
   header: "Weekly Bureau of Reclamation FASTA Slides",
@@ -205,6 +209,9 @@ export const owrdData = {
 }
 
 const Resources = () => {
+  const { user } = useContext(UserContext) || {}
+  const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
+  const { isTabletScreenSize, handleResize } = useTabletScreenSize()
   return (
     <Layout pageInfo={{ pageName: "resources" }}>
       <SEO title="Water Quality Resources" />
@@ -224,6 +231,35 @@ const Resources = () => {
       </Grid>
       <Divider section />
       <Grid container stackable doubling className="grid-container">
+        <Grid.Row>
+          {user && Object.keys(user).length > 0 && (
+            <Modal
+              closeIcon
+              open={uploadReportModalOpen}
+              onOpen={() => setUploadReportModalOpen(true)}
+              onClose={() => setUploadReportModalOpen(false)}
+              trigger={
+                <Grid.Column
+                  mobile={16}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    color="blue"
+                    icon="upload"
+                    content={"Upload Resource"}
+                  />
+                </Grid.Column>
+              }
+            >
+              <Modal.Header>Upload Resource</Modal.Header>
+              <Modal.Content>
+                <UploadResourceForm
+                  onClose={() => setUploadReportModalOpen(false)}
+                />
+              </Modal.Content>
+            </Modal>
+          )}
+        </Grid.Row>
         <Grid.Row>
           <Header as="h1">Weekly Reports</Header>
         </Grid.Row>
