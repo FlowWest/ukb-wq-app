@@ -38,62 +38,59 @@ const UploadResourceForm = ({ onClose, report = null }) => {
         },
   })
 
-  const editForm = !!report
-
   const handleFormSubmit = async (data) => {
     console.log("🚀 ~ handleFormSubmit ~ data:", data)
 
-    // try {
-    //   setIsSubmitting(true)
-    //   AWS.config.update({ region: "us-west-1" })
-    //   const docClient = new AWS.DynamoDB.DocumentClient()
-    //   const tableName = "reports_metadata"
+    try {
+      setIsSubmitting(true)
+      AWS.config.update({ region: "us-west-1" })
+      const docClient = new AWS.DynamoDB.DocumentClient()
+      const tableName = "weekly_reports_metadata"
 
-    //   const reader = new FileReader()
-    //   reader.readAsArrayBuffer(data.file)
-    //   reader.onabort = () => console.log("file reading was aborted")
-    //   reader.onerror = () => console.log("file reading has failed")
-    //   reader.onload = async () => {
-    //     // Do whatever you want with the file contents
-    //     const binaryStr = reader.result
+      const reader = new FileReader()
+      reader.readAsArrayBuffer(data.file)
+      reader.onabort = () => console.log("file reading was aborted")
+      reader.onerror = () => console.log("file reading has failed")
+      reader.onload = async () => {
+        // Do whatever you want with the file contents
+        const binaryStr = reader.result
 
-    //     const client = new S3Client({ ...AWS.config, region: "us-west-2" })
-    //     const pdfCommand = new PutObjectCommand({
-    //       Bucket: process.env.GATSBY_S3_BUCKET,
-    //       Key: data.file.name,
-    //       Body: binaryStr,
-    //       ContentType: "application/pdf",
-    //       StorageClass: "STANDARD_IA",
-    //       ACL: "public-read",
-    //     })
-    //     console.log("onload")
-    //     try {
-    //       const response = await client.send(pdfCommand)
-    //       console.log(response)
+        const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+        const pdfCommand = new PutObjectCommand({
+          Bucket: process.env.GATSBY_S3_BUCKET,
+          Key: data.file.name,
+          Body: binaryStr,
+          ContentType: "application/pdf",
+          StorageClass: "STANDARD_IA",
+          ACL: "public-read",
+        })
+        console.log("onload")
+        try {
+          const response = await client.send(pdfCommand)
+          console.log(response)
 
-    //       const newReport = {
-    //         date: data.date,
+          const newWeeklyReport = {
+            date: data.date,
+            filename: data.file.name,
+            type: data.type,
+            weekly_report_uuid: uuidv4(),
+          }
+          const params = {
+            TableName: tableName,
+            Item: newWeeklyReport,
+          }
+          await docClient.put(params).promise()
+        } catch (err) {
+          console.error(err)
+        } finally {
+          setIsSubmitting(false)
 
-    //         filename: data.file.name,
-    //         type: data.type,
-    //         resource_uuid: uuidv4(),
-    //       }
-    //       const params = {
-    //         TableName: tableName,
-    //         Item: newReport,
-    //       }
-    //       await docClient.put(params).promise()
-    //     } catch (err) {
-    //       console.error(err)
-    //     } finally {
-    //       setIsSubmitting(false)
-
-    //       onClose()
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.error(err)
-    // }
+          onClose()
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const handleSelectChange = (event, option) => {
