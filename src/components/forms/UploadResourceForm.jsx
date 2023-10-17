@@ -39,8 +39,6 @@ const UploadResourceForm = ({ onClose, report = null }) => {
   })
 
   const handleFormSubmit = async (data) => {
-    console.log("🚀 ~ handleFormSubmit ~ data:", data)
-
     try {
       setIsSubmitting(true)
       AWS.config.update({ region: "us-west-1" })
@@ -60,11 +58,10 @@ const UploadResourceForm = ({ onClose, report = null }) => {
           Bucket: process.env.GATSBY_S3_BUCKET,
           Key: data.file.name,
           Body: binaryStr,
-          ContentType: "application/pdf",
+          ContentType: data.file.type,
           StorageClass: "STANDARD_IA",
           ACL: "public-read",
         })
-        console.log("onload")
         try {
           const response = await client.send(pdfCommand)
           console.log(response)
