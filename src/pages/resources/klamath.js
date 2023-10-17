@@ -3,7 +3,7 @@ import Layout from "../../components/Layout"
 import WeeklyUploadTable from "../../components/WeeklyUploadTable"
 import { klamathData } from "."
 
-const klamath = () => {
+const klamath = ({ location }) => {
   return (
     <Layout
       pageInfo={{
@@ -11,7 +11,7 @@ const klamath = () => {
           "Weekly Klamath Tribes Water Reports (Water Rights Regulation",
       }}
     >
-      <WeeklyUploadTable data={klamathData} />
+      <WeeklyUploadTable data={klamathData} reports={location.state.reports} />
     </Layout>
   )
 }

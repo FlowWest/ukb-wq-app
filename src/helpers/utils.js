@@ -28,3 +28,10 @@ export const calcMapCenter = (monitoringLocations) => {
 
   return center
 }
+
+export const formatDate = (date) =>
+  Intl.DateTimeFormat("en-us", {
+    month: "long",
+    day: "2-digit",
+    year: "numeric",
+  }).format(new Date(date))

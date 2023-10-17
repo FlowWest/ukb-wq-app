@@ -2,17 +2,15 @@ import React from "react"
 import { Header, Table, Icon, Grid } from "semantic-ui-react"
 import { Link } from "gatsby"
 import Layout from "../../components/Layout"
-import { usbrData } from "."
+import { owrdData } from "."
 import WeeklyUploadTable from "../../components/WeeklyUploadTable"
 
-const usbr = ({ location }) => {
+const owrd = ({ location }) => {
   return (
-    <Layout
-      pageInfo={{ pageName: "Weekly Bureau of Reclamation FASTA slides" }}
-    >
-      <WeeklyUploadTable data={usbrData} reports={location.state.reports} />
+    <Layout pageInfo={{ pageName: "Weekly OWRD Hydrology Report" }}>
+      <WeeklyUploadTable data={owrdData} reports={location.state.reports} />
     </Layout>
   )
 }
 
-export default usbr
+export default owrd

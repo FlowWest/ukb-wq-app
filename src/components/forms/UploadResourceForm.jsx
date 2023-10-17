@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
 
-const UploadResourceForm = ({ onClose, report = null }) => {
+const UploadResourceForm = ({ onClose, getAllReports, report = null }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
@@ -53,10 +53,23 @@ const UploadResourceForm = ({ onClose, report = null }) => {
         // Do whatever you want with the file contents
         const binaryStr = reader.result
 
+        // Create a Date object from the input string
+        const date = new Date(data.date)
+
+        // Extract the month, day, and year components
+        const month = (date.getMonth() + 1).toString().padStart(2, "0") // Adding 1 to the month because it's 0-indexed
+        const day = date.getDate().toString().padStart(2, "0")
+        const year = date.getFullYear().toString()
+
+        // Format the date as MMDDYYYY
+        const formattedDate = month + day + year
+
+        const uniqueFileName = `${data.file.name}_${formattedDate}`
+
         const client = new S3Client({ ...AWS.config, region: "us-west-2" })
         const pdfCommand = new PutObjectCommand({
           Bucket: process.env.GATSBY_S3_BUCKET,
-          Key: data.file.name,
+          Key: uniqueFileName,
           Body: binaryStr,
           ContentType: data.file.type,
           StorageClass: "STANDARD_IA",
@@ -64,11 +77,10 @@ const UploadResourceForm = ({ onClose, report = null }) => {
         })
         try {
           const response = await client.send(pdfCommand)
-          console.log(response)
 
           const newWeeklyReport = {
             date: data.date,
-            filename: data.file.name,
+            filename: uniqueFileName,
             type: data.type,
             weekly_report_uuid: uuidv4(),
           }
@@ -81,7 +93,7 @@ const UploadResourceForm = ({ onClose, report = null }) => {
           console.error(err)
         } finally {
           setIsSubmitting(false)
-
+          await getAllReports()
           onClose()
         }
       }

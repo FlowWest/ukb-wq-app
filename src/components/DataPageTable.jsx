@@ -2,13 +2,6 @@ import React, { useState } from "react"
 import { Grid, Header, Icon, Pagination, Table } from "semantic-ui-react"
 import usePagination from "../hooks/usePagination"
 
-const formatDate = (date) =>
-  Intl.DateTimeFormat("en-us", {
-    month: "long",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date)
-
 const TableDetail = ({ title, description }) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
     <b>
