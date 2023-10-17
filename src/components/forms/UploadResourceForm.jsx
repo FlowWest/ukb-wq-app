@@ -97,6 +97,14 @@ const UploadResourceForm = ({ onClose, report = null }) => {
   }
 
   const handleSelectChange = (event, option) => {
+    const fileValue = watch("file")
+    if (option.value === "sonde" && fileValue?.type.includes("pdf")) {
+      setValue("file", null)
+    }
+    if (option.value !== "sonde" && fileValue?.type.includes("csv")) {
+      setValue("file", null)
+    }
+
     setValue("type", option.value)
     clearErrors("type")
   }
