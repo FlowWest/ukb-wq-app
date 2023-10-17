@@ -1,19 +1,19 @@
 import React, { useCallback, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Form, Button, Checkbox } from "semantic-ui-react"
-import DataUploader from "./DataUploader"
-import reportTypeDropdownOptions from "../helpers/reportTypeOptions"
+import DataUploader from "../DataUploader"
+import reportTypeDropdownOptions from "../../helpers/reportTypeOptions"
 import {
   uploadReportSchema,
   editReportSchema,
-} from "../helpers/validationSchemas"
+} from "../../helpers/validationSchemas"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as AWS from "aws-sdk"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import DatePicker from "react-datepicker"
 import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
-import DatePickerContainer from "./DatePickerContainer"
+import DatePickerContainer from "../DatePickerContainer"
 
 const UploadReportForm = ({
   onClose,
@@ -221,7 +221,9 @@ const UploadReportForm = ({
             />
 
             {errors.year && (
-              <p className="form-error-message">{errors.year.message}</p>
+              <p className="form-error-message form-error-message__datepicker">
+                {errors.year.message}
+              </p>
             )}
           </>
         )}
@@ -253,7 +255,9 @@ const UploadReportForm = ({
               />
 
               {errors.endYear && (
-                <p className="form-error-message">{errors.endYear.message}</p>
+                <p className="form-error-message form-error-message__datepicker">
+                  {errors.endYear.message}
+                </p>
               )}
             </>
           )}
@@ -327,11 +331,9 @@ const UploadReportForm = ({
                 getValues={getValues}
                 clearErrors={clearErrors}
                 error={errors.file}
+                accept="pdf"
                 {...field}
               />
-              {errors.file && (
-                <p className="form-error-message">{errors.file.message}</p>
-              )}
             </>
           )}
         />

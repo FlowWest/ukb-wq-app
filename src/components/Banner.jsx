@@ -10,7 +10,7 @@ const Banner = ({ mobile, pageName }) => {
         <div>
           The Klamath Tribes
           <br />
-          Water Quality Monitoring
+          Water Resources Repository
         </div>
       ),
       text: "The largest water quality data collection entity in the Upper Klamath Basin, monitoring water quality conditions in Upper Klamath Lake since 1990 and major tributaries including the Sprague, Williamson, and Wood Rivers since 2001.",

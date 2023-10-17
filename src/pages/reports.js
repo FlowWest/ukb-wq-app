@@ -6,15 +6,15 @@ import DataDownloadCard from "../components/DataDownloadCard"
 import ReportSearch from "../components/ReportSearch"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
-import UploadReportForm from "../components/UploadReportForm"
+import UploadReportForm from "../components/forms/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
 import { filter, escapeRegExp, orderBy } from "lodash"
 import * as AWS from "aws-sdk"
+import useTabletScreenSize from "../hooks/useTabletScreenSize"
 
 const ReportsPage = () => {
   const { user } = useContext(UserContext) || {}
   const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
-  const [isTabletScreenSize, setIsTabletScreenSize] = useState(false)
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
   const [allReports, setAllReports] = useState([])
   const [filteredReports, setFilteredReports] = useState(
@@ -24,6 +24,7 @@ const ReportsPage = () => {
   const [currentSearchFilterString, setCurrentSearchFilterString] = useState("")
   const [reportTypeOptions, setReportTypeOptions] = useState([])
   const [getReportsError, setGetReportsError] = useState(false)
+  const { isTabletScreenSize, handleResize } = useTabletScreenSize()
 
   useEffect(() => {
     ;(async () => {
@@ -33,18 +34,6 @@ const ReportsPage = () => {
         console.error(error)
       }
     })()
-    const handleResize = (e) => {
-      const { innerWidth } = e.target
-      if (innerWidth >= 768 && innerWidth <= 991) setIsTabletScreenSize(true)
-
-      if (innerWidth < 768 || innerWidth > 991) setIsTabletScreenSize(false)
-    }
-
-    window.addEventListener("resize", handleResize)
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
   }, [])
 
   useEffect(() => {
@@ -221,7 +210,7 @@ const ReportsPage = () => {
         </Grid>
       ) : (
         <>
-          <Grid container>
+          <Grid container className="grid-container">
             {user && Object.keys(user).length > 0 && (
               <Grid.Column mobile={16} tablet={4} computer={3}>
                 <Dropdown
@@ -308,7 +297,7 @@ const ReportsPage = () => {
             columns={3}
             doubling
             stackable
-            className="mobile-grid-container"
+            className="mobile-grid-container grid-container"
           >
             {paginatedReports.map((report) => (
               <Grid.Column key={report.report_uuid}>

@@ -30,6 +30,9 @@ p {
   font-size: 1rem;
   margin-block: -0.5rem 1rem !important;
 }
+.form-error-message__datepicker {
+  margin-block: 0.5rem 1rem !important;
+}
 .form-error-message.no-margin {
   margin-block: -0.5rem 0 !important;
 }
@@ -61,6 +64,42 @@ p {
   width: 300px !important;
 }
 
+.weekly-upload-table {
+  width: 100% !important;
+}
+
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  background: hsl(0, 0%, 98%);
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid hsl(0, 0%, 80%);
+  top: 5px;
+}
+.custom-datepicker-container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px 0 0 1px;
+  width: 15px;
+  height: 15px;
+  top: -8px;
+  right: 19px;
+  background: inherit;
+
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 @media only screen and (max-width: 767px) {
   .ui.container.form-forgot-password-wrapper {
     margin-left: 0 !important;
@@ -73,5 +112,11 @@ p {
 @media only screen and (max-width: 767px) {
   .ui.grid .remove-negative-margin.ui.stackable.grid {
     margin-left: 0 !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .ui.grid.container.grid-container {
+    width: calc(1200px + 2rem) !important;
   }
 }

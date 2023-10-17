@@ -3,7 +3,7 @@ const path = require(`path`)
 module.exports = {
   pathPrefix: "/gatsby-react-bootstrap-starter",
   siteMetadata: {
-    title: `Water Quality Explorer`,
+    title: `Water Resources Repository`,
     description: `The Klamath Tribes' water quality data and report repository.`,
     author: `The Klamath Tribes`,
   },

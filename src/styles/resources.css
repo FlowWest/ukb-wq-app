@@ -1,6 +1,17 @@
-.resource-upload-container {
+.resource-upload-content {
   display: flex !important;
   flex-wrap: wrap;
+  border: 1px solid hsl(206, 80%, 42%);
+  border-radius: 5px;
+  padding: 15px 20px !important;
+  /* background-color: hsl(206, 80%, 42%);
+  color: white !important; */
+  color: hsl(206, 80%, 42%);
+  transition: all 0.2s;
+}
+.resource-upload-content:hover {
+  color: white;
+  background-color: hsl(206, 80%, 37%);
 }
 
 .resource-photo-container {
@@ -29,13 +40,24 @@
 }
 
 .resource-upload-header {
-  line-height: 1.5rem !important;
-  height: 3rem;
-  margin-bottom: 1rem;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.resource-upload-description {
+  font-size: 13px;
 }
 
 .previous-report-weekly-header {
   color: hsl(0, 0%, 50%);
   margin-bottom: 0.5rem;
   text-decoration: underline;
+}
+
+.weekly-upload-card-header {
+  font-size: 1.05rem !important;
+  height: 38px;
+}
+.weekly-upload-card-description {
+  height: 80px;
 }
