@@ -127,10 +127,13 @@ const Resources = () => {
               onClose={() => setUploadReportModalOpen(false)}
               trigger={
                 <Grid.Column
+                  floated="right"
                   mobile={16}
+                  computer={4}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <Button
+                    fluid
                     color="blue"
                     icon="upload"
                     content={"Upload Resource"}
@@ -151,11 +154,12 @@ const Resources = () => {
         <Grid.Row>
           <Header as="h1">Weekly Reports</Header>
         </Grid.Row>
-        <Grid.Row columns={4}>
+        <Grid.Row columns={4} className="weekly-upload-cards-container">
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={3}
+            computer={5}
+            largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
             <WeeklyUploadCard
@@ -166,7 +170,8 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={3}
+            computer={5}
+            largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
             <WeeklyUploadCard
@@ -177,7 +182,8 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={3}
+            computer={5}
+            largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
             <WeeklyUploadCard
@@ -188,7 +194,8 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={3}
+            computer={5}
+            largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
             <WeeklyUploadCard
@@ -199,7 +206,8 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={3}
+            computer={5}
+            largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
             <WeeklyUploadCard
