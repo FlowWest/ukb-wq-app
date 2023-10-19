@@ -158,7 +158,7 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={5}
+            computer={3}
             largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
@@ -170,7 +170,7 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={5}
+            computer={3}
             largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
@@ -182,7 +182,7 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={5}
+            computer={3}
             largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
@@ -194,7 +194,7 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={5}
+            computer={3}
             largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
@@ -206,7 +206,7 @@ const Resources = () => {
           <Grid.Column
             mobile={16}
             tablet={8}
-            computer={5}
+            computer={3}
             largeScreen={3}
             className="weekly-upload-card-wrapper"
           >
