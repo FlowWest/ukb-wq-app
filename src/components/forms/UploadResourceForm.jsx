@@ -64,7 +64,9 @@ const UploadResourceForm = ({ onClose, getAllReports, report = null }) => {
         // Format the date as MMDDYYYY
         const formattedDate = month + day + year
 
-        const uniqueFileName = `${data.file.name}_${formattedDate}`
+        const [fileName, fileExtension] = data.file.name.split(".")
+
+        const uniqueFileName = `${fileName}_${formattedDate}.${fileExtension}`
 
         const client = new S3Client({
           ...AWS.config,
