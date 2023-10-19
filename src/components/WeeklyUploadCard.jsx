@@ -16,8 +16,8 @@ const WeeklyUploadCard = ({ metadata, reports = [] }) => {
   const bucketLink =
     "https://klamath-water-quality-app.s3-us-west-2.amazonaws.com"
   return (
-    <Card fluid>
-      <Card.Content>
+    <Card fluid className="weekly-upload-card">
+      <Card.Content className="weekly-upload-card-content">
         <ResourcePhoto />
         <Card.Header className="weekly-upload-card-header">
           {header}
@@ -41,8 +41,8 @@ const WeeklyUploadCard = ({ metadata, reports = [] }) => {
           View Most Recent Upload
         </Button>
       </Card.Content>
-      <Card.Content extra>
-        <List size="medium">
+      <Card.Content extra className="weekly-upload-card-date-list-wrapper">
+        <List size="medium" className="weekly-upload-card-date-list">
           <List.Header className="previous-report-weekly-header">
             Recently Uploaded Reports
           </List.Header>

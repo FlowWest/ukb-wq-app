@@ -117,6 +117,6 @@ p {
 
 @media only screen and (min-width: 1200px) {
   .ui.grid.container.grid-container {
-    width: calc(1200px + 2rem) !important;
+    width: calc(1400px + 2rem) !important;
   }
 }

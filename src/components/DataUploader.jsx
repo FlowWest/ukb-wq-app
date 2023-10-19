@@ -18,6 +18,8 @@ function DataUploader(
     clearErrors("file")
   }, [])
 
+  const mimeType = accept === "pdf" ? "application/pdf" : "text/csv"
+
   const {
     isDragActive,
     isDragAccept,
@@ -26,7 +28,7 @@ function DataUploader(
     isDragReject,
   } = useDropzone({
     onDrop,
-    accept: { [`application/${accept}`]: [`.${accept}`] },
+    accept: { [mimeType]: [`.${accept}`] },
   })
 
   const style = useMemo(

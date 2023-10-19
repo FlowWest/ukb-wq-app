@@ -36,6 +36,12 @@ export const owrdData = {
     "Klamath Basin Hydrology Report as prepared by Oregon Water Resources Department.",
   path: "/resources/owrd",
 }
+export const sondeData = {
+  header: "Weekly Sonde Report",
+  description:
+    "Klamath Basin Hydrology Report as prepared by Oregon Water Resources Department.",
+  path: "/resources/owrd",
+}
 
 const Resources = () => {
   const { user } = useContext(UserContext) || {}
@@ -146,28 +152,59 @@ const Resources = () => {
           <Header as="h1">Weekly Reports</Header>
         </Grid.Row>
         <Grid.Row columns={4}>
-          <Grid.Column mobile={16} tablet={8} computer={4}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={3}
+            className="weekly-upload-card-wrapper"
+          >
             <WeeklyUploadCard
               metadata={usbrData}
               reports={groupedWeeklyReports.fasta}
             />
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={8} computer={4}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={3}
+            className="weekly-upload-card-wrapper"
+          >
             <WeeklyUploadCard
               metadata={usgsData}
               reports={groupedWeeklyReports.usgs}
             />
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={8} computer={4}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={3}
+            className="weekly-upload-card-wrapper"
+          >
             <WeeklyUploadCard
               metadata={klamathData}
               reports={groupedWeeklyReports.klamath}
             />
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={8} computer={4}>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={3}
+            className="weekly-upload-card-wrapper"
+          >
             <WeeklyUploadCard
               metadata={owrdData}
               reports={groupedWeeklyReports.owrd}
+            />
+          </Grid.Column>
+          <Grid.Column
+            mobile={16}
+            tablet={8}
+            computer={3}
+            className="weekly-upload-card-wrapper"
+          >
+            <WeeklyUploadCard
+              metadata={sondeData}
+              reports={groupedWeeklyReports.sonde}
             />
           </Grid.Column>
         </Grid.Row>

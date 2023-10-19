@@ -54,10 +54,28 @@
   text-decoration: underline;
 }
 
+.weekly-upload-card {
+  height: 100% !important;
+}
+.weekly-upload-card-content {
+  flex-grow: 0 !important;
+}
+.weekly-upload-card-wrapper {
+  flex-grow: 1 !important;
+}
 .weekly-upload-card-header {
   font-size: 1.05rem !important;
   height: 38px;
 }
 .weekly-upload-card-description {
   height: 80px;
+}
+.weekly-upload-card-date-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+  flex-grow: 1 !important;
+}
+.weekly-upload-card-date-list {
+  flex-grow: 1;
 }
