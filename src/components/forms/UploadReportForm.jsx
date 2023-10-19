@@ -125,7 +125,11 @@ const UploadReportForm = ({
         // Do whatever you want with the file contents
         const binaryStr = reader.result
 
-        const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+        const client = new S3Client({
+          ...AWS.config,
+          region: "us-west-2",
+          correctClockSkew: true,
+        })
         const pdfCommand = new PutObjectCommand({
           Bucket: process.env.GATSBY_S3_BUCKET,
           Key: data.file.name,

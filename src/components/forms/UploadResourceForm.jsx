@@ -66,7 +66,11 @@ const UploadResourceForm = ({ onClose, getAllReports, report = null }) => {
 
         const uniqueFileName = `${data.file.name}_${formattedDate}`
 
-        const client = new S3Client({ ...AWS.config, region: "us-west-2" })
+        const client = new S3Client({
+          ...AWS.config,
+          region: "us-west-2",
+          correctClockSkew: true,
+        })
         const pdfCommand = new PutObjectCommand({
           Bucket: process.env.GATSBY_S3_BUCKET,
           Key: uniqueFileName,
