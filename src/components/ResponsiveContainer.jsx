@@ -3,6 +3,7 @@ import { UserContext } from "../../gatsby-browser"
 import { createMedia } from "@artsy/fresnel"
 import {
   Accordion,
+  Container,
   Menu,
   Sidebar,
   Segment,
@@ -34,31 +35,33 @@ const DesktopContainer = ({ children, pageName }) => {
         className="menu-container"
         borderless={true}
       >
-        <Menu.Item position="left">
-          <Link to="/" className="link-no-style">
-            <KlamathLogo />
-          </Link>
-        </Menu.Item>
-        <Menu.Item position="left">
-          <Link to="/data" className="link-no-style">
-            Data
-          </Link>
-        </Menu.Item>
-        <Menu.Item position="left">
-          <Link to="/reports" className="link-no-style">
-            Reports
-          </Link>
-        </Menu.Item>
-        <Menu.Item position="left">
-          <Link to="/resources" className="link-no-style">
-            Resources
-          </Link>
-        </Menu.Item>
-        <Menu.Item position="left">
-          <Link to="/about" className="link-no-style">
-            <p>About</p>
-          </Link>
-        </Menu.Item>
+        <Container>
+          <Menu.Item className="menu-item">
+            <Link to="/" className="link-no-style">
+              <KlamathLogo />
+            </Link>
+          </Menu.Item>
+          <Menu.Item className="menu-item">
+            <Link to="/data" className="link-no-style">
+              Data
+            </Link>
+          </Menu.Item>
+          <Menu.Item className="menu-item">
+            <Link to="/reports" className="link-no-style">
+              Reports
+            </Link>
+          </Menu.Item>
+          <Menu.Item className="menu-item">
+            <Link to="/resources" className="link-no-style">
+              Resources
+            </Link>
+          </Menu.Item>
+          <Menu.Item className="menu-item">
+            <Link to="/about" className="link-no-style">
+              About
+            </Link>
+          </Menu.Item>
+        </Container>
       </Menu>
       <Banner pageName={pageName} />
       {children}

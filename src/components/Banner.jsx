@@ -119,15 +119,7 @@ const Banner = ({ mobile, pageName }) => {
   if (mobile) {
     if (pageName === "index") {
       return (
-        <Segment
-          style={{
-            height: "15em",
-            margin: 0,
-            border: "none",
-            padding: "1em 0em",
-          }}
-          className="header-image-container"
-        >
+        <Segment className="header-image-container">
           <BackgroundImage
             className="header-background-image"
             fluid={[
@@ -156,15 +148,7 @@ const Banner = ({ mobile, pageName }) => {
     }
   } else {
     return (
-      <Segment
-        style={{
-          padding: "1em 0em",
-          height: "50em",
-          margin: 0,
-          border: "none",
-        }}
-        className="header-image-container"
-      >
+      <Segment className="header-image-container">
         <BackgroundImage
           className="header-background-image"
           fluid={[

@@ -101,15 +101,17 @@ export const query = graphql`
         relativePath: {
           regex: "images/"
           in: [
-            "wq_tech_1.jpg"
-            "ben_desk_1.jpg"
-            "IMG_0780.jpg"
-            "IMG_0781.jpg"
-            "IMG_0790.jpg"
-            "Charles_Jackson_SRWQL.jpg"
-            "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL.jpg"
             "beaker.png"
             "report.png"
+            "slider-image-1.JPG"
+            "slider-image-2.JPG"
+            "slider-image-3.JPG"
+            "slider-image-4.JPG"
+            "slider-image-5.JPG"
+            "slider-image-6.JPG"
+            "slider-image-7.JPG"
+            "slider-image-8.JPG"
+            "slider-image-9.JPG"
           ]
         }
       }

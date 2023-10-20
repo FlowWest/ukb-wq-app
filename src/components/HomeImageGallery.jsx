@@ -2,38 +2,50 @@ import React, { useState, useEffect } from "react"
 import ImageGallery from "react-image-gallery"
 
 const imageInfo = {
-  wq_tech_1: {
-    filename: "wq_tech_1.jpg",
+  "slider-image-1": {
+    filename: "slider-image-1.jpg",
     altText:
-      "Water Quality Technician II, Charles Jackson, at Sprague River Water Quality Lab (SRWQL)",
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
   },
-  ben_desk_1: {
-    filename: "ben_desk_1.jpg",
-    altText: "Chemist Ben Harris at Sprague River Water Quality Lab (SRWQL)",
-  },
-  IMG_0780: {
-    filename: "IMG_0780.jpg",
+  "slider-image-2": {
+    filename: "slider-image-2.jpg",
     altText:
-      "Faryn Case (aquatic biologist) filtering water samples in the lab",
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
   },
-  IMG_0781: {
-    filename: "IMG_0781.jpg",
-    altText: "Ben Harris (Chemist) processing water samplesl in the SRWQL",
-  },
-  IMG_0790: {
-    filename: "IMG_0790.jpg",
-    altText: "Faryn Case (aquatic biologist) processing samples in the lab",
-  },
-  Charles_Jackson_SRWQL: {
-    filename: "Charles_Jackson_SRWQL.jpg",
+  "slider-image-3": {
+    filename: "slider-image-3.jpg",
     altText:
-      "Charles Jackson working in the Sprague River Water Quality Lab (SRWQL)",
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
   },
-  "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL": {
-    filename:
-      "Kenny_Knight_Water_Quality_Technician_III_Chlorophll-a_filtering_SRWQL.jpg",
+  "slider-image-4": {
+    filename: "slider-image-4.jpg",
     altText:
-      "Water Quality Technician III, Kenny Knight, labeling Chlorophll-a filtering at the Sprague River Water Quality Lab (SRWQL)",
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
+  },
+  "slider-image-5": {
+    filename: "slider-image-5.jpg",
+    altText:
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
+  },
+  "slider-image-6": {
+    filename: "slider-image-6.jpg",
+    altText:
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
+  },
+  "slider-image-7": {
+    filename: "slider-image-7.jpg",
+    altText:
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
+  },
+  "slider-image-8": {
+    filename: "slider-image-8.jpg",
+    altText:
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
+  },
+  "slider-image-9": {
+    filename: "slider-image-9.jpg",
+    altText:
+      "[Position], [Personnel], at Sprague River Water Quality Lab (SRWQL)",
   },
 }
 
@@ -43,7 +55,7 @@ const HomeImageGallery = ({ imagesArray }) => {
   useEffect(() => {
     if (imagesArray) {
       const imageGalleryArray = []
-      imagesArray.forEach(image => {
+      imagesArray.forEach((image) => {
         if (imageInfo[image.node.name]) {
           imageGalleryArray.push({
             original: image.node.childImageSharp.fluid.src,
