@@ -55,6 +55,56 @@ const Banner = ({ mobile, pageName }) => {
       ),
       text: "",
     },
+    usbr: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Weekly Report
+        </div>
+      ),
+      text: "",
+    },
+    usgs: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Weekly Report
+        </div>
+      ),
+      text: "",
+    },
+    klamath: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Weekly Report
+        </div>
+      ),
+      text: "",
+    },
+    owrd: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Weekly Report
+        </div>
+      ),
+      text: "",
+    },
+    sonde: {
+      title: (
+        <div>
+          The Klamath Tribes
+          <br />
+          Weekly Report
+        </div>
+      ),
+      text: "",
+    },
     notFound: {
       title: <div>Page Not Found</div>,
       text: "",
@@ -90,6 +140,45 @@ const Banner = ({ mobile, pageName }) => {
         relativePath: {
           eq: "Sprague_River_above_dam_by_taylor_tupper_copy.jpg"
         }
+      ) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
+      usbr: file(relativePath: { eq: "River_and_Forest.jpg" }) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
+      owrd: file(relativePath: { eq: "wocus.jpg" }) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
+      usgs: file(
+        relativePath: { eq: "UKL_near_Eagle_Ridge_and_Bare_Island.jpg" }
+      ) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
+      klamath: file(relativePath: { eq: "Williamson_2016_by_T_Tupper.jpg" }) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1540) {
+            ...GatsbyImageSharpFluid_noBase64
+          }
+        }
+      }
+      sonde: file(
+        relativePath: { eq: "Bridge_williamson_bridge_by_T_Tupper.jpg" }
       ) {
         childImageSharp {
           fluid(quality: 90, maxWidth: 1540) {

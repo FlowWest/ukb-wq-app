@@ -1,16 +1,11 @@
-import React from "react"
-import { Card, Button, Grid, List } from "semantic-ui-react"
 import { Link } from "gatsby"
+import React from "react"
+import { Button, Card, List } from "semantic-ui-react"
 import { formatDate } from "../helpers/utils"
-
-const ResourcePhoto = () => (
-  <div className="resource-photo-container">
-    <div className="resource-placeholder">Placeholder</div>
-  </div>
-)
+import WeeklyUploadCardImage from "./WeeklyUploadCardImage"
 
 const WeeklyUploadCard = ({ metadata, reports = [] }) => {
-  const { header, path, description } = metadata
+  const { header, path, description, imgSrc, imgAlt } = metadata
   const [mostRecent, ...remainingUploads] = reports
 
   const bucketLink =
@@ -18,7 +13,7 @@ const WeeklyUploadCard = ({ metadata, reports = [] }) => {
   return (
     <Card fluid className="weekly-upload-card">
       <Card.Content className="weekly-upload-card-content">
-        <ResourcePhoto />
+        <WeeklyUploadCardImage src={imgSrc} alt={imgAlt} />
         <Card.Header className="weekly-upload-card-header">
           {header}
         </Card.Header>
