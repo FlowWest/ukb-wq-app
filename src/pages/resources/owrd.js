@@ -14,7 +14,10 @@ const owrd = ({ location }) => {
         </Grid.Row>
 
         <Grid.Row>
-          <WeeklyUploadTable data={owrdData} reports={location.state.reports} />
+          <WeeklyUploadTable
+            data={owrdData}
+            reports={location?.state?.reports}
+          />
         </Grid.Row>
       </Grid>
     </Layout>

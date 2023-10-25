@@ -19,24 +19,26 @@ const WeeklyUploadTable = ({ data, reports, downloadOnly = false }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {reports.map((upload) => (
-            <Table.Row key={upload.date}>
-              <Table.Cell>{formatDate(upload.date)}</Table.Cell>
-              <Table.Cell>
-                <a
-                  href={`${bucketLink}/${upload.filename}`}
-                  fluid
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Icon
-                    name={downloadOnly ? "download" : "external"}
-                    size="large"
-                  />
-                </a>
-              </Table.Cell>
-            </Table.Row>
-          ))}
+          {reports &&
+            reports.length &&
+            reports.map((upload) => (
+              <Table.Row key={upload.date}>
+                <Table.Cell>{formatDate(upload.date)}</Table.Cell>
+                <Table.Cell>
+                  <a
+                    href={`${bucketLink}/${upload.filename}`}
+                    fluid
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon
+                      name={downloadOnly ? "download" : "external"}
+                      size="large"
+                    />
+                  </a>
+                </Table.Cell>
+              </Table.Row>
+            ))}
         </Table.Body>
       </Table>
     </Grid>

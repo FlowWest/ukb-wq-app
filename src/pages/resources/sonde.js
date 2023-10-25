@@ -15,7 +15,7 @@ const sonde = ({ location }) => {
         <Grid.Row>
           <WeeklyUploadTable
             data={sondeData}
-            reports={location.state.reports}
+            reports={location?.state?.reports}
             downloadOnly
           />
         </Grid.Row>

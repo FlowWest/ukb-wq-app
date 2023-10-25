@@ -17,7 +17,10 @@ const usbr = ({ location }) => {
           <BackToLink to="/resources" routeLabel={"Resources"} />
         </Grid.Row>
         <Grid.Row>
-          <WeeklyUploadTable data={usbrData} reports={location.state.reports} />
+          <WeeklyUploadTable
+            data={usbrData}
+            reports={location?.state?.reports}
+          />
         </Grid.Row>
       </Grid>
     </Layout>
