@@ -1,56 +1,69 @@
-import React from "react"
-import { Card, Button, Grid, List } from "semantic-ui-react"
 import { Link } from "gatsby"
+import React from "react"
+import { Button, Card, List } from "semantic-ui-react"
+import { formatDate } from "../helpers/utils"
+import WeeklyUploadCardImage from "./WeeklyUploadCardImage"
 
-const ResourcePhoto = () => (
-  <div className="resource-photo-container">
-    <div className="resource-placeholder">Placeholder</div>
-  </div>
-)
+const WeeklyUploadCard = ({ metadata, reports = [], downloadOnly = false }) => {
+  const { header, path, description, imgSrc, imgAlt } = metadata
+  const [mostRecent, ...remainingUploads] = reports
 
-const formatDate = (date) =>
-  Intl.DateTimeFormat("en-us", {
-    month: "long",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date)
-
-const WeeklyUploadCard = ({ data }) => {
-  const { header, path, description, uploads } = data
-  const [mostRecent, ...remainingUploads] = uploads
+  const bucketLink =
+    "https://klamath-water-quality-app.s3-us-west-2.amazonaws.com"
   return (
-    <Grid.Column>
-      <Card fluid>
-        <Card.Content>
-          <ResourcePhoto />
-          <Card.Header>{header}</Card.Header>
-          <Card.Meta>
-            Last Updated: {formatDate(mostRecent.uploadDate)}
-          </Card.Meta>
-          <Card.Description>{description}</Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <Link to={mostRecent.link}>
-            <Button fluid>View Most Recent Upload</Button>
-          </Link>
-        </Card.Content>
-        <Card.Content extra>
-          <List size="medium">
-            <List.Header className="previous-report-weekly-header">
-              Previous Reports
-            </List.Header>
-            {remainingUploads.slice(0, 5).map((upload) => (
-              <List.Item key={upload.uploadDate}>
-                <Link to={upload.link}>{formatDate(upload.uploadDate)}</Link>
+    <Card fluid className="weekly-upload-card">
+      <Card.Content className="weekly-upload-card-content">
+        <WeeklyUploadCardImage src={imgSrc} alt={imgAlt} />
+        <Card.Header className="weekly-upload-card-header">
+          {header}
+        </Card.Header>
+        <Card.Meta>
+          Last Upload:{" "}
+          {mostRecent ? formatDate(new Date(mostRecent.date)) : "N/A"}
+        </Card.Meta>
+        <Card.Description className="weekly-upload-card-description">
+          {description}
+        </Card.Description>
+      </Card.Content>
+      <Card.Content extra>
+        <Button
+          href={mostRecent ? `${bucketLink}/${mostRecent.filename}` : ""}
+          disabled={!mostRecent}
+          fluid
+          target="_blank"
+          rel="noreferrer"
+        >
+          {downloadOnly ? "Download" : "View"} Most Recent
+        </Button>
+      </Card.Content>
+      <Card.Content extra className="weekly-upload-card-date-list-wrapper">
+        <List size="medium" className="weekly-upload-card-date-list">
+          <List.Header className="previous-report-weekly-header">
+            Recently Uploaded Reports
+          </List.Header>
+          {reports.length ? (
+            reports.slice(0, 5).map((upload) => (
+              <List.Item key={upload.date}>
+                <a
+                  href={`${bucketLink}/${upload.filename}`}
+                  disabled={!mostRecent}
+                  fluid
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {formatDate(upload.date)}
+                </a>
               </List.Item>
-            ))}
-          </List>
-          <Link to={path}>
-            <b>View All</b>
-          </Link>
-        </Card.Content>
-      </Card>
-    </Grid.Column>
+            ))
+          ) : (
+            <List.Item>N/A</List.Item>
+          )}
+        </List>
+        <Link to={path} state={{ reports }}>
+          {reports.length > 0 && <b>View All</b>}
+        </Link>
+      </Card.Content>
+    </Card>
   )
 }
 

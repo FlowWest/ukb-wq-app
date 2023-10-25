@@ -2,13 +2,6 @@ import React, { useState } from "react"
 import { Grid, Header, Icon, Pagination, Table } from "semantic-ui-react"
 import usePagination from "../hooks/usePagination"
 
-const formatDate = (date) =>
-  Intl.DateTimeFormat("en-us", {
-    month: "long",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date)
-
 const TableDetail = ({ title, description }) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
     <b>
@@ -35,7 +28,7 @@ const DataPageTable = ({ data }) => {
     expandedRow === key ? setExpandedRow(null) : setExpandedRow(key)
 
   return (
-    <Grid container className="weekly-upload-table">
+    <Grid className="weekly-upload-table">
       <Header as="h1">{data.header}</Header>
       <Table striped color="blue">
         <Table.Header>
@@ -210,11 +203,14 @@ const DataPageTable = ({ data }) => {
           </Table.Body>
         )}
       </Table>
-      <Pagination
-        totalPages={numberOfPages}
-        onPageChange={handlePaginationPageChange}
-        defaultActivePage={currentPage}
-      />
+      {numberOfPages > 0 && (
+        <Pagination
+          totalPages={numberOfPages}
+          onPageChange={handlePaginationPageChange}
+          defaultActivePage={currentPage}
+          style={{ margin: "auto" }}
+        />
+      )}
     </Grid>
   )
 }

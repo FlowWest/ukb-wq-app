@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback } from "react"
 import { Card, Button, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
-import UploadReportForm from "./UploadReportForm"
+import UploadReportForm from "./forms/UploadReportForm"
 import * as AWS from "aws-sdk"
 
 const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {

@@ -1,9 +1,12 @@
 const path = require(`path`)
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
 
 module.exports = {
   pathPrefix: "/gatsby-react-bootstrap-starter",
   siteMetadata: {
-    title: `Water Quality Explorer`,
+    title: `Water Resources Repository`,
     description: `The Klamath Tribes' water quality data and report repository.`,
     author: `The Klamath Tribes`,
   },

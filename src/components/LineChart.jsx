@@ -56,9 +56,6 @@ function getRandomColor() {
 // }
 
 const LineChart = ({ selectedFilters, data }) => {
-  console.log("🚀 ~ LineChart ~ data:", data)
-  console.log("🚀 ~ LineChart ~ selectedFilters:", selectedFilters)
-
   const [chartData, setChartData] = useState({
     labels: [],
     // labels: generateYearLabels(new Date("1980-1-1"), Date.now()),
@@ -124,11 +121,7 @@ const LineChart = ({ selectedFilters, data }) => {
   }
 
   return (
-    <React.Fragment
-      style={{
-        position: "relative",
-      }}
-    >
+    <>
       <Line ref={chartRef} options={options} data={chartData} />
       {!selectedFilters?.monitoringLocation && (
         <div
@@ -147,7 +140,7 @@ const LineChart = ({ selectedFilters, data }) => {
           </p>
         </div>
       )}
-    </React.Fragment>
+    </>
   )
 }
 
