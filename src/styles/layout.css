@@ -17,6 +17,12 @@ a.link-no-style:hover {
   text-decoration: none;
 }
 
+.back-to-link {
+  display: flex;
+  justify-content: flex-end !important;
+  font-size: larger;
+}
+
 .footer {
   display: flex;
   justify-content: center;

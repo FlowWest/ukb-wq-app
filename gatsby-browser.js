@@ -32,7 +32,6 @@ const UserContextProvider = ({ children }) => {
         }
 
         if (session.isValid()) {
-          console.log("User has an active and valid session")
           cognitoUser?.getUserData(async function (err, userData) {
             if (err) {
               alert(err.message || JSON.stringify(err))
@@ -41,8 +40,28 @@ const UserContextProvider = ({ children }) => {
             const cognitoUid = userData?.Username
             const cognitoUserEmail =
               cognitoUser.signInUserSession.idToken.payload.email
+            AWS.config.region = "us-west-1"
+
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+              Logins: {
+                // Change the key below according to the specific region your user pool is in.
+                [`cognito-idp.us-west-1.amazonaws.com/${process.env.GATSBY_COGNITO_USER_POOL_ID}`]:
+                  session.getIdToken().getJwtToken(),
+              },
+            })
+
+            //call refresh method in order to authenticate user and get new temp credentials
+            AWS.config.credentials.refresh(async (error) => {
+              if (error) {
+                console.error(error)
+              } else {
+                console.log("Successfully logged!")
+              }
+            })
 
             setUser({
+              ...cognitoUser,
               username: cognitoUid,
               email: cognitoUserEmail,
               setter: setUser,
