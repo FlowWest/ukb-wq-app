@@ -38,9 +38,9 @@ export const owrdData = {
   imgAlt: "Oregon Water Resources Department Logo",
 }
 export const sondeData = {
-  header: "Weekly Sonde Report",
+  header: "Weekly Water Quality Data",
   description:
-    "Klamath Basin Hydrology Report as prepared by Oregon Water Resources Department.",
+    "Weekly water quality data uploaded from the continuous sondes deployed in the Sprague River.",
   path: "/resources/sonde",
   imgSrc: sondeLogo,
   imgAlt: "Sonde Logo",
