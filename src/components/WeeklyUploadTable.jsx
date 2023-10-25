@@ -3,7 +3,7 @@ import { Header, Table, Grid, Icon } from "semantic-ui-react"
 import { Link } from "gatsby"
 import { formatDate } from "../helpers/utils"
 
-const WeeklyUploadTable = ({ data, reports }) => {
+const WeeklyUploadTable = ({ data, reports, downloadOnly = false }) => {
   const bucketLink =
     "https://klamath-water-quality-app.s3-us-west-2.amazonaws.com"
   return (
@@ -13,7 +13,9 @@ const WeeklyUploadTable = ({ data, reports }) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell width={10}>Report Date</Table.HeaderCell>
-            <Table.HeaderCell>View Report</Table.HeaderCell>
+            <Table.HeaderCell>
+              {downloadOnly ? "Download" : "View"} Report
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -27,7 +29,10 @@ const WeeklyUploadTable = ({ data, reports }) => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Icon name="external" size="large" />
+                  <Icon
+                    name={downloadOnly ? "download" : "external"}
+                    size="large"
+                  />
                 </a>
               </Table.Cell>
             </Table.Row>

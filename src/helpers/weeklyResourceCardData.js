@@ -2,6 +2,7 @@ import usgsLogo from "../images/usgs-logo.png"
 import owrdLogo from "../images/owrd-logo.png"
 import usbrLogo from "../images/usbr-logo.png"
 import klamathLogo from "../images/klamathtribes1200.png"
+import sondeLogo from "../images/sonde-logo.png"
 
 export const usbrData = {
   header: "Weekly Bureau of Reclamation FASTA Slides",
@@ -34,11 +35,13 @@ export const owrdData = {
     "Klamath Basin Hydrology Report as prepared by Oregon Water Resources Department.",
   path: "/resources/owrd",
   imgSrc: owrdLogo,
-  imgAlt: "Oregon Water Resources Departmentr Logo",
+  imgAlt: "Oregon Water Resources Department Logo",
 }
 export const sondeData = {
   header: "Weekly Sonde Report",
   description:
     "Klamath Basin Hydrology Report as prepared by Oregon Water Resources Department.",
   path: "/resources/sonde",
+  imgSrc: sondeLogo,
+  imgAlt: "Sonde Logo",
 }

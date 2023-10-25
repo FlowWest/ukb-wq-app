@@ -186,6 +186,7 @@ const Resources = () => {
             <WeeklyUploadCard
               metadata={sondeData}
               reports={groupedWeeklyReports.sonde}
+              downloadOnly
             />
           </Grid.Column>
         </Grid.Row>

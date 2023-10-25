@@ -4,7 +4,7 @@ import { Button, Card, List } from "semantic-ui-react"
 import { formatDate } from "../helpers/utils"
 import WeeklyUploadCardImage from "./WeeklyUploadCardImage"
 
-const WeeklyUploadCard = ({ metadata, reports = [] }) => {
+const WeeklyUploadCard = ({ metadata, reports = [], downloadOnly = false }) => {
   const { header, path, description, imgSrc, imgAlt } = metadata
   const [mostRecent, ...remainingUploads] = reports
 
@@ -33,7 +33,7 @@ const WeeklyUploadCard = ({ metadata, reports = [] }) => {
           target="_blank"
           rel="noreferrer"
         >
-          View Most Recent Upload
+          {downloadOnly ? "Download" : "View"} Most Recent
         </Button>
       </Card.Content>
       <Card.Content extra className="weekly-upload-card-date-list-wrapper">
