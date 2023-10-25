@@ -60,13 +60,9 @@ const UserContextProvider = ({ children }) => {
               }
             })
 
-            const loggedUser = {
-              ...cognitoUser,
-              email: cognitoUserEmail,
-            }
-
             setUser({
               ...cognitoUser,
+              username: cognitoUid,
               email: cognitoUserEmail,
               setter: setUser,
             })
