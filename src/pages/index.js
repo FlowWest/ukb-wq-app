@@ -26,7 +26,7 @@ const IndexPage = ({ data }) => {
         >
           <Grid container columns={2} centered>
             <Grid.Column computer={6} mobile={16}>
-              <Card href="/data">
+              <Card href="/data/">
                 <Card.Content header="Download Our Data" />
                 <Img
                   fluid={imagesObject["beaker"].childImageSharp.fluid}
@@ -34,7 +34,7 @@ const IndexPage = ({ data }) => {
                   className="index-icon-image"
                 />
               </Card>
-              <Card href="/reports">
+              <Card href="/reports/">
                 <Card.Content header="View Water Quality Reports" />
                 <Img
                   fluid={imagesObject["report"].childImageSharp.fluid}
