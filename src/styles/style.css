@@ -12,10 +12,6 @@
 @import "reset-password.css";
 @import "data.css";
 
-main {
-  min-width: 100vw;
-}
-
 p {
   font-size: 18px;
 }
@@ -115,9 +111,9 @@ p {
   }
 }
 
-@media only screen and (min-width: 1200px) {
+/* @media only screen and (min-width: 1200px) {
   .ui.container,
   .ui.grid.container.grid-container {
     width: calc(1400px + 2rem) !important;
   }
-}
+} */
