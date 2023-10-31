@@ -190,6 +190,7 @@ const ReportsPage = () => {
             IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
             IdentityId: data.IdentityId,
           })
+          AWS.config.region = "us-west-1"
           // Create a DynamoDB DocumentClient
           const docClient = new AWS.DynamoDB.DocumentClient()
 
