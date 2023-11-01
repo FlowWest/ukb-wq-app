@@ -78,25 +78,16 @@ export const DataPage = ({ data }) => {
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
       <Grid container className="grid-container">
-        <Grid.Row columns={2}>
-          <Grid.Column>
-            <DataInfoBlock data={data} />
-          </Grid.Column>
-          <Grid.Column>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: 5,
-                maxWidth: 250,
-                marginLeft: "auto",
-              }}
-            >
-              {/* <Button fluid>Get Updated Data</Button> */}
-              {/* <Button fluid>Download Data</Button> */}
-            </div>
-          </Grid.Column>
+        <Grid.Row
+          style={{
+            justifyContent: "flex-start",
+            padding: "0 1rem",
+            color: "hsla(0, 0%, 0%, .7)",
+          }}
+        >
+          <p>
+            <i>Current Dataset Range: 01/23/1990 - 12/13/2018</i>
+          </p>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={16} style={{ marginBottom: 25, zIndex: 1100 }}>
