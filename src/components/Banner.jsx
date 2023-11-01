@@ -221,6 +221,19 @@ const Banner = ({ mobile, pageName }) => {
               position: "cover",
             }}
           >
+            <Header
+              as="h1"
+              inverted
+              content={
+                headerContent[pageName] ? headerContent[pageName].title : ""
+              }
+              style={{
+                fontSize: "3rem",
+                fontWeight: "normal",
+                marginBottom: 0,
+              }}
+              className="header-title"
+            />
             <p
               style={{
                 color: "white",

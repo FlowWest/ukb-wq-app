@@ -9,15 +9,7 @@ export const Footer = () => {
   const { user, setUser } = useContext(UserContext) || {}
 
   return (
-    <Segment
-      attached="bottom"
-      textAlign="center"
-      style={{
-        margin: 0,
-        border: "none",
-        height: "3rem",
-      }}
-    >
+    <>
       <Divider section />
       <Grid centered>
         <footer className="footer">
@@ -50,7 +42,7 @@ export const Footer = () => {
           </div>
         </footer>
       </Grid>
-    </Segment>
+    </>
   )
 }
 
