@@ -77,7 +77,7 @@ export const DataPage = ({ data }) => {
   return (
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
-      <Grid container style={{ padding: "4em 0" }} className="grid-container">
+      <Grid container className="grid-container">
         <Grid.Row columns={2}>
           <Grid.Column>
             <DataInfoBlock data={data} />
@@ -109,7 +109,7 @@ export const DataPage = ({ data }) => {
               markerRef={markerRef}
             />
           </Grid.Column>
-          <Grid.Column only="tablet computer" tablet={6} computer={6}>
+          <Grid.Column only="tablet computer" tablet={16} computer={6}>
             <DataMap
               data={monitoringLocations}
               selectedMonitoringLocation={selectedFilters.monitoringLocation}
@@ -120,7 +120,7 @@ export const DataPage = ({ data }) => {
           </Grid.Column>
           <Grid.Column
             mobile={16}
-            tablet={10}
+            tablet={16}
             computer={10}
             style={{ height: 600, position: "relative" }}
           >

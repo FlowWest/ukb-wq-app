@@ -1,6 +1,6 @@
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
-import React, { createRef } from "react"
+import React, { createRef, useMemo } from "react"
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import { Divider, List } from "semantic-ui-react"
 import { calcMapCenter } from "../helpers/utils"
@@ -27,7 +27,8 @@ const DataMap = ({ data, setMap, markerRef }) => {
 
   return (
     <MapContainer
-      style={{ height: "600px" }}
+      className="map-container"
+      style={{ height: 600 }}
       center={center}
       zoom={8}
       //scrollWheelZoom={false}
