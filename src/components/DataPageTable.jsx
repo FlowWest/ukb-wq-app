@@ -28,9 +28,8 @@ const DataPageTable = ({ data }) => {
     expandedRow === key ? setExpandedRow(null) : setExpandedRow(key)
 
   return (
-    <Grid className="weekly-upload-table">
-      <Header as="h1">{data.header}</Header>
-      <Table striped color="blue">
+    <>
+      <Table striped stackable color="blue">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
@@ -211,7 +210,7 @@ const DataPageTable = ({ data }) => {
           style={{ margin: "auto" }}
         />
       )}
-    </Grid>
+    </>
   )
 }
 

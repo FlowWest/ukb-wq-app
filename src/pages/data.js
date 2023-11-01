@@ -1,7 +1,14 @@
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import React, { useRef, useState, useEffect } from "react"
-import { Button, Dropdown, Form, Grid } from "semantic-ui-react"
+import {
+  Button,
+  Dropdown,
+  Form,
+  Grid,
+  IconGroup,
+  Icon,
+} from "semantic-ui-react"
 import DataInfoBlock from "../components/DataInfoBlock"
 import DataMap from "../components/DataMap"
 import DataPageFilters from "../components/DataPageFilters"
@@ -86,8 +93,8 @@ export const DataPage = ({ data }) => {
                 marginLeft: "auto",
               }}
             >
-              <Button fluid>Get Updated Data</Button>
-              <Button fluid>Download Data</Button>
+              {/* <Button fluid>Get Updated Data</Button> */}
+              {/* <Button fluid>Download Data</Button> */}
             </div>
           </Grid.Column>
         </Grid.Row>
@@ -111,18 +118,23 @@ export const DataPage = ({ data }) => {
               markerRef={markerRef}
             />
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={10} computer={10}>
-            <Grid style={{ height: 600 }}>
-              <Grid.Row>
-                <LineChart
-                  selectedFilters={selectedFilters}
-                  data={filteredKlamathData}
-                />
-              </Grid.Row>
-            </Grid>
+          <Grid.Column
+            mobile={16}
+            tablet={10}
+            computer={10}
+            style={{ height: 600, position: "relative" }}
+          >
+            <LineChart
+              selectedFilters={selectedFilters}
+              data={filteredKlamathData}
+            />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row style={{ marginBottom: 25 }}>
+        <Grid.Row style={{ flexDirection: "column" }}>
+          <Button style={{ marginLeft: "auto" }}>
+            <Icon name="refresh" />
+            Get Updated Data
+          </Button>
           <DataPageTable
             data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
           />
