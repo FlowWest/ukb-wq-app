@@ -35,3 +35,34 @@ export const formatDate = (date) =>
     day: "2-digit",
     year: "numeric",
   }).format(new Date(date))
+
+export function generateAuthorReportMap(authors, reports) {
+  const authorReportMap = {}
+
+  authors.forEach((author) => {
+    const authorKey = author.author_name
+    const authorId = author.author_uuid
+
+    const authorReports = reports.filter((report) =>
+      report.authors?.includes(authorKey)
+    )
+
+    authorReportMap[authorKey] = {
+      id: authorId,
+      reports: authorReports.map((report) => ({
+        id: report.report_id,
+        ...report,
+      })),
+    }
+  })
+
+  return authorReportMap
+}
+
+export function removeNameFromString(nameToRemove, namesString) {
+  const namesArray = namesString.split(",").map((name) => name.trim())
+
+  const filteredNames = namesArray.filter((name) => name !== nameToRemove)
+
+  return filteredNames.join(", ")
+}
