@@ -5,13 +5,16 @@ import usePagination from "../hooks/usePagination"
 
 const ReportsTable = ({ reportsObject }) => {
   const authorsArray = Object.entries(reportsObject)
+  const filteredAuthors = authorsArray.filter(
+    (author) => author[1].reports.length > 0
+  )
   const {
     paginatedItems,
     currentPage,
     handlePaginationPageChange,
     numberOfPages,
   } = usePagination({
-    tableData: authorsArray,
+    tableData: filteredAuthors,
     itemsPerPage: 10,
   })
 
@@ -30,7 +33,7 @@ const ReportsTable = ({ reportsObject }) => {
 
   return (
     <>
-      <Table celled padded>
+      <Table celled padded sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell width={12}>Author</Table.HeaderCell>
@@ -41,6 +44,24 @@ const ReportsTable = ({ reportsObject }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
+          {!paginatedItems.length && (
+            <Table.Row>
+              <Table.Cell colSpan="16">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 300,
+                  }}
+                >
+                  <span style={{ fontSize: 20 }}>
+                    No results matched your search criteria
+                  </span>
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          )}
           {paginatedItems.map(([author, { id, reports }], index) => {
             const backgroundColor = index % 2 === 0 ? "#fff" : "#fafafa"
             return (
@@ -88,9 +109,17 @@ const ReportsTable = ({ reportsObject }) => {
                               type,
                               report_uuid,
                               authors,
+                              filename,
                             }) => (
                               <Table.Row key={report_uuid}>
-                                <Table.Cell> {title}</Table.Cell>
+                                <Table.Cell>
+                                  <a
+                                    target="_blank"
+                                    href={`https://klamath-water-quality-app.s3-us-west-2.amazonaws.com/${filename}`}
+                                  >
+                                    {title}
+                                  </a>
+                                </Table.Cell>
                                 <Table.Cell>{year}</Table.Cell>
                                 <Table.Cell>{location}</Table.Cell>
                                 <Table.Cell>

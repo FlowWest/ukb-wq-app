@@ -108,7 +108,9 @@ const DataPageTable = ({ data }) => {
                     height: 300,
                   }}
                 >
-                  <h3>Set filter to view tabular data</h3>
+                  <span style={{ fontSize: 20 }}>
+                    Set filter to view tabular data
+                  </span>
                 </div>
               </Table.Cell>
             </Table.Row>

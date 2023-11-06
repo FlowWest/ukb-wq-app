@@ -1,4 +1,3 @@
-import { useCallback } from "react"
 import { sum } from "lodash"
 
 export const formatTextCasing = (str) => {
@@ -36,16 +35,16 @@ export const formatDate = (date) =>
     year: "numeric",
   }).format(new Date(date))
 
-export function generateAuthorReportMap(authors, reports) {
+export function generateAuthorReportMap(authors, reports, sortMethod) {
   const authorReportMap = {}
 
   authors.forEach((author) => {
     const authorKey = author.author_name
     const authorId = author.author_uuid
 
-    const authorReports = reports.filter((report) =>
-      report.authors?.includes(authorKey)
-    )
+    const authorReports = sortMethod
+      .sort(reports)
+      .filter((report) => report.authors?.includes(authorKey))
 
     authorReportMap[authorKey] = {
       id: authorId,
