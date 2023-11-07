@@ -5,7 +5,7 @@ import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "./forms/UploadReportForm"
 import * as AWS from "aws-sdk"
 
-const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
+const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext) || {}
@@ -186,4 +186,4 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
   )
 }
 
-export default DataDownloadCard
+export default ReportCard

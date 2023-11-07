@@ -1,6 +1,6 @@
 import React from "react"
 import { Grid, Pagination } from "semantic-ui-react"
-import DataDownloadCard from "./DataDownloadCard"
+import ReportCard from "./ReportCard"
 import usePagination from "../hooks/usePagination"
 
 const ReportsGridView = ({
@@ -29,7 +29,7 @@ const ReportsGridView = ({
       >
         {paginatedReports.map((report) => (
           <Grid.Column key={report.report_uuid}>
-            <DataDownloadCard
+            <ReportCard
               allReports={allReports}
               getAllReports={getAllReports}
               reportMetaData={report}
