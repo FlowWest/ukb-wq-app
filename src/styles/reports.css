@@ -107,6 +107,9 @@ Filter Container and Input Styles
   flex-grow: 1;
 }
 
+.report-cards-wrapper {
+  justify-content: flex-start;
+}
 /* input wrapper */
 
 .checkbox-field {

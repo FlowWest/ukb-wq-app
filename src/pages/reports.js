@@ -241,6 +241,28 @@ const ReportsPage = () => {
         </Grid>
       ) : (
         <>
+          <Grid container>
+            <Grid.Column
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Button
+                icon="grid layout"
+                attached="left"
+                content="Grid"
+                color="blue"
+                basic={!gridLayoutSelected}
+                onClick={() => setLayoutState("grid")}
+              />
+              <Button
+                icon="list"
+                content="List"
+                attached="right"
+                color="blue"
+                basic={!listLayoutSelected}
+                onClick={() => setLayoutState("list")}
+              />
+            </Grid.Column>
+          </Grid>
           <Grid container className="grid-container">
             {user && Object.keys(user).length > 0 && (
               <Grid.Column mobile={16} tablet={4} computer={3}>
@@ -323,28 +345,7 @@ const ReportsPage = () => {
               </Modal>
             )}
           </Grid>
-          <Grid container>
-            <Grid.Column
-              style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button
-                icon="grid layout"
-                attached="left"
-                content="Grid"
-                color="blue"
-                basic={!gridLayoutSelected}
-                onClick={() => setLayoutState("grid")}
-              />
-              <Button
-                icon="list"
-                content="List"
-                attached="right"
-                color="blue"
-                basic={!listLayoutSelected}
-                onClick={() => setLayoutState("list")}
-              />
-            </Grid.Column>
-          </Grid>
+
           {listLayoutSelected && (
             <Grid container>
               <Grid.Row>

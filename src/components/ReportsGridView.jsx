@@ -25,7 +25,7 @@ const ReportsGridView = ({
         columns={3}
         doubling
         stackable
-        className="mobile-grid-container grid-container"
+        className="mobile-grid-container grid-container report-cards-wrapper"
       >
         {paginatedReports.map((report) => (
           <Grid.Column key={report.report_uuid}>
@@ -36,7 +36,7 @@ const ReportsGridView = ({
             />
           </Grid.Column>
         ))}
-        <Grid.Row>
+        <Grid.Row centered>
           <Pagination
             activePage={currentPage}
             totalPages={numberOfPages}
