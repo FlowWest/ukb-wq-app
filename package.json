@@ -6,7 +6,7 @@
   "author": "Sadie Gill <sgill@flowwest.com>",
   "dependencies": {
     "@artsy/fresnel": "^6.1.0",
-    "@aws-sdk/client-s3": "^3.391.0",
+    "@aws-sdk/client-s3": "^3.317.0",
     "@hookform/resolvers": "^3.2.0",
     "@parcel/watcher": "^2.2.0",
     "amazon-cognito-identity-js": "^6.3.2",

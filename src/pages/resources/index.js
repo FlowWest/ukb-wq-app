@@ -41,31 +41,43 @@ const Resources = () => {
 
   const getAllReports = async () => {
     try {
-      if (!AWS.config.credentials) {
-        AWS.config.region = "us-west-1"
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
-        })
-      }
-      // Create a DynamoDB DocumentClient
-      const docClient = new AWS.DynamoDB.DocumentClient()
-
-      // Specify the table name
-      const tableName = "weekly_reports_metadata"
+      const cognitoidentity = new AWS.CognitoIdentity({
+        region: "us-west-1",
+      })
       const params = {
-        TableName: tableName,
+        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
       }
-      const result = await docClient.scan(params).promise()
-      const items = result.Items
 
-      const reportsData = orderBy(items, (item) => new Date(item.date), [
-        "desc",
-      ])
+      cognitoidentity.getId(params, async function (err, data) {
+        if (err) {
+          console.log(err, err.stack) // an error occurred
+        } else {
+          AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+            IdentityId: data.IdentityId,
+          })
+          AWS.config.region = "us-west-1"
+          // Create a DynamoDB DocumentClient
+          const docClient = new AWS.DynamoDB.DocumentClient()
 
-      const groupedWeeklyReports = groupBy(reportsData, "type")
-      setGroupedWeeklyReports(groupedWeeklyReports)
+          // Specify the table name
+          const tableName = "weekly_reports_metadata"
+          const params = {
+            TableName: tableName,
+          }
+          const result = await docClient.scan(params).promise()
+          const items = result.Items
 
-      setGetReportsError(false)
+          const reportsData = orderBy(items, (item) => new Date(item.date), [
+            "desc",
+          ])
+
+          const groupedWeeklyReports = groupBy(reportsData, "type")
+          setGroupedWeeklyReports(groupedWeeklyReports)
+
+          setGetReportsError(false)
+        }
+      })
     } catch (error) {
       setGetReportsError(true)
       // throw error

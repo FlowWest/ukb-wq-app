@@ -19,7 +19,7 @@ const klamath = ({ location }) => {
         <Grid.Row>
           <WeeklyUploadTable
             data={klamathData}
-            reports={location.state.reports}
+            reports={location?.state?.reports}
           />
         </Grid.Row>
       </Grid>

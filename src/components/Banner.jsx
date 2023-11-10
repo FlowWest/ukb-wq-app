@@ -3,6 +3,17 @@ import BackgroundImage from "gatsby-background-image"
 import { Header, Container, Segment } from "semantic-ui-react"
 import { graphql, useStaticQuery } from "gatsby"
 
+const resourceTablePageHeaderContent = {
+  title: (
+    <div>
+      The Klamath Tribes
+      <br />
+      Weekly Report
+    </div>
+  ),
+  text: "",
+}
+
 const Banner = ({ mobile, pageName }) => {
   const headerContent = {
     index: {
@@ -55,56 +66,11 @@ const Banner = ({ mobile, pageName }) => {
       ),
       text: "",
     },
-    usbr: {
-      title: (
-        <div>
-          The Klamath Tribes
-          <br />
-          Weekly Report
-        </div>
-      ),
-      text: "",
-    },
-    usgs: {
-      title: (
-        <div>
-          The Klamath Tribes
-          <br />
-          Weekly Report
-        </div>
-      ),
-      text: "",
-    },
-    klamath: {
-      title: (
-        <div>
-          The Klamath Tribes
-          <br />
-          Weekly Report
-        </div>
-      ),
-      text: "",
-    },
-    owrd: {
-      title: (
-        <div>
-          The Klamath Tribes
-          <br />
-          Weekly Report
-        </div>
-      ),
-      text: "",
-    },
-    sonde: {
-      title: (
-        <div>
-          The Klamath Tribes
-          <br />
-          Weekly Report
-        </div>
-      ),
-      text: "",
-    },
+    usbr: resourceTablePageHeaderContent,
+    usgs: resourceTablePageHeaderContent,
+    klamath: resourceTablePageHeaderContent,
+    owrd: resourceTablePageHeaderContent,
+    sonde: resourceTablePageHeaderContent,
     notFound: {
       title: <div>Page Not Found</div>,
       text: "",
