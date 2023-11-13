@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useContext, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Form, Button, Checkbox, Grid } from "semantic-ui-react"
 import DataUploader from "../DataUploader"
@@ -11,9 +11,11 @@ import DatePicker from "react-datepicker"
 import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
+import { UserContext } from "../../../gatsby-browser"
 
 const UploadResourceForm = ({ onClose, getAllReports, report = null }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { user } = useContext(UserContext) || {}
 
   const {
     control,
@@ -41,67 +43,86 @@ const UploadResourceForm = ({ onClose, getAllReports, report = null }) => {
   const handleFormSubmit = async (data) => {
     try {
       setIsSubmitting(true)
-      AWS.config.update({ region: "us-west-1" })
-      const docClient = new AWS.DynamoDB.DocumentClient()
-      const tableName = "weekly_reports_metadata"
 
-      const reader = new FileReader()
-      reader.readAsArrayBuffer(data.file)
-      reader.onabort = () => console.log("file reading was aborted")
-      reader.onerror = () => console.log("file reading has failed")
-      reader.onload = async () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result
-
-        // Create a Date object from the input string
-        const date = new Date(data.date)
-
-        // Extract the month, day, and year components
-        const month = (date.getMonth() + 1).toString().padStart(2, "0") // Adding 1 to the month because it's 0-indexed
-        const day = date.getDate().toString().padStart(2, "0")
-        const year = date.getFullYear().toString()
-
-        // Format the date as MMDDYYYY
-        const formattedDate = month + day + year
-
-        const [fileName, fileExtension] = data.file.name.split(".")
-
-        const uniqueFileName = `${fileName}_${formattedDate}.${fileExtension}`
-
-        const client = new S3Client({
-          ...AWS.config,
-          region: "us-west-2",
-          correctClockSkew: true,
+      if (user && Object.keys(user).length) {
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+          Logins: {
+            // Change the key below according to the specific region your user pool is in.
+            [`cognito-idp.us-west-1.amazonaws.com/${process.env.GATSBY_COGNITO_USER_POOL_ID}`]:
+              user.signInUserSession.getIdToken().getJwtToken(),
+          },
         })
-        const pdfCommand = new PutObjectCommand({
-          Bucket: process.env.GATSBY_S3_BUCKET,
-          Key: uniqueFileName,
-          Body: binaryStr,
-          ContentType: data.file.type,
-          StorageClass: "STANDARD_IA",
-          ACL: "public-read",
-        })
-        try {
-          const response = await client.send(pdfCommand)
 
-          const newWeeklyReport = {
-            date: data.date,
-            filename: uniqueFileName,
-            type: data.type,
-            weekly_report_uuid: uuidv4(),
+        //call refresh method in order to authenticate user and get new temp credentials
+        AWS.config.credentials.refresh(async (error) => {
+          if (error) {
+            console.error(error)
+          } else {
+            AWS.config.update({ region: "us-west-1" })
+            const docClient = new AWS.DynamoDB.DocumentClient()
+            const tableName = "weekly_reports_metadata"
+
+            const reader = new FileReader()
+            reader.readAsArrayBuffer(data.file)
+            reader.onabort = () => console.log("file reading was aborted")
+            reader.onerror = () => console.log("file reading has failed")
+            reader.onload = async () => {
+              // Do whatever you want with the file contents
+              const binaryStr = reader.result
+
+              // Create a Date object from the input string
+              const date = new Date(data.date)
+
+              // Extract the month, day, and year components
+              const month = (date.getMonth() + 1).toString().padStart(2, "0") // Adding 1 to the month because it's 0-indexed
+              const day = date.getDate().toString().padStart(2, "0")
+              const year = date.getFullYear().toString()
+
+              // Format the date as MMDDYYYY
+              const formattedDate = month + day + year
+
+              const [fileName, fileExtension] = data.file.name.split(".")
+
+              const uniqueFileName = `${fileName}_${formattedDate}.${fileExtension}`
+
+              const client = new S3Client({
+                ...AWS.config,
+                region: "us-west-2",
+                correctClockSkew: true,
+              })
+              const pdfCommand = new PutObjectCommand({
+                Bucket: process.env.GATSBY_S3_BUCKET,
+                Key: uniqueFileName,
+                Body: binaryStr,
+                ContentType: data.file.type,
+                StorageClass: "STANDARD_IA",
+                ACL: "public-read",
+              })
+              try {
+                const response = await client.send(pdfCommand)
+
+                const newWeeklyReport = {
+                  date: data.date,
+                  filename: uniqueFileName,
+                  type: data.type,
+                  weekly_report_uuid: uuidv4(),
+                }
+                const params = {
+                  TableName: tableName,
+                  Item: newWeeklyReport,
+                }
+                await docClient.put(params).promise()
+              } catch (err) {
+                console.error(err)
+              } finally {
+                setIsSubmitting(false)
+                await getAllReports()
+                onClose()
+              }
+            }
           }
-          const params = {
-            TableName: tableName,
-            Item: newWeeklyReport,
-          }
-          await docClient.put(params).promise()
-        } catch (err) {
-          console.error(err)
-        } finally {
-          setIsSubmitting(false)
-          await getAllReports()
-          onClose()
-        }
+        })
       }
     } catch (err) {
       console.error(err)

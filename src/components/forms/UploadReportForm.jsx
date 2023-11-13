@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState, useContext } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Form, Button, Checkbox } from "semantic-ui-react"
 import DataUploader from "../DataUploader"
@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker"
 import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
+import { UserContext } from "../../../gatsby-browser"
 
 const UploadReportForm = ({
   onClose,
@@ -21,6 +22,7 @@ const UploadReportForm = ({
   getAllReports,
   report = null,
 }) => {
+  const { user } = useContext(UserContext) || {}
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
   )
@@ -79,93 +81,111 @@ const UploadReportForm = ({
   const handleFormSubmit = async (data) => {
     try {
       setIsSubmitting(true)
-      AWS.config.update({ region: "us-west-1" })
-      const docClient = new AWS.DynamoDB.DocumentClient()
-      const tableName = "reports_metadata"
 
-      if (editForm) {
-        try {
-          const params = {
-            TableName: tableName,
-            Key: { report_uuid: report.report_uuid },
-            UpdateExpression:
-              "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
-            ExpressionAttributeNames: {
-              "#title": "title",
-              "#year": "year",
-              "#endyear": "endyear",
-              "#location": "location",
-              "#authors": "authors",
-              "#type": "type",
-            },
-            ExpressionAttributeValues: {
-              ":title": data.title,
-              ":year": data.year,
-              ":endyear": data.endYear || "NA",
-              ":location": data.location || "NA",
-              ":authors": data.authors,
-              ":type": data.type,
-            },
-          }
-          await docClient.update(params).promise()
-        } catch (error) {
-          console.log("🚀 ~ handleFormSubmit ~ error:", error)
-        } finally {
-          setIsSubmitting(false)
-          await getAllReports()
-          onClose()
-        }
-      }
-
-      const reader = new FileReader()
-      reader.readAsArrayBuffer(data.file)
-      reader.onabort = () => console.log("file reading was aborted")
-      reader.onerror = () => console.log("file reading has failed")
-      reader.onload = async () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result
-
-        const client = new S3Client({
-          ...AWS.config,
-          region: "us-west-2",
-          correctClockSkew: true,
+      if (user && Object.keys(user).length) {
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+          Logins: {
+            // Change the key below according to the specific region your user pool is in.
+            [`cognito-idp.us-west-1.amazonaws.com/${process.env.GATSBY_COGNITO_USER_POOL_ID}`]:
+              user.signInUserSession.getIdToken().getJwtToken(),
+          },
         })
-        const pdfCommand = new PutObjectCommand({
-          Bucket: process.env.GATSBY_S3_BUCKET,
-          Key: data.file.name,
-          Body: binaryStr,
-          ContentType: "application/pdf",
-          StorageClass: "STANDARD_IA",
-          ACL: "public-read",
-        })
-        console.log("onload")
-        try {
-          const response = await client.send(pdfCommand)
-          console.log(response)
+        //call refresh method in order to authenticate user and get new temp credentials
+        AWS.config.credentials.refresh(async (error) => {
+          if (error) {
+            console.error(error)
+          } else {
+            AWS.config.update({ region: "us-west-1" })
+            const docClient = new AWS.DynamoDB.DocumentClient()
+            const tableName = "reports_metadata"
 
-          const newReport = {
-            title: data.title,
-            year: data.year,
-            endyear: data.endYear || "NA",
-            filename: data.file.name,
-            location: data.location || "NA",
-            authors: data.authors,
-            type: data.type,
-            active: "TRUE",
-            report_uuid: uuidv4(),
+            if (editForm) {
+              try {
+                const params = {
+                  TableName: tableName,
+                  Key: { report_uuid: report.report_uuid },
+                  UpdateExpression:
+                    "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
+                  ExpressionAttributeNames: {
+                    "#title": "title",
+                    "#year": "year",
+                    "#endyear": "endyear",
+                    "#location": "location",
+                    "#authors": "authors",
+                    "#type": "type",
+                  },
+                  ExpressionAttributeValues: {
+                    ":title": data.title,
+                    ":year": data.year,
+                    ":endyear": data.endYear || "NA",
+                    ":location": data.location || "NA",
+                    ":authors": data.authors,
+                    ":type": data.type,
+                  },
+                }
+                await docClient.update(params).promise()
+              } catch (error) {
+                console.log("🚀 ~ handleFormSubmit ~ error:", error)
+              } finally {
+                setIsSubmitting(false)
+                await getAllReports()
+                onClose()
+              }
+            }
+
+            const reader = new FileReader()
+            reader.readAsArrayBuffer(data.file)
+            reader.onabort = () => console.log("file reading was aborted")
+            reader.onerror = () => console.log("file reading has failed")
+            reader.onload = async () => {
+              // Do whatever you want with the file contents
+              const binaryStr = reader.result
+
+              const client = new S3Client({
+                ...AWS.config,
+                region: "us-west-2",
+                correctClockSkew: true,
+              })
+              const pdfCommand = new PutObjectCommand({
+                Bucket: process.env.GATSBY_S3_BUCKET,
+                Key: data.file.name,
+                Body: binaryStr,
+                ContentType: "application/pdf",
+                StorageClass: "STANDARD_IA",
+                ACL: "public-read",
+              })
+              console.log("onload")
+              try {
+                const response = await client.send(pdfCommand)
+                console.log(response)
+
+                const newReport = {
+                  title: data.title,
+                  year: data.year,
+                  endyear: data.endYear || "NA",
+                  filename: data.file.name,
+                  location: data.location || "NA",
+                  authors: data.authors,
+                  type: data.type,
+                  active: "TRUE",
+                  report_uuid: uuidv4(),
+                }
+                const params = {
+                  TableName: tableName,
+                  Item: newReport,
+                }
+                await docClient.put(params).promise()
+              } catch (err) {
+                console.error(err)
+              } finally {
+                setIsSubmitting(false)
+                await getAllReports()
+                onClose()
+              }
+            }
           }
-          const params = {
-            TableName: tableName,
-            Item: newReport,
-          }
-          await docClient.put(params).promise()
-        } catch (err) {
-          console.error(err)
-        } finally {
-          setIsSubmitting(false)
-          await getAllReports()
-          onClose()
-        }
+        })
       }
     } catch (err) {
       console.error(err)
