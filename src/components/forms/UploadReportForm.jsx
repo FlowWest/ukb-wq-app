@@ -55,7 +55,7 @@ const UploadReportForm = ({
     })()
   }, [])
 
-  const handleAddition = (e, { value }) => {
+  const handleAuthorAddition = (e, { value }) => {
     setAuthorsDropdownOptions((prevOptions) => [
       { key: value, text: value, value },
       ...prevOptions,
@@ -231,7 +231,7 @@ const UploadReportForm = ({
     }
   }
 
-  const handleChange = (event, { value: authorsValue }) => {
+  const handleAuthorsChange = (event, { value: authorsValue }) => {
     setValue("authors", authorsValue)
   }
 
@@ -371,8 +371,8 @@ const UploadReportForm = ({
               className={
                 errors.authors ? "form-error-input" : "filter-input-field"
               }
-              onAddItem={handleAddition}
-              onChange={handleChange}
+              onAddItem={handleAuthorAddition}
+              onChange={handleAuthorsChange}
               options={authorsDropdownOptions}
             />
             {errors.authors && (
