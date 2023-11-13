@@ -9,15 +9,14 @@ const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext) || {}
-  const authorsArray = reportMetaData.authors?.split(",")
 
   const generateAuthorsString = (authors) => {
-    if (authors?.length <= 3) return authors?.join(",")
+    if (authors?.length <= 3) return authors?.join(", ")
 
     const firstThreeAuthors = authors?.slice(0, 3)
     const remainingAuthors = authors?.slice(3)
 
-    return `${firstThreeAuthors?.join(",")}, and ${remainingAuthors?.length} ${
+    return `${firstThreeAuthors?.join(", ")}, and ${remainingAuthors?.length} ${
       remainingAuthors?.length === 1 ? "other" : "others"
     }`
   }
@@ -63,8 +62,8 @@ const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
             {formatTextCasing(reportMetaData.type)}
           </Card.Meta>
           <Card.Description>
-            <strong>Author(s)</strong>: {generateAuthorsString(authorsArray)}{" "}
-            <br />
+            <strong>Author(s)</strong>:{" "}
+            {generateAuthorsString(reportMetaData.authors_array)} <br />
             <strong>Location</strong>: {reportMetaData.location} <br />
             <strong>Year</strong>: {reportMetaData.year}{" "}
             {reportMetaData.endyear !== "NA"
