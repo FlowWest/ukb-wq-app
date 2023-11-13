@@ -1,4 +1,5 @@
 import { sum } from "lodash"
+import * as AWS from "aws-sdk"
 
 export const formatTextCasing = (str) => {
   var splitStr = str?.split(" ") || []
@@ -64,4 +65,30 @@ export function removeNameFromString(nameToRemove, namesString) {
   const filteredNames = namesArray.filter((name) => name !== nameToRemove)
 
   return filteredNames.join(", ")
+}
+
+export const getAllAuthors = async () => {
+  try {
+    if (!AWS.config.credentials) {
+      AWS.config.region = "us-west-1"
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+      })
+    }
+    // Create a DynamoDB DocumentClient
+    const docClient = new AWS.DynamoDB.DocumentClient()
+
+    // Specify the table name
+    const tableName = "authors"
+    const params = {
+      TableName: tableName,
+    }
+    const result = await docClient.scan(params).promise()
+    const items = result.Items
+    return items
+    // setGetReportsError(false)
+  } catch (error) {
+    // setGetReportsError(true)
+    // throw error
+  }
 }

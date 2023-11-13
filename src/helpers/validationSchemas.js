@@ -34,7 +34,10 @@ export const uploadReportSchema = yup
         } else return true
       }),
     location: yup.string().label("Location").required().trim(),
-    authors: yup.string().label("Authors").required().trim(),
+    authors: yup
+      .array(yup.string())
+      .min(1, "Authors is a required field")
+      .label("Authors"),
     type: yup.string().label("Report Type").required(),
     file: yup.mixed().required("Please specify a file to upload"),
   })

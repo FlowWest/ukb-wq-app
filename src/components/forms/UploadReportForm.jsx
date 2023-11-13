@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Form, Button, Checkbox } from "semantic-ui-react"
 import DataUploader from "../DataUploader"
@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker"
 import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
+import { getAuthorsDropdownOptions } from "../../helpers/authorsDropdownOptions"
 
 const UploadReportForm = ({
   onClose,
@@ -21,6 +22,8 @@ const UploadReportForm = ({
   getAllReports,
   report = null,
 }) => {
+  console.log("🚀 ~ report:", report)
+
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
   )
@@ -43,6 +46,25 @@ const UploadReportForm = ({
     if (!checked) setValue("endYear", null)
   }, [])
 
+  const [authorsDropdownOptions, setAuthorsDropdownOptions] = useState([])
+  const [userAddedAuthors, setUserAddedAuthors] = useState([])
+
+  useEffect(() => {
+    ;(async () => {
+      const options = await getAuthorsDropdownOptions()
+
+      setAuthorsDropdownOptions(options)
+    })()
+  }, [])
+
+  const handleAddition = (e, { value }) => {
+    setAuthorsDropdownOptions((prevOptions) => [
+      { key: value, text: value, value },
+      ...prevOptions,
+    ])
+    setUserAddedAuthors((prevAdded) => [...prevAdded, value])
+  }
+
   const {
     control,
     handleSubmit,
@@ -50,6 +72,7 @@ const UploadReportForm = ({
     getValues,
     clearErrors,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(!!report ? editReportSchema : uploadReportSchema),
     defaultValues: !!report
@@ -59,7 +82,7 @@ const UploadReportForm = ({
           endYear: report.endyear === "NA" ? null : report.endyear,
           addEndYear: !(report.endyear === "NA"),
           location: report.location,
-          authors: report.authors,
+          authors: report.authors_array,
           type: report.type,
         }
       : {
@@ -68,11 +91,12 @@ const UploadReportForm = ({
           endYear: null,
           addEndYear: false,
           location: "",
-          authors: "",
+          authors: [],
           type: "",
           file: null,
         },
   })
+  const authorsValue = watch("authors")
 
   const editForm = !!report
 
@@ -82,6 +106,15 @@ const UploadReportForm = ({
       AWS.config.update({ region: "us-west-1" })
       const docClient = new AWS.DynamoDB.DocumentClient()
       const tableName = "reports_metadata"
+
+      ///
+      //Logic for adding new authors to the authors table in DynamoDB
+      userAddedAuthors.forEach((author) => {
+        if (data.authors.includes(author))
+          console.log(`${author} add to authors table`)
+      })
+      ///
+      ///
 
       if (editForm) {
         try {
@@ -170,6 +203,10 @@ const UploadReportForm = ({
     } catch (err) {
       console.error(err)
     }
+  }
+
+  const handleChange = (event, { value: authorsValue }) => {
+    setValue("authors", authorsValue)
   }
 
   const handleSelectChange = (event, option) => {
@@ -295,10 +332,22 @@ const UploadReportForm = ({
         control={control}
         render={({ field }) => (
           <>
-            <Form.Input
-              label="Authors (Commas can be used to separate multiple authors)"
-              {...field}
-              className={errors.authors ? "form-error-input" : ""}
+            <Form.Dropdown
+              label="Authors"
+              value={field.value}
+              fluid
+              placeholder="Select or enter the author(s) of this report"
+              allowAdditions
+              selection
+              search
+              clearable
+              multiple
+              className={
+                errors.authors ? "form-error-input" : "filter-input-field"
+              }
+              onAddItem={handleAddition}
+              onChange={handleChange}
+              options={authorsDropdownOptions}
             />
             {errors.authors && (
               <p className="form-error-message">{errors.authors.message}</p>
