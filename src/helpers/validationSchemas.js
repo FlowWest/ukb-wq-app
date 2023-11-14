@@ -64,7 +64,10 @@ export const editReportSchema = yup
         } else return true
       }),
     location: yup.string().label("Location").trim(),
-    authors: yup.string().label("Authors").required().trim(),
+    authors: yup
+      .array(yup.string())
+      .min(1, "Authors is a required field")
+      .label("Authors"),
     type: yup.string().label("Report Type").required(),
   })
   .required()

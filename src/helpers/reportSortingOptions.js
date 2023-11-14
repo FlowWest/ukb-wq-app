@@ -4,7 +4,7 @@ const sortingOptions = [
     value: "Year - Descending",
     text: "Year - Descending",
     sort: function (reports) {
-      return reports.sort((a, b) => +b.year - +a.year)
+      return reports?.sort((a, b) => +b.year - +a.year)
     },
   },
   {
@@ -12,7 +12,7 @@ const sortingOptions = [
     value: "Year - Ascending",
     text: "Year - Ascending",
     sort: function (reports) {
-      return reports.sort((a, b) => +a.year - +b.year)
+      return reports?.sort((a, b) => +a.year - +b.year)
     },
   },
   {
@@ -20,7 +20,7 @@ const sortingOptions = [
     value: "Title - A-Z",
     text: "Title - A-Z",
     sort: function (reports) {
-      return reports.sort((a, b) =>
+      return reports?.sort((a, b) =>
         a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
       )
     },
@@ -30,7 +30,7 @@ const sortingOptions = [
     value: "Title - Z-A",
     text: "Title - Z-A",
     sort: function (reports) {
-      return reports.sort((a, b) =>
+      return reports?.sort((a, b) =>
         a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
       )
     },
