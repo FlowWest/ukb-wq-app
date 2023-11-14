@@ -15,7 +15,7 @@ const ReportsPageContent = () => {
   const { user } = useContext(UserContext) || {}
   const { state: reportsState, dispatch: reportsDispatch } =
     useContext(ReportModalContext)
-  console.log("🚀 ~ ReportsPageContent ~ reportsState:", reportsState)
+
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
 
   const [filteredReports, setFilteredReports] = useState(
@@ -26,10 +26,6 @@ const ReportsPageContent = () => {
 
   const [currentReportTypeFilters, setCurrentReportTypeFilters] = useState([])
   const [currentSearchFilterString, setCurrentSearchFilterString] = useState("")
-  console.log(
-    "🚀 ~ ReportsPageContent ~ currentSearchFilterString:",
-    currentSearchFilterString
-  )
 
   const [reportTypeOptions, setReportTypeOptions] = useState([])
 
@@ -217,6 +213,7 @@ const ReportsPageContent = () => {
               icon="upload"
               content={isTabletScreenSize ? null : "Upload"}
               fluid
+              onClick={() => reportsDispatch({ type: "OPEN_FORM_MODAL" })}
             />
           </Grid.Column>
         )}

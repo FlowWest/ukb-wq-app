@@ -18,11 +18,6 @@ const reportModalReducer = (state, action) => {
     case "CLOSE_FORM_MODAL":
       return { ...state, selectedReport: null, formModalOpen: false }
     case "EDIT_REPORT":
-      console.log("new state", {
-        ...state,
-        selectedReport: action.payload.selectedReport,
-        formModalOpen: true,
-      })
       return {
         ...state,
         selectedReport: action.payload.selectedReport,
@@ -71,20 +66,10 @@ const reportModalReducer = (state, action) => {
         currentReportTypeFilters: action.payload.currentReportTypeFilters,
         filteredReports: updatedFilteredReports,
       }
-    // case "GET_ALL_REPORTS":
-    //   console.log("test from get all reports case")
-    //   return { ...state, allReports: action.payload.reports }
-    // case "GET_ALL_AUTHORS":
-    //   console.log("test test from get all authors case")
-    //   return { ...state, allAuthors: action.payload.authors }
+
     case "TOGGLE_REPORT_VISIBILITY":
       return toggleReportVisibility(action.payload.selectedReport)
     case "STARTUP":
-      // const allReports = await getAllReports()
-      // console.log("🚀 ~ reportModalReducer ~ allReports:", allReports)
-      // const allAuthors = await getAllAuthors()
-      // console.log("🚀 ~ reportModalReducer ~ allAuthors:", allAuthors)
-
       const uniqueReportTypes = [
         ...new Set(action.payload.reports?.map((item) => item.type)),
       ].sort(function (a, b) {

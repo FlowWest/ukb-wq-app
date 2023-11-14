@@ -21,7 +21,7 @@ const ReportsGridView = ({ filteredReports, sortMethod }) => {
         stackable
         className="mobile-grid-container grid-container report-cards-wrapper"
       >
-        {paginatedReports.length > 0 ? (
+        {paginatedReports?.length > 0 ? (
           <>
             {paginatedReports?.map((report) => (
               <Grid.Column key={report.report_uuid}>
