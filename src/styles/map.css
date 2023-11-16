@@ -1,8 +1,10 @@
 .map-container {
-  height: 35rem;
-  width: 100%;
-  margin: 0 1rem 2rem 0rem;
-  overflow: hidden;
-  display: inline;
-  float: right;
+  height: 30rem !important;
+  margin-bottom: 2rem !important;
+}
+
+@media only screen and (min-width: 992px) {
+  .map-container {
+    height: 43rem !important;
+  }
 }

@@ -1,7 +1,14 @@
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import React, { useRef, useState, useEffect } from "react"
-import { Button, Dropdown, Form, Grid } from "semantic-ui-react"
+import {
+  Button,
+  Dropdown,
+  Form,
+  Grid,
+  IconGroup,
+  Icon,
+} from "semantic-ui-react"
 import DataInfoBlock from "../components/DataInfoBlock"
 import DataMap from "../components/DataMap"
 import DataPageFilters from "../components/DataPageFilters"
@@ -70,26 +77,17 @@ export const DataPage = ({ data }) => {
   return (
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
-      <Grid container style={{ padding: "4em 0" }} className="grid-container">
-        <Grid.Row columns={2}>
-          <Grid.Column>
-            <DataInfoBlock data={data} />
-          </Grid.Column>
-          <Grid.Column>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: 5,
-                maxWidth: 250,
-                marginLeft: "auto",
-              }}
-            >
-              <Button fluid>Get Updated Data</Button>
-              <Button fluid>Download Data</Button>
-            </div>
-          </Grid.Column>
+      <Grid container className="grid-container">
+        <Grid.Row
+          style={{
+            justifyContent: "flex-start",
+            padding: "0 1rem",
+            color: "hsla(0, 0%, 0%, .7)",
+          }}
+        >
+          <p>
+            <i>Current Dataset Range: 01/23/1990 - 12/13/2018</i>
+          </p>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={16} style={{ marginBottom: 25, zIndex: 1100 }}>
@@ -102,7 +100,7 @@ export const DataPage = ({ data }) => {
               markerRef={markerRef}
             />
           </Grid.Column>
-          <Grid.Column only="tablet computer" tablet={6} computer={6}>
+          <Grid.Column only="tablet computer" tablet={16} computer={6}>
             <DataMap
               data={monitoringLocations}
               selectedMonitoringLocation={selectedFilters.monitoringLocation}
@@ -111,18 +109,23 @@ export const DataPage = ({ data }) => {
               markerRef={markerRef}
             />
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={10} computer={10}>
-            <Grid style={{ height: 600 }}>
-              <Grid.Row>
-                <LineChart
-                  selectedFilters={selectedFilters}
-                  data={filteredKlamathData}
-                />
-              </Grid.Row>
-            </Grid>
+          <Grid.Column
+            mobile={16}
+            tablet={16}
+            computer={10}
+            style={{ height: 600, position: "relative" }}
+          >
+            <LineChart
+              selectedFilters={selectedFilters}
+              data={filteredKlamathData}
+            />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row style={{ marginBottom: 25 }}>
+        <Grid.Row style={{ flexDirection: "column" }}>
+          <Button style={{ marginLeft: "auto" }}>
+            <Icon name="refresh" />
+            Get Updated Data
+          </Button>
           <DataPageTable
             data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
           />

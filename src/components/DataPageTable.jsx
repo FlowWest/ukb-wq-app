@@ -28,15 +28,25 @@ const DataPageTable = ({ data }) => {
     expandedRow === key ? setExpandedRow(null) : setExpandedRow(key)
 
   return (
-    <Grid className="weekly-upload-table">
-      <Header as="h1">{data.header}</Header>
-      <Table striped color="blue">
+    <>
+      <Table
+        striped
+        stackable
+        color="blue"
+        fixed={!!paginatedItems.length}
+        singleLine={!!paginatedItems.length}
+      >
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell width={8}>Name</Table.HeaderCell>
-            <Table.HeaderCell>Date Created</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell>Monitoring Location ID</Table.HeaderCell>
+            <Table.HeaderCell>Monitoring Location Name</Table.HeaderCell>
+            <Table.HeaderCell>Activity Date</Table.HeaderCell>
+            <Table.HeaderCell>Category</Table.HeaderCell>
+            <Table.HeaderCell>Characteristic</Table.HeaderCell>
+            <Table.HeaderCell>Result</Table.HeaderCell>
+            <Table.HeaderCell>Latitude</Table.HeaderCell>
+            <Table.HeaderCell>Longitude</Table.HeaderCell>
+            <Table.HeaderCell>Huc Code</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         {!!data.length ? (
@@ -75,110 +85,12 @@ const DataPageTable = ({ data }) => {
                       </a>
                     </Table.Cell>
                     <Table.Cell>{activity_start_date}</Table.Cell>
-                    <Table.Cell>
-                      <Icon
-                        name={
-                          expandedRow === key ? "caret down" : "caret right"
-                        }
-                        onClick={() => handleRowExpansion(key)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row
-                    style={{
-                      display: expandedRow === key ? "table-row" : "none",
-                    }}
-                  >
-                    <Table.Cell colSpan="16">
-                      <Grid>
-                        <Grid.Row columns={1}>
-                          <Grid.Column>
-                            <p>Activity Summary</p>
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row columns={3}>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Name"
-                              description={monitoring_location_name}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Latitude"
-                              description={latitude_measure}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Longitude"
-                              description={longitude_measure}
-                            />
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row columns={3}>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Start Date"
-                              description={activity_start_date}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Monitoring Location Type"
-                              description={monitoring_location_type_name}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Characteristic Name"
-                              description={characteristic_name}
-                            />
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row columns={3}>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Provider Name"
-                              description={provider_name}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Result Measure"
-                              description={`${result_measure_value}${result_measure_measure_unit_code}`}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="HUC Code"
-                              description={huc_eight_digit_code}
-                            />
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row columns={3}>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Result Analytical Method"
-                              description={result_analytical_method_method_name}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Result Sample Fraction"
-                              description={result_sample_fraction_text}
-                            />
-                          </Grid.Column>
-                          <Grid.Column>
-                            <TableDetail
-                              title="Result Status Identifier"
-                              description={result_status_identifier}
-                            />
-                          </Grid.Column>
-                        </Grid.Row>
-                      </Grid>
-                    </Table.Cell>
+                    <Table.Cell>N/A</Table.Cell>
+                    <Table.Cell>{characteristic_name}</Table.Cell>
+                    <Table.Cell>{result_measure_value}</Table.Cell>
+                    <Table.Cell>{longitude_measure}</Table.Cell>
+                    <Table.Cell>{latitude_measure}</Table.Cell>
+                    <Table.Cell>{huc_eight_digit_code}</Table.Cell>
                   </Table.Row>
                 </React.Fragment>
               )
@@ -196,7 +108,9 @@ const DataPageTable = ({ data }) => {
                     height: 300,
                   }}
                 >
-                  <h3>Set filter to view tabular data</h3>
+                  <span style={{ fontSize: 20 }}>
+                    Set filter to view tabular data
+                  </span>
                 </div>
               </Table.Cell>
             </Table.Row>
@@ -211,7 +125,7 @@ const DataPageTable = ({ data }) => {
           style={{ margin: "auto" }}
         />
       )}
-    </Grid>
+    </>
   )
 }
 

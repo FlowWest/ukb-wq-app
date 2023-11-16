@@ -3,8 +3,14 @@
 }
 
 .header-image-container {
-  height: 40rem;
+  height: 25rem;
   margin: 0 !important;
+}
+
+@media only screen and (min-width: 1024px) {
+  .header-image-container {
+    height: 40rem !important;
+  }
 }
 .header-image-container .header-background-image {
   text-align: center;
@@ -88,4 +94,10 @@
 
 .ui.secondary.pointing.menu .item {
   align-self: auto !important;
+}
+
+.mobile-nav-link.active.item,
+.mobile-nav-link.item:hover,
+a.link-no-style + .accordion.ui .title:hover {
+  background-color: hsla(41, 84%, 45%, 0.9) !important;
 }
