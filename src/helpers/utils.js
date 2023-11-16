@@ -39,7 +39,7 @@ export const formatDate = (date) =>
 export function generateAuthorReportMap(authors, reports, sortMethod) {
   const authorReportMap = {}
 
-  authors.forEach((author) => {
+  authors?.forEach((author) => {
     const authorKey = author.author_name
     const authorId = author.author_uuid
 
@@ -67,28 +67,28 @@ export function removeNameFromString(nameToRemove, namesString) {
   return filteredNames.join(", ")
 }
 
-export const getAllAuthors = async () => {
-  try {
-    if (!AWS.config.credentials) {
-      AWS.config.region = "us-west-1"
-      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
-      })
-    }
-    // Create a DynamoDB DocumentClient
-    const docClient = new AWS.DynamoDB.DocumentClient()
+// export const getAllAuthors = async () => {
+//   try {
+//     if (!AWS.config.credentials) {
+//       AWS.config.region = "us-west-1"
+//       AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+//         IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+//       })
+//     }
+//     // Create a DynamoDB DocumentClient
+//     const docClient = new AWS.DynamoDB.DocumentClient()
 
-    // Specify the table name
-    const tableName = "authors"
-    const params = {
-      TableName: tableName,
-    }
-    const result = await docClient.scan(params).promise()
-    const items = result.Items
-    return items
-    // setGetReportsError(false)
-  } catch (error) {
-    // setGetReportsError(true)
-    // throw error
-  }
-}
+//     // Specify the table name
+//     const tableName = "authors"
+//     const params = {
+//       TableName: tableName,
+//     }
+//     const result = await docClient.scan(params).promise()
+//     const items = result.Items
+//     return items
+//     // setGetReportsError(false)
+//   } catch (error) {
+//     // setGetReportsError(true)
+//     // throw error
+//   }
+// }
