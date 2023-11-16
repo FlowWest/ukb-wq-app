@@ -159,7 +159,7 @@ const getCognitoIdSync = () => {
   })
 }
 
-async function getAllReports() {
+export const getAllReports = async () => {
   try {
     let reportsData = []
 
@@ -197,7 +197,7 @@ async function getAllReports() {
   }
 }
 
-async function getAllAuthors() {
+export const getAllAuthors = async () => {
   try {
     if (!AWS.config.credentials) {
       AWS.config.region = "us-west-1"
