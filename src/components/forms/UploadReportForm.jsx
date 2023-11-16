@@ -112,7 +112,6 @@ const UploadReportForm = ({ state, dispatch, report = null }) => {
     try {
       setIsSubmitting(true)
 
-<<<<<<< HEAD
       if (user && Object.keys(user).length) {
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
           IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
@@ -132,21 +131,6 @@ const UploadReportForm = ({ state, dispatch, report = null }) => {
             const tableName = "reports_metadata"
             ///
             //Logic for adding new authors to the authors table in DynamoDB
-=======
-      ///
-      //Logic for adding new authors to the authors table in DynamoDB
-
-      const authorsToAdd = userAddedAuthors.reduce((arr, cur) => {
-        if (data.authors.includes(cur)) {
-          arr.push({
-            PutRequest: {
-              Item: { author_name: cur, author_uuid: uuidv4() },
-            },
-          })
-        }
-        return arr
-      }, [])
->>>>>>> 04eda780045f1aef65d2b2916e9e43621d3400fa
 
             const authorsToAdd = userAddedAuthors.reduce((arr, cur) => {
               if (data.authors.includes(cur)) {
