@@ -17,7 +17,6 @@ import DatePickerContainer from "../DatePickerContainer"
 import { UserContext } from "../../../gatsby-browser"
 import { getAuthorsDropdownOptions } from "../../helpers/authorsDropdownOptions"
 
-<<<<<<< HEAD
 const UploadReportForm = ({
   onClose,
   allReports,
@@ -25,9 +24,6 @@ const UploadReportForm = ({
   report = null,
 }) => {
   const { user } = useContext(UserContext) || {}
-=======
-const UploadReportForm = ({ state, dispatch, report = null }) => {
->>>>>>> 04eda780045f1aef65d2b2916e9e43621d3400fa
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
   )
@@ -239,96 +235,6 @@ const UploadReportForm = ({ state, dispatch, report = null }) => {
           }
         })
       }
-<<<<<<< HEAD
-=======
-      const batchWriteResult = await docClient.batchWrite(params).promise()
-      console.log("BWR", batchWriteResult)
-
-      // if (editForm) {
-      //   try {
-      //     const params = {
-      //       TableName: tableName,
-      //       Key: { report_uuid: report.report_uuid },
-      //       UpdateExpression:
-      //         "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
-      //       ExpressionAttributeNames: {
-      //         "#title": "title",
-      //         "#year": "year",
-      //         "#endyear": "endyear",
-      //         "#location": "location",
-      //         "#authors": "authors",
-      //         "#type": "type",
-      //       },
-      //       ExpressionAttributeValues: {
-      //         ":title": data.title,
-      //         ":year": data.year,
-      //         ":endyear": data.endYear || "NA",
-      //         ":location": data.location || "NA",
-      //         ":authors": data.authors,
-      //         ":type": data.type,
-      //       },
-      //     }
-      //     await docClient.update(params).promise()
-      //   } catch (error) {
-      //     console.log("🚀 ~ handleFormSubmit ~ error:", error)
-      //   } finally {
-      //     setIsSubmitting(false)
-      //     await getAllReports()
-      //     handleFormModalClose()
-      //   }
-      // }
-
-      // const reader = new FileReader()
-      // reader.readAsArrayBuffer(data.file)
-      // reader.onabort = () => console.log("file reading was aborted")
-      // reader.onerror = () => console.log("file reading has failed")
-      // reader.onload = async () => {
-      //   // Do whatever you want with the file contents
-      //   const binaryStr = reader.result
-
-      //   const client = new S3Client({
-      //     ...AWS.config,
-      //     region: "us-west-2",
-      //     correctClockSkew: true,
-      //   })
-      //   const pdfCommand = new PutObjectCommand({
-      //     Bucket: process.env.GATSBY_S3_BUCKET,
-      //     Key: data.file.name,
-      //     Body: binaryStr,
-      //     ContentType: "application/pdf",
-      //     StorageClass: "STANDARD_IA",
-      //     ACL: "public-read",
-      //   })
-      //   console.log("onload")
-      //   try {
-      //     const response = await client.send(pdfCommand)
-      //     console.log(response)
-
-      //     const newReport = {
-      //       title: data.title,
-      //       year: data.year,
-      //       endyear: data.endYear || "NA",
-      //       filename: data.file.name,
-      //       location: data.location || "NA",
-      //       authors: data.authors,
-      //       type: data.type,
-      //       active: "TRUE",
-      //       report_uuid: uuidv4(),
-      //     }
-      //     const params = {
-      //       TableName: tableName,
-      //       Item: newReport,
-      //     }
-      //     await docClient.put(params).promise()
-      //   } catch (err) {
-      //     console.error(err)
-      //   } finally {
-      //     setIsSubmitting(false)
-      //     await getAllReports()
-      //     handleFormModalClose()
-      //   }
-      // }
->>>>>>> 04eda780045f1aef65d2b2916e9e43621d3400fa
     } catch (err) {
       console.error(err)
     }
