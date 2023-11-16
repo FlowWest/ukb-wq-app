@@ -14,17 +14,17 @@ const DataInfoBlock = ({ data }) => {
   return (
     <>
       <InfoDetail
-        header={"Date Last Retrieved:"}
-        content={new Date(Date.now()).toLocaleDateString()}
+        header={"Dataset Data Range:"}
+        content={"01/23/1990 - 12/13/2018"}
       />
-      <InfoDetail
+      {/* <InfoDetail
         header={"Metadata A:"}
         content={new Date("6-25-2023").toLocaleDateString()}
       />
       <InfoDetail
         header={"MetaData B:"}
         content={new Date("6-30-2023").toLocaleDateString()}
-      />
+      /> */}
     </>
   )
 }

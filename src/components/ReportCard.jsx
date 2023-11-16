@@ -5,20 +5,19 @@ import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "./forms/UploadReportForm"
 import * as AWS from "aws-sdk"
 
-const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
+const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
   const [editReportModalOpen, setEditReportModalOpen] = useState(false)
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext) || {}
-  const authorsArray = reportMetaData.authors.split(",")
 
   const generateAuthorsString = (authors) => {
-    if (authors.length <= 3) return authors.join(",")
+    if (authors?.length <= 3) return authors?.join(", ")
 
-    const firstThreeAuthors = authors.slice(0, 3)
-    const remainingAuthors = authors.slice(3)
+    const firstThreeAuthors = authors?.slice(0, 3)
+    const remainingAuthors = authors?.slice(3)
 
-    return `${firstThreeAuthors.join(",")}, and ${remainingAuthors.length} ${
-      remainingAuthors.length === 1 ? "other" : "others"
+    return `${firstThreeAuthors?.join(", ")}, and ${remainingAuthors?.length} ${
+      remainingAuthors?.length === 1 ? "other" : "others"
     }`
   }
 
@@ -63,8 +62,8 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
             {formatTextCasing(reportMetaData.type)}
           </Card.Meta>
           <Card.Description>
-            <strong>Author(s)</strong>: {generateAuthorsString(authorsArray)}{" "}
-            <br />
+            <strong>Author(s)</strong>:{" "}
+            {generateAuthorsString(reportMetaData.authors_array)} <br />
             <strong>Location</strong>: {reportMetaData.location} <br />
             <strong>Year</strong>: {reportMetaData.year}{" "}
             {reportMetaData.endyear !== "NA"
@@ -186,4 +185,4 @@ const DataDownloadCard = ({ reportMetaData, allReports, getAllReports }) => {
   )
 }
 
-export default DataDownloadCard
+export default ReportCard

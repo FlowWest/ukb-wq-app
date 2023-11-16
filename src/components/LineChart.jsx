@@ -124,17 +124,7 @@ const LineChart = ({ selectedFilters, data }) => {
     <>
       <Line ref={chartRef} options={options} data={chartData} />
       {!selectedFilters?.monitoringLocation && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            width: "100%",
-            background: "hsla(0,0%,0%,.5",
-            position: "absolute",
-          }}
-        >
+        <div className="line-chart-overlay">
           <p style={{ fontSize: "1.5rem", color: "white" }}>
             Select monitoring location to display chart data
           </p>

@@ -1,5 +1,5 @@
-import { useCallback } from "react"
 import { sum } from "lodash"
+import * as AWS from "aws-sdk"
 
 export const formatTextCasing = (str) => {
   var splitStr = str?.split(" ") || []
@@ -35,3 +35,60 @@ export const formatDate = (date) =>
     day: "2-digit",
     year: "numeric",
   }).format(new Date(date))
+
+export function generateAuthorReportMap(authors, reports, sortMethod) {
+  const authorReportMap = {}
+
+  authors.forEach((author) => {
+    const authorKey = author.author_name
+    const authorId = author.author_uuid
+
+    const authorReports = sortMethod
+      .sort(reports)
+      .filter((report) => report.authors?.includes(authorKey))
+
+    authorReportMap[authorKey] = {
+      id: authorId,
+      reports: authorReports.map((report) => ({
+        id: report.report_id,
+        ...report,
+      })),
+    }
+  })
+
+  return authorReportMap
+}
+
+export function removeNameFromString(nameToRemove, namesString) {
+  const namesArray = namesString.split(",").map((name) => name.trim())
+
+  const filteredNames = namesArray.filter((name) => name !== nameToRemove)
+
+  return filteredNames.join(", ")
+}
+
+export const getAllAuthors = async () => {
+  try {
+    if (!AWS.config.credentials) {
+      AWS.config.region = "us-west-1"
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+      })
+    }
+    // Create a DynamoDB DocumentClient
+    const docClient = new AWS.DynamoDB.DocumentClient()
+
+    // Specify the table name
+    const tableName = "authors"
+    const params = {
+      TableName: tableName,
+    }
+    const result = await docClient.scan(params).promise()
+    const items = result.Items
+    return items
+    // setGetReportsError(false)
+  } catch (error) {
+    // setGetReportsError(true)
+    // throw error
+  }
+}

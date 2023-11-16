@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext } from "react"
+import React, { useCallback, useState, useContext, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Form, Button, Checkbox } from "semantic-ui-react"
 import DataUploader from "../DataUploader"
@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
 import { UserContext } from "../../../gatsby-browser"
+import { getAuthorsDropdownOptions } from "../../helpers/authorsDropdownOptions"
 
 const UploadReportForm = ({
   onClose,
@@ -45,6 +46,25 @@ const UploadReportForm = ({
     if (!checked) setValue("endYear", null)
   }, [])
 
+  const [authorsDropdownOptions, setAuthorsDropdownOptions] = useState([])
+  const [userAddedAuthors, setUserAddedAuthors] = useState([])
+
+  useEffect(() => {
+    ;(async () => {
+      const options = await getAuthorsDropdownOptions()
+
+      setAuthorsDropdownOptions(options)
+    })()
+  }, [])
+
+  const handleAuthorAddition = (e, { value }) => {
+    setAuthorsDropdownOptions((prevOptions) => [
+      { key: value, text: value, value },
+      ...prevOptions,
+    ])
+    setUserAddedAuthors((prevAdded) => [...prevAdded, value])
+  }
+
   const {
     control,
     handleSubmit,
@@ -52,6 +72,7 @@ const UploadReportForm = ({
     getValues,
     clearErrors,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(!!report ? editReportSchema : uploadReportSchema),
     defaultValues: !!report
@@ -61,7 +82,7 @@ const UploadReportForm = ({
           endYear: report.endyear === "NA" ? null : report.endyear,
           addEndYear: !(report.endyear === "NA"),
           location: report.location,
-          authors: report.authors,
+          authors: report.authors_array,
           type: report.type,
         }
       : {
@@ -70,15 +91,19 @@ const UploadReportForm = ({
           endYear: null,
           addEndYear: false,
           location: "",
-          authors: "",
+          authors: [],
           type: "",
           file: null,
         },
   })
+  const authorsValue = watch("authors")
 
   const editForm = !!report
 
   const handleFormSubmit = async (data) => {
+    console.log("🚀 ~ authorsValue:", authorsValue)
+    console.log("🚀 ~ userAddedAuthors:", userAddedAuthors)
+
     try {
       setIsSubmitting(true)
 
@@ -99,6 +124,28 @@ const UploadReportForm = ({
             AWS.config.update({ region: "us-west-1" })
             const docClient = new AWS.DynamoDB.DocumentClient()
             const tableName = "reports_metadata"
+            ///
+            //Logic for adding new authors to the authors table in DynamoDB
+
+            const authorsToAdd = userAddedAuthors.reduce((arr, cur) => {
+              if (data.authors.includes(cur)) {
+                arr.push({
+                  PutRequest: {
+                    Item: { author_name: cur, author_uuid: uuidv4() },
+                  },
+                })
+              }
+              return arr
+            }, [])
+
+            if (authorsToAdd.length) {
+              const params = {
+                RequestItems: {
+                  authors: authorsToAdd,
+                },
+              }
+              await docClient.batchWrite(params).promise()
+            }
 
             if (editForm) {
               try {
@@ -106,13 +153,13 @@ const UploadReportForm = ({
                   TableName: tableName,
                   Key: { report_uuid: report.report_uuid },
                   UpdateExpression:
-                    "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors = :authors, #type = :type",
+                    "set #title = :title, #year = :year, #endyear = :endyear, #location = :location, #authors_array = :authors_array, #type = :type",
                   ExpressionAttributeNames: {
                     "#title": "title",
                     "#year": "year",
                     "#endyear": "endyear",
                     "#location": "location",
-                    "#authors": "authors",
+                    "#authors_array": "authors_array",
                     "#type": "type",
                   },
                   ExpressionAttributeValues: {
@@ -120,7 +167,7 @@ const UploadReportForm = ({
                     ":year": data.year,
                     ":endyear": data.endYear || "NA",
                     ":location": data.location || "NA",
-                    ":authors": data.authors,
+                    ":authors_array": authorsValue,
                     ":type": data.type,
                   },
                 }
@@ -131,6 +178,7 @@ const UploadReportForm = ({
                 setIsSubmitting(false)
                 await getAllReports()
                 onClose()
+                return
               }
             }
 
@@ -155,7 +203,6 @@ const UploadReportForm = ({
                 StorageClass: "STANDARD_IA",
                 ACL: "public-read",
               })
-              console.log("onload")
               try {
                 const response = await client.send(pdfCommand)
                 console.log(response)
@@ -166,7 +213,7 @@ const UploadReportForm = ({
                   endyear: data.endYear || "NA",
                   filename: data.file.name,
                   location: data.location || "NA",
-                  authors: data.authors,
+                  authors_array: authorsValue,
                   type: data.type,
                   active: "TRUE",
                   report_uuid: uuidv4(),
@@ -190,6 +237,10 @@ const UploadReportForm = ({
     } catch (err) {
       console.error(err)
     }
+  }
+
+  const handleAuthorsChange = (event, { value: authorsValue }) => {
+    setValue("authors", authorsValue)
   }
 
   const handleSelectChange = (event, option) => {
@@ -315,10 +366,22 @@ const UploadReportForm = ({
         control={control}
         render={({ field }) => (
           <>
-            <Form.Input
-              label="Authors (Commas can be used to separate multiple authors)"
-              {...field}
-              className={errors.authors ? "form-error-input" : ""}
+            <Form.Dropdown
+              label="Authors"
+              value={field.value}
+              fluid
+              placeholder="Select or enter the author(s) of this report"
+              allowAdditions
+              selection
+              search
+              clearable
+              multiple
+              className={
+                errors.authors ? "form-error-input" : "filter-input-field"
+              }
+              onAddItem={handleAuthorAddition}
+              onChange={handleAuthorsChange}
+              options={authorsDropdownOptions}
             />
             {errors.authors && (
               <p className="form-error-message">{errors.authors.message}</p>

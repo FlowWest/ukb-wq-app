@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
-import { Button, Grid, Dropdown, Pagination, Modal } from "semantic-ui-react"
-import Layout from "../components/Layout"
-import SEO from "../components/Seo"
-import DataDownloadCard from "../components/DataDownloadCard"
-import ReportSearch from "../components/ReportSearch"
-import { formatTextCasing } from "../helpers/utils"
+import * as AWS from "aws-sdk"
+import { escapeRegExp, filter, orderBy } from "lodash"
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import { Button, Dropdown, Grid, Modal } from "semantic-ui-react"
 import { UserContext } from "../../gatsby-browser"
+import Layout from "../components/Layout"
+import ReportSearch from "../components/ReportSearch"
+import ReportsGridView from "../components/ReportsGridView"
+import ReportsTable from "../components/ReportsTable"
+import SEO from "../components/Seo"
 import UploadReportForm from "../components/forms/UploadReportForm"
 import reportSortingOptions from "../helpers/reportSortingOptions"
-import { filter, escapeRegExp, orderBy } from "lodash"
-import * as AWS from "aws-sdk"
+import { formatTextCasing, generateAuthorReportMap } from "../helpers/utils"
+import usePagination from "../hooks/usePagination"
 import useTabletScreenSize from "../hooks/useTabletScreenSize"
 
 const ReportsPage = () => {
@@ -17,6 +19,8 @@ const ReportsPage = () => {
   const [uploadReportModalOpen, setUploadReportModalOpen] = useState(false)
   const [sortMethod, setSortMethod] = useState(reportSortingOptions.at(0))
   const [allReports, setAllReports] = useState([])
+  const [allAuthors, setAllAuthors] = useState([])
+
   const [filteredReports, setFilteredReports] = useState(
     allReports.sort((a, b) => +b.year - +a.year)
   )
@@ -25,11 +29,20 @@ const ReportsPage = () => {
   const [reportTypeOptions, setReportTypeOptions] = useState([])
   const [getReportsError, setGetReportsError] = useState(false)
   const { isTabletScreenSize, handleResize } = useTabletScreenSize()
+  const [layoutState, setLayoutState] = useState("grid")
+  const gridLayoutSelected = layoutState === "grid"
+  const listLayoutSelected = layoutState === "list"
+  const reportsObject = generateAuthorReportMap(
+    allAuthors,
+    filteredReports,
+    sortMethod
+  )
 
   useEffect(() => {
     ;(async () => {
       try {
         await getAllReports()
+        await getAllAuthors()
       } catch (error) {
         console.error(error)
       }
@@ -87,20 +100,13 @@ const ReportsPage = () => {
         : reportVisibilityFilterOptions.at(1)
     )
 
-  // Pagination Logic
-  const [currentPage, setCurrentPage] = useState(1)
-  const reportsPerPage = 9
-  const lastIndex = currentPage * reportsPerPage
-  const firstIndex = lastIndex - reportsPerPage
-  const paginatedReports = sortMethod
-    .sort(filteredReports)
-    .slice(firstIndex, lastIndex)
-
-  const numberOfPages = Math.ceil(filteredReports.length / reportsPerPage)
-
-  const handlePaginationPageChange = (e, { activePage }) => {
-    setCurrentPage(activePage)
-  }
+  const {
+    paginatedItems: paginatedReports,
+    currentPage,
+    handlePaginationPageChange,
+    numberOfPages,
+    setCurrentPage,
+  } = usePagination({ tableData: filteredReports, itemsPerPage: 9, sortMethod })
 
   const reportTypeChangeHandler = (event, { value }) => {
     setCurrentReportTypeFilters(value)
@@ -213,6 +219,31 @@ const ReportsPage = () => {
     }
   }
 
+  const getAllAuthors = async () => {
+    try {
+      if (!AWS.config.credentials) {
+        AWS.config.region = "us-west-1"
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+        })
+      }
+      // Create a DynamoDB DocumentClient
+      const docClient = new AWS.DynamoDB.DocumentClient()
+
+      // Specify the table name
+      const tableName = "authors"
+      const params = {
+        TableName: tableName,
+      }
+      const result = await docClient.scan(params).promise()
+      const items = result.Items
+      setAllAuthors(items)
+      // setGetReportsError(false)
+    } catch (error) {
+      // setGetReportsError(true)
+      // throw error
+    }
+  }
   return (
     <Layout pageInfo={{ pageName: "reports" }}>
       <SEO title="Water Quality Reports" />
@@ -222,6 +253,28 @@ const ReportsPage = () => {
         </Grid>
       ) : (
         <>
+          <Grid container>
+            <Grid.Column
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Button
+                icon="grid layout"
+                attached="left"
+                content="Grid"
+                color="blue"
+                basic={!gridLayoutSelected}
+                onClick={() => setLayoutState("grid")}
+              />
+              <Button
+                icon="list"
+                content="List"
+                attached="right"
+                color="blue"
+                basic={!listLayoutSelected}
+                onClick={() => setLayoutState("list")}
+              />
+            </Grid.Column>
+          </Grid>
           <Grid container className="grid-container">
             {user && Object.keys(user).length > 0 && (
               <Grid.Column mobile={16} tablet={4} computer={3}>
@@ -304,31 +357,23 @@ const ReportsPage = () => {
               </Modal>
             )}
           </Grid>
-          <Grid
-            container
-            columns={3}
-            doubling
-            stackable
-            className="mobile-grid-container grid-container"
-          >
-            {paginatedReports.map((report) => (
-              <Grid.Column key={report.report_uuid}>
-                <DataDownloadCard
-                  allReports={allReports}
-                  getAllReports={getAllReports}
-                  reportMetaData={report}
-                />
-              </Grid.Column>
-            ))}
-          </Grid>
-          <Grid container>
-            <Pagination
-              activePage={currentPage}
-              defaultActivePage={1}
-              totalPages={numberOfPages}
-              onPageChange={handlePaginationPageChange}
+
+          {listLayoutSelected && (
+            <Grid container>
+              <Grid.Row>
+                <ReportsTable reportsObject={reportsObject} />
+              </Grid.Row>
+            </Grid>
+          )}
+          {gridLayoutSelected && (
+            <ReportsGridView
+              filteredReports={filteredReports}
+              user={user}
+              allReports={allReports}
+              getAllReports={getAllReports}
+              sortMethod={sortMethod}
             />
-          </Grid>
+          )}
         </>
       )}
     </Layout>

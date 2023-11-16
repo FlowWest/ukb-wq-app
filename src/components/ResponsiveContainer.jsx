@@ -27,7 +27,7 @@ const { Media, MediaContextProvider } = createMedia({
 
 const DesktopContainer = ({ children, pageName }) => {
   return (
-    <Media greaterThan="mobile">
+    <Media greaterThan="tablet">
       <Menu
         pointing={true}
         secondary={true}
@@ -72,8 +72,10 @@ const DesktopContainer = ({ children, pageName }) => {
 const MobileContainer = ({ children, pageName }) => {
   const [sidebarOpen, setSideBarOpen] = useState(false)
   const [accordionExpanded, setAccordionExpanded] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(-1)
+  const [activeIndex, setActiveIndex] = useState(0)
   const { user } = useContext(UserContext)
+  const userIsLoggedIn = Object.keys(user || {}).length > 0
+
   const handleSidebarHide = () => {
     setSideBarOpen(false)
   }
@@ -93,7 +95,7 @@ const MobileContainer = ({ children, pageName }) => {
   // setAccordionExpanded((prevState) => !prevState)
 
   return (
-    <Media as={Sidebar.Pushable} at="mobile">
+    <Media as={Sidebar.Pushable} lessThan="computer">
       <Sidebar.Pushable>
         <Sidebar
           as={Menu}
@@ -105,19 +107,41 @@ const MobileContainer = ({ children, pageName }) => {
           float="left"
         >
           <Link to="/" className="link-no-style">
-            <Menu.Item active={pageName === "index"}>Home</Menu.Item>
+            <Menu.Item
+              className="mobile-nav-link"
+              active={pageName === "index"}
+            >
+              Home
+            </Menu.Item>
           </Link>
           <Link to="/data" className="link-no-style">
-            <Menu.Item active={pageName === "data"}>Data</Menu.Item>
+            <Menu.Item className="mobile-nav-link" active={pageName === "data"}>
+              Data
+            </Menu.Item>
           </Link>
           <Link to="/reports" className="link-no-style">
-            <Menu.Item active={pageName === "reports"}>Reports</Menu.Item>
+            <Menu.Item
+              className="mobile-nav-link"
+              active={pageName === "reports"}
+            >
+              Reports
+            </Menu.Item>
           </Link>
           <Link to="/resources" className="link-no-style">
-            <Menu.Item active={pageName === "resources"}>Resources</Menu.Item>
+            <Menu.Item
+              className="mobile-nav-link"
+              active={pageName === "resources"}
+            >
+              Resources
+            </Menu.Item>
           </Link>
           <Link to="/about" className="link-no-style">
-            <Menu.Item active={pageName === "about"}>About</Menu.Item>
+            <Menu.Item
+              className="mobile-nav-link"
+              active={pageName === "about"}
+            >
+              About
+            </Menu.Item>
           </Link>
           <Accordion>
             <Accordion.Title active={activeIndex === 0} index={0}>
@@ -126,16 +150,16 @@ const MobileContainer = ({ children, pageName }) => {
                 onClick={handleAccordionToggle}
               >
                 <Icon name="dropdown" />
-                {user ? "Logout" : "Login"}
+                {userIsLoggedIn ? "Logout" : "Login"}
               </Menu.Item>
             </Accordion.Title>
             <Accordion.Content
               active={activeIndex === 0}
               className={`responsive-admin-menu-wrapper ${
-                user ? "logout-menu" : "login-form"
+                userIsLoggedIn ? "logout-menu" : "login-form"
               }`}
             >
-              {user ? <LogoutMenu user={user} /> : <LoginForm />}
+              {userIsLoggedIn ? <LogoutMenu user={user} /> : <LoginForm />}
             </Accordion.Content>
           </Accordion>
         </Sidebar>
@@ -146,18 +170,16 @@ const MobileContainer = ({ children, pageName }) => {
             style={{ padding: "0" }}
             vertical
           >
-            <Grid style={{ height: "6rem" }} verticalAlign="middle">
-              <Menu inverted pointing secondary size="large">
-                <Menu.Item onClick={handleSidebarShow}>
-                  <Icon name="sidebar" />
-                </Menu.Item>
-                <Menu.Item>
-                  {pageName === "index"
-                    ? "The Klamath Tribes WQ Monitoring"
-                    : formatTextCasing(pageName)}
-                </Menu.Item>
-              </Menu>
-            </Grid>
+            <div
+              style={{ padding: "1rem", display: "flex", alignItems: "center" }}
+            >
+              <Icon name="sidebar" onClick={handleSidebarShow} size="big" />
+              <div style={{ flexGrow: 1 }}>
+                <Link to="/" className="link-no-style">
+                  <KlamathLogo mobile />
+                </Link>
+              </div>
+            </div>
             <Banner mobile={true} pageName={pageName} />
           </Segment>
           {children}
