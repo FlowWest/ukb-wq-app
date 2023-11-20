@@ -3,13 +3,7 @@ import { Grid, Pagination } from "semantic-ui-react"
 import ReportCard from "./ReportCard"
 import usePagination from "../hooks/usePagination"
 
-const ReportsGridView = ({
-  filteredReports,
-  user,
-  allReports,
-  getAllReports,
-  sortMethod,
-}) => {
+const ReportsGridView = ({ filteredReports, sortMethod }) => {
   const {
     paginatedItems: paginatedReports,
     currentPage,
@@ -27,22 +21,28 @@ const ReportsGridView = ({
         stackable
         className="mobile-grid-container grid-container report-cards-wrapper"
       >
-        {paginatedReports.map((report) => (
-          <Grid.Column key={report.report_uuid}>
-            <ReportCard
-              allReports={allReports}
-              getAllReports={getAllReports}
-              reportMetaData={report}
-            />
-          </Grid.Column>
-        ))}
-        <Grid.Row centered>
-          <Pagination
-            activePage={currentPage}
-            totalPages={numberOfPages}
-            onPageChange={handlePaginationPageChange}
-          />
-        </Grid.Row>
+        {paginatedReports?.length > 0 ? (
+          <>
+            {paginatedReports?.map((report) => (
+              <Grid.Column key={report.report_uuid}>
+                <ReportCard reportMetaData={report} />
+              </Grid.Column>
+            ))}
+            <Grid.Row centered>
+              <Pagination
+                activePage={currentPage}
+                totalPages={numberOfPages}
+                onPageChange={handlePaginationPageChange}
+              />
+            </Grid.Row>
+          </>
+        ) : (
+          <Grid.Row style={{ height: 100 }}>
+            <p style={{ fontSize: 20, margin: "auto" }}>
+              No results matched your search criteria
+            </p>
+          </Grid.Row>
+        )}
       </Grid>
     </>
   )

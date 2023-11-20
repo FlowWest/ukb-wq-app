@@ -1,13 +1,23 @@
-import React, { useState } from "react"
-import { Icon, Pagination, Table } from "semantic-ui-react"
+import React, { useState, useContext } from "react"
+import { ReportModalContext } from "../hooks/useReportModalContext"
+import { Button, Icon, Pagination, Table, Modal } from "semantic-ui-react"
 import { removeNameFromString } from "../helpers/utils"
 import usePagination from "../hooks/usePagination"
+import { generateAuthorReportMap } from "../helpers/utils"
 
-const ReportsTable = ({ reportsObject }) => {
+const ReportsTable = ({ sortMethod }) => {
+  const { state: reportsState, dispatch: reportsDispatch } =
+    useContext(ReportModalContext)
+  const reportsObject = generateAuthorReportMap(
+    reportsState?.allAuthors,
+    reportsState?.filteredReports,
+    sortMethod
+  )
   const authorsArray = Object.entries(reportsObject)
   const filteredAuthors = authorsArray.filter(
     (author) => author[1].reports.length > 0
   )
+
   const {
     paginatedItems,
     currentPage,
@@ -29,6 +39,20 @@ const ReportsTable = ({ reportsObject }) => {
     }
 
     setExpandedRows((prevRows) => [...prevRows, author])
+  }
+
+  const editButtonClickHandler = (report) => {
+    reportsDispatch({
+      type: "EDIT_REPORT",
+      payload: { selectedReport: report },
+    })
+  }
+
+  const toggleReportVisibility = (report) => {
+    reportsDispatch({
+      type: "TOGGLE_REPORT_VISIBILITY",
+      payload: { selectedReport: report },
+    })
   }
 
   return (
@@ -91,6 +115,8 @@ const ReportsTable = ({ reportsObject }) => {
                             <Table.HeaderCell>Location</Table.HeaderCell>
                             <Table.HeaderCell>Co-Authors</Table.HeaderCell>
                             <Table.HeaderCell>Category</Table.HeaderCell>
+                            <Table.HeaderCell>Edit</Table.HeaderCell>
+                            <Table.HeaderCell>Visibility</Table.HeaderCell>
                           </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -101,8 +127,9 @@ const ReportsTable = ({ reportsObject }) => {
                               </Table.Cell>
                             </Table.Row>
                           )}
-                          {reports.map(
-                            ({
+                          {reports.map((report) => {
+                            const {
+                              active,
                               title,
                               year,
                               location,
@@ -110,7 +137,11 @@ const ReportsTable = ({ reportsObject }) => {
                               report_uuid,
                               authors,
                               filename,
-                            }) => (
+                            } = report
+
+                            const reportIsActive = active === "TRUE"
+
+                            return (
                               <Table.Row key={report_uuid}>
                                 <Table.Cell>
                                   <a
@@ -126,9 +157,53 @@ const ReportsTable = ({ reportsObject }) => {
                                   {removeNameFromString(author, authors)}
                                 </Table.Cell>
                                 <Table.Cell>{type}</Table.Cell>
+                                <Table.Cell>
+                                  <Button
+                                    icon
+                                    onClick={() =>
+                                      editButtonClickHandler(report)
+                                    }
+                                  >
+                                    <Icon name="edit" />
+                                  </Button>
+                                </Table.Cell>
+                                <Table.Cell>
+                                  <Modal
+                                    size="tiny"
+                                    trigger={
+                                      <Button icon>
+                                        <Icon
+                                          name={
+                                            reportIsActive ? "unhide" : "hide"
+                                          }
+                                        />
+                                        {reportIsActive ? "Visible" : "Hidden"}
+                                      </Button>
+                                    }
+                                    header={`Toggle Report Visibility (${
+                                      reportIsActive ? "Hidden" : "Visible"
+                                    })`}
+                                    content={`${
+                                      reportIsActive
+                                        ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
+                                        : "Setting the report visibility status to visible will allow visitors to view the content of the report."
+                                    } Do you wish to proceed?`}
+                                    actions={[
+                                      "Cancel",
+                                      {
+                                        key: "proceed",
+                                        content: "Proceed",
+                                        negative: reportIsActive,
+                                        positive: !reportIsActive,
+                                        onClick: () =>
+                                          toggleReportVisibility(report),
+                                      },
+                                    ]}
+                                  />
+                                </Table.Cell>
                               </Table.Row>
                             )
-                          )}
+                          })}
                         </Table.Body>
                       </Table>
                     </Table.Cell>
