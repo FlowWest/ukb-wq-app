@@ -3,11 +3,15 @@ import { Card, Button, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "./forms/UploadReportForm"
-import { ReportModalContext } from "../hooks/useReportModalContext"
+import {
+  ReportModalContext,
+  toggleReportVisibility,
+} from "../hooks/useReportModalContext"
 import * as AWS from "aws-sdk"
 
 const ReportCard = ({ reportMetaData }) => {
-  const { dispatch: reportsModalDispatch } = useContext(ReportModalContext)
+  const { state: reportsState, dispatch: reportsModalDispatch } =
+    useContext(ReportModalContext)
 
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext) || {}
@@ -21,6 +25,16 @@ const ReportCard = ({ reportMetaData }) => {
     return `${firstThreeAuthors?.join(", ")}, and ${remainingAuthors?.length} ${
       remainingAuthors?.length === 1 ? "other" : "others"
     }`
+  }
+
+  const toggleReportVisibilityHandler = async (report) => {
+    const allReports = await toggleReportVisibility(report, user)
+    reportsModalDispatch({
+      type: "TOGGLE_REPORT_VISIBILITY",
+      payload: {
+        allReports,
+      },
+    })
   }
 
   return (
@@ -114,10 +128,7 @@ const ReportCard = ({ reportMetaData }) => {
                           negative: reportIsActive,
                           positive: !reportIsActive,
                           onClick: () =>
-                            reportsModalDispatch({
-                              type: "TOGGLE_REPORT_VISIBILITY",
-                              payload: { selectedReport: reportMetaData },
-                            }),
+                            toggleReportVisibilityHandler(reportMetaData),
                         },
                       ]}
                     />
