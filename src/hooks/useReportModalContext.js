@@ -68,7 +68,52 @@ const reportModalReducer = (state, action) => {
       }
 
     case "TOGGLE_REPORT_VISIBILITY":
-      return toggleReportVisibility(action.payload.selectedReport)
+      let updatedFilteredReportsAfterToggle = [...action.payload.allReports]
+
+      switch (state.selectedReportVisibilityFilter) {
+        case "all":
+          updatedFilteredReportsAfterToggle = action.payload.allReports
+          break
+        case "active":
+          updatedFilteredReportsAfterToggle =
+            updatedFilteredReportsAfterToggle.filter(
+              (report) => report.active === "TRUE"
+            )
+          break
+        case "hidden":
+          updatedFilteredReportsAfterToggle =
+            updatedFilteredReportsAfterToggle.filter(
+              (report) => report.active === "FALSE"
+            )
+          break
+      }
+
+      if (state.currentSearchFilterString) {
+        const re = new RegExp(
+          escapeRegExp(state.currentSearchFilterString),
+          "i"
+        )
+
+        const isMatch = (result) => re.test(`${result.title} ${result.authors}`)
+
+        updatedFilteredReportsAfterToggle = filter(
+          updatedFilteredReportsAfterToggle,
+          isMatch
+        )
+      }
+
+      if (state?.currentReportTypeFilters?.length > 0) {
+        updatedFilteredReportsAfterToggle =
+          updatedFilteredReportsAfterToggle?.filter((report) =>
+            state?.currentReportTypeFilters?.includes(report.type)
+          )
+      }
+
+      return {
+        ...state,
+        allReports: action.payload.allReports,
+        filteredReports: updatedFilteredReportsAfterToggle,
+      }
     case "STARTUP":
       const uniqueReportTypes = [
         ...new Set(action.payload.reports?.map((item) => item.type)),
@@ -225,28 +270,49 @@ export const getAllAuthors = async () => {
   }
 }
 
-async function toggleReportVisibility(reportMetaData) {
-  const reportIsActive = reportMetaData.active === "TRUE"
-  AWS.config.update({ region: "us-west-1" })
-  const docClient = new AWS.DynamoDB.DocumentClient()
-  const tableName = "reports_metadata"
+export const toggleReportVisibility = async (reportMetaData, user) => {
+  if (user && Object.keys(user).length) {
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: process.env.GATSBY_COGNITO_IDENTITY_POOL_ID, // your identity pool id here
+      Logins: {
+        // Change the key below according to the specific region your user pool is in.
+        [`cognito-idp.us-west-1.amazonaws.com/${process.env.GATSBY_COGNITO_USER_POOL_ID}`]:
+          user.signInUserSession.getIdToken().getJwtToken(),
+      },
+    })
+    return new Promise((resolve, reject) => {
+      //call refresh method in order to authenticate user and get new temp credentials
+      AWS.config.credentials.refresh(async (error) => {
+        if (error) {
+          console.error(error)
+        } else {
+          const reportIsActive = reportMetaData.active === "TRUE"
+          AWS.config.update({ region: "us-west-1" })
+          const docClient = new AWS.DynamoDB.DocumentClient()
+          const tableName = "reports_metadata"
 
-  try {
-    const params = {
-      TableName: tableName,
-      Key: { report_uuid: reportMetaData.report_uuid },
-      UpdateExpression: "set #active = :active",
-      ExpressionAttributeNames: {
-        "#active": "active",
-      },
-      ExpressionAttributeValues: {
-        ":active": reportIsActive ? "FALSE" : "TRUE",
-      },
-    }
-    await docClient.update(params).promise()
-  } catch (error) {
-    console.log("🚀 ~ handleVisibilityToggle ~ error:", error)
-  } finally {
-    getAllAuthors()
+          try {
+            const params = {
+              TableName: tableName,
+              Key: { report_uuid: reportMetaData.report_uuid },
+              UpdateExpression: "set #active = :active",
+              ExpressionAttributeNames: {
+                "#active": "active",
+              },
+              ExpressionAttributeValues: {
+                ":active": reportIsActive ? "FALSE" : "TRUE",
+              },
+            }
+            const result = await docClient.update(params).promise()
+          } catch (error) {
+            console.log("🚀 ~ handleVisibilityToggle ~ error:", error)
+            reject(error)
+          } finally {
+            const allReports = await getAllReports()
+            resolve(allReports)
+          }
+        }
+      })
+    })
   }
 }

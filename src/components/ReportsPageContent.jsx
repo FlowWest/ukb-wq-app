@@ -62,8 +62,6 @@ const ReportsPageContent = () => {
   }
 
   const reportVisibilityChangeHandler = (event, { value }) => {
-    console.log("🚀 ~ reportVisibilityChangeHandler ~ value:", value)
-
     const selectedReportVisibilityFilter = reportVisibilityFilterOptions.find(
       (option) => option.value === value
     )
@@ -104,7 +102,7 @@ const ReportsPageContent = () => {
 
   useEffect(() => {
     setFilteredReports(
-      reportsState?.allReports.sort((a, b) => +b.year - +a.year)
+      reportsState?.allReports?.sort((a, b) => +b.year - +a.year)
     )
 
     const uniqueReportTypes = [
@@ -122,13 +120,22 @@ const ReportsPageContent = () => {
     setReportTypeOptions(reportTypesArray)
   }, [reportsState?.allReports])
 
-  // useEffect(() => {
-  //   setReportVisibilityFilterMethod(
-  //     user && Object.keys(user).length
-  //       ? reportVisibilityFilterOptions.at(0)
-  //       : reportVisibilityFilterOptions.at(1)
-  //   )
-  // }, [user])
+  useEffect(() => {
+    const filterValue =
+      user && Object.keys(user).length
+        ? reportVisibilityFilterOptions.at(0)
+        : reportVisibilityFilterOptions.at(1)
+    setReportVisibilityFilterMethod(filterValue.value)
+    reportsDispatch({
+      type: "FILTER_REPORTS",
+      payload: {
+        selectedReportVisibilityFilter: filterValue.value,
+        currentSearchFilterString,
+        currentReportTypeFilters,
+      },
+    }) //
+    setCurrentPage(1)
+  }, [user])
   return (
     <>
       <Grid container>
