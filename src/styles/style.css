@@ -1,5 +1,5 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
-
+@import "admin.css";
 @import "layout.css";
 @import "header.css";
 @import "index.css";
@@ -7,11 +7,109 @@
 @import "reports.css";
 @import "about.css";
 @import "map.css";
-
-main {
-  min-width: 100vw;
-}
+@import "resources.css";
+@import "data-uploader.css";
+@import "reset-password.css";
+@import "data.css";
 
 p {
   font-size: 18px;
 }
+
+.form-error-input > .dropdown,
+.form-error-input > .input > input {
+  border: 1px solid hsl(0, 100%, 40%) !important;
+}
+
+.form-error-message {
+  color: hsl(0, 100%, 40%);
+  font-size: 1rem;
+  margin-block: -0.5rem 1rem !important;
+}
+.form-error-message__datepicker {
+  margin-block: 0.5rem 1rem !important;
+}
+.form-error-message.no-margin {
+  margin-block: -0.5rem 0 !important;
+}
+
+.form-file-upload-error {
+  border-color: hsl(0, 100%, 40%) !important;
+}
+
+.form-forgot-password {
+  text-align: right;
+  font-size: small;
+  text-decoration: underline;
+  margin-top: -10px !important;
+  margin-bottom: 10px !important;
+  cursor: pointer;
+  width: fit-content;
+  color: black;
+}
+
+.form-forgot-password:hover {
+  text-decoration: underline;
+}
+
+.form-forgot-password-wrapper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: flex !important;
+  justify-content: flex-end;
+  width: 300px !important;
+}
+
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  background: hsl(0, 0%, 98%);
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid hsl(0, 0%, 80%);
+  top: 5px;
+}
+.custom-datepicker-container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px 0 0 1px;
+  width: 15px;
+  height: 15px;
+  top: -8px;
+  right: 19px;
+  background: inherit;
+
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+@media only screen and (max-width: 767px) {
+  .ui.container.form-forgot-password-wrapper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: flex !important;
+    justify-content: flex-end;
+    width: 100% !important;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .ui.grid .remove-negative-margin.ui.stackable.grid {
+    margin-left: 0 !important;
+  }
+}
+
+/* @media only screen and (min-width: 1200px) {
+  .ui.container,
+  .ui.grid.container.grid-container {
+    width: calc(1400px + 2rem) !important;
+  }
+} */

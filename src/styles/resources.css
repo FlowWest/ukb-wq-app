@@ -1,0 +1,95 @@
+.resource-upload-content {
+  display: flex !important;
+  flex-wrap: wrap;
+  border: 1px solid hsl(206, 80%, 42%);
+  border-radius: 5px;
+  padding: 15px 20px !important;
+  /* background-color: hsl(206, 80%, 42%);
+  color: white !important; */
+  color: hsl(206, 80%, 42%);
+  transition: all 0.2s;
+}
+.resource-upload-content:hover {
+  color: white;
+  background-color: hsl(206, 80%, 37%);
+}
+
+.resource-photo-container {
+  max-width: 250px;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.weekly-upload-card-image {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: auto;
+}
+
+.resource-placeholder + .content {
+  display: inline-block;
+  padding: 0 0 0 0.5em;
+  vertical-align: top;
+  width: 390px;
+}
+
+.resource-upload-header {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.resource-upload-description {
+  font-size: 13px;
+}
+
+.previous-report-weekly-header {
+  color: hsl(0, 0%, 50%);
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+}
+
+.weekly-upload-card {
+  height: 100% !important;
+}
+.weekly-upload-card-content {
+  flex-grow: 0 !important;
+}
+.weekly-upload-card-wrapper {
+  flex-grow: 0 !important;
+}
+.weekly-upload-card-header {
+  font-size: 1.05rem !important;
+  -webkit-line-clamp: 2 !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden;
+  min-height: 38px;
+}
+.weekly-upload-card-description {
+  height: 150px;
+}
+.weekly-upload-card-date-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+  flex-grow: 1 !important;
+}
+.weekly-upload-card-date-list {
+  flex-grow: 1;
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1200px) {
+  .weekly-upload-cards-container {
+    row-gap: 25px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .weekly-upload-card-wrapper {
+    flex-grow: 1 !important;
+  }
+}

@@ -1,10 +1,30 @@
 .ui.cards.reports {
-  justify-content: center;
+  justify-content: space-around;
+  gap: 2rem;
   width: inherit;
 }
 
+.edit-report-form-container {
+  padding: 1.5rem;
+}
+
+/* 
+Filter Container and Input Styles
+*/
 .ui.grid > .row.report-filters-container {
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 25px;
+}
+
+/* Search Input */
+.ui.grid .report-search-input .ui.input {
+  width: 100%;
+}
+.ui.grid > .row.report-filters-container div .input .prompt:hover {
+  border-color: rgba(34, 36, 38, 0.35);
+}
+.ui.grid > .row.report-filters-container div:first-child {
+  flex-grow: 1;
 }
 
 .ui.primary.button.view-report-button {
@@ -14,23 +34,96 @@
   right: 15px;
 }
 
-.ui.card.report-card {
-  margin: 10px !important;
+.report-card-header {
+  margin-bottom: 0.5rem !important;
+  font-size: 1.15rem !important;
+  line-height: 20.7px;
+  height: 62px;
+  overflow: hidden;
+  /*autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /*autoprefixer: off */
+  -webkit-line-clamp: 3;
+  display: -webkit-box !important;
+  text-overflow: ellipsis;
 }
 
-.report-card-header {
-  min-height: 5rem;
+.report-card-subheader {
+  background-color: hsl(0, 0%, 60%);
+  background-color: #39bfff;
+  font-size: 0.85rem !important;
+  color: white !important;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 50px;
 }
 
 .report-card {
-  width: 350px !important;
   cursor: pointer;
+  height: 300px;
+  position: relative;
+}
+
+.report-cta {
+  z-index: 1;
+}
+
+.report-card-hidden::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  position: absolute;
+}
+
+.report-card-hidden::after {
+  color: hsla(0, 0%, 85%, 0.5);
+  font-size: 4rem;
+  position: absolute;
+  content: "HIDDEN" !important;
+  overflow: visible !important;
+  visibility: inherit !important;
+  height: calc(100% - 58px) !important;
+  width: 100% !important;
+  display: flex !important;
+  rotate: -45deg;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 .ui.cards > .card > .content > .meta + .description {
   padding-bottom: 10px;
 }
 
-.filter-input-field {
-  margin-bottom: 2rem;
+.report-search-input.ui.search .prompt {
+  border-radius: 0.28571429rem !important;
+}
+
+.card-action-buttons {
+  display: flex;
+}
+.card-action-buttons a:first-child {
+  flex-grow: 1;
+}
+
+.report-cards-wrapper {
+  justify-content: flex-start;
+}
+/* input wrapper */
+
+.checkbox-field {
+  margin-bottom: 1em;
+}
+
+@media only screen and (max-width: 690px) {
+  .ui.grid .mobile-grid-container.ui.doubling.stackable {
+    margin-left: 0rem !important;
+  }
+}
+
+.error-message {
+  color: #ff3838;
+  font-size: 1.5rem;
+  height: 62px;
 }

@@ -1,0 +1,27 @@
+.leaflet-popup-title {
+  font-size: 1.2rem !important;
+  margin: 0 !important;
+}
+
+.leaflet-popup-detail-wrapper {
+  display: flex;
+}
+.leaflet-popup-detail-wrapper:not(:last-of-type) {
+  margin-bottom: 5px;
+}
+
+.leaflet-popup-detail-title {
+  width: 100px;
+  font-weight: 500;
+}
+
+.line-chart-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: calc(100% - 24px);
+  background: hsla(0, 0%, 0%, 0.5);
+  position: absolute;
+  top: 0;
+}

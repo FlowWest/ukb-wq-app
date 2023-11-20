@@ -2,6 +2,16 @@
   background-color: #173457;
 }
 
+.header-image-container {
+  height: 25rem;
+  margin: 0 !important;
+}
+
+@media only screen and (min-width: 1024px) {
+  .header-image-container {
+    height: 40rem !important;
+  }
+}
 .header-image-container .header-background-image {
   text-align: center;
   position: initial;
@@ -39,6 +49,42 @@
   top: 0;
   z-index: 100;
   width: 100%;
+
+  background: hsla(0, 0%, 0%, 0.35) !important;
+  /* background: linear-gradient(
+    0deg,
+    hsla(255, 100%, 100%, 0) 0%,
+    hsla(0, 0%, 0%, 0.45) 35%
+  ) !important; */
+}
+
+.menu-container .container {
+  justify-content: flex-start;
+  gap: 25px;
+}
+
+.menu-item a {
+  position: relative;
+}
+.menu-item a:hover {
+  color: white;
+}
+.menu-item:not(:first-of-type) a::after {
+  height: 3px;
+  width: 100%;
+  background: #d49812;
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -5px;
+  transform: scaleX(0);
+  transition: all 0.45s;
+}
+.menu-item:not(:first-of-type) a:hover::after {
+  transform: scaleX(1);
+}
+.menu-item:first-of-type {
+  margin-right: auto !important;
 }
 
 .ui.secondary.pointing.menu .menu-container {
@@ -48,4 +94,10 @@
 
 .ui.secondary.pointing.menu .item {
   align-self: auto !important;
+}
+
+.mobile-nav-link.active.item,
+.mobile-nav-link.item:hover,
+a.link-no-style + .accordion.ui .title:hover {
+  background-color: hsla(41, 84%, 45%, 0.9) !important;
 }
