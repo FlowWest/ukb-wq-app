@@ -16,13 +16,9 @@ import "react-datepicker/dist/react-datepicker.css"
 import DatePickerContainer from "../DatePickerContainer"
 import { UserContext } from "../../../gatsby-browser"
 import { getAuthorsDropdownOptions } from "../../helpers/authorsDropdownOptions"
+import { getAllAuthors, getAllReports } from "../../hooks/useReportModalContext"
 
-const UploadReportForm = ({
-  onClose,
-  allReports,
-  getAllReports,
-  report = null,
-}) => {
+const UploadReportForm = ({ state, dispatch, report = null }) => {
   const { user } = useContext(UserContext) || {}
   const [showEndYear, setShowEndYear] = useState(
     report?.endyear.length === 4 || false
@@ -50,11 +46,10 @@ const UploadReportForm = ({
   const [userAddedAuthors, setUserAddedAuthors] = useState([])
 
   useEffect(() => {
-    ;(async () => {
-      const options = await getAuthorsDropdownOptions()
+    const authors = state.allAuthors
+    const options = getAuthorsDropdownOptions(authors)
 
-      setAuthorsDropdownOptions(options)
-    })()
+    setAuthorsDropdownOptions(options)
   }, [])
 
   const handleAuthorAddition = (e, { value }) => {
@@ -100,10 +95,9 @@ const UploadReportForm = ({
 
   const editForm = !!report
 
-  const handleFormSubmit = async (data) => {
-    console.log("🚀 ~ authorsValue:", authorsValue)
-    console.log("🚀 ~ userAddedAuthors:", userAddedAuthors)
+  const handleFormModalClose = () => dispatch({ type: "CLOSE_FORM_MODAL" })
 
+  const handleFormSubmit = async (data) => {
     try {
       setIsSubmitting(true)
 
@@ -176,8 +170,15 @@ const UploadReportForm = ({
                 console.log("🚀 ~ handleFormSubmit ~ error:", error)
               } finally {
                 setIsSubmitting(false)
-                await getAllReports()
-                onClose()
+                // await getAllReports()
+
+                const reports = await getAllReports()
+                const authors = await getAllAuthors()
+                dispatch({
+                  type: "STARTUP",
+                  payload: { reports, authors },
+                })
+                handleFormModalClose()
                 return
               }
             }
@@ -227,8 +228,14 @@ const UploadReportForm = ({
                 console.error(err)
               } finally {
                 setIsSubmitting(false)
-                await getAllReports()
-                onClose()
+                // await getAllReports()
+                const reports = await getAllReports()
+                const authors = await getAllAuthors()
+                dispatch({
+                  type: "STARTUP",
+                  payload: { reports, authors },
+                })
+                handleFormModalClose()
               }
             }
           }
@@ -425,7 +432,7 @@ const UploadReportForm = ({
           )}
         />
       )}
-      <Button type="button" color="red" inverted onClick={onClose}>
+      <Button type="button" color="red" inverted onClick={handleFormModalClose}>
         Cancel
       </Button>
       <Button type="submit" positive>

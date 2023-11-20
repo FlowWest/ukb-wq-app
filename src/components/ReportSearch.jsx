@@ -2,7 +2,7 @@ import _ from "lodash"
 import React, { useEffect, useRef, useReducer } from "react"
 import { Search } from "semantic-ui-react"
 
-const ReportSearch = ({ setCurrentSearchFilterString, setCurrentPage }) => {
+const ReportSearch = ({ searchStringChangeHandler, setCurrentPage }) => {
   const initialState = {
     loading: false,
     value: "",
@@ -35,7 +35,7 @@ const ReportSearch = ({ setCurrentSearchFilterString, setCurrentPage }) => {
     dispatch({ type: "START_SEARCH", query: data.value })
 
     timeoutRef.current = setTimeout(() => {
-      setCurrentSearchFilterString(data.value)
+      searchStringChangeHandler(data.value)
       if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" })
 

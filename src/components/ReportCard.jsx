@@ -3,10 +3,12 @@ import { Card, Button, Dropdown, Modal } from "semantic-ui-react"
 import { formatTextCasing } from "../helpers/utils"
 import { UserContext } from "../../gatsby-browser"
 import UploadReportForm from "./forms/UploadReportForm"
+import { ReportModalContext } from "../hooks/useReportModalContext"
 import * as AWS from "aws-sdk"
 
-const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
-  const [editReportModalOpen, setEditReportModalOpen] = useState(false)
+const ReportCard = ({ reportMetaData }) => {
+  const { dispatch: reportsModalDispatch } = useContext(ReportModalContext)
+
   const reportIsActive = reportMetaData.active === "TRUE"
   const { user } = useContext(UserContext) || {}
 
@@ -20,31 +22,6 @@ const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
       remainingAuthors?.length === 1 ? "other" : "others"
     }`
   }
-
-  const handleVisibilityToggle = useCallback(async () => {
-    AWS.config.update({ region: "us-west-1" })
-    const docClient = new AWS.DynamoDB.DocumentClient()
-    const tableName = "reports_metadata"
-
-    try {
-      const params = {
-        TableName: tableName,
-        Key: { report_uuid: reportMetaData.report_uuid },
-        UpdateExpression: "set #active = :active",
-        ExpressionAttributeNames: {
-          "#active": "active",
-        },
-        ExpressionAttributeValues: {
-          ":active": reportIsActive ? "FALSE" : "TRUE",
-        },
-      }
-      await docClient.update(params).promise()
-    } catch (error) {
-      console.log("🚀 ~ handleVisibilityToggle ~ error:", error)
-    } finally {
-      await getAllReports()
-    }
-  }, [reportIsActive])
 
   return (
     <>
@@ -98,7 +75,14 @@ const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
                   key: "edit report",
                   value: "edit report",
                   text: (
-                    <Dropdown.Item onClick={() => setEditReportModalOpen(true)}>
+                    <Dropdown.Item
+                      onClick={() =>
+                        reportsModalDispatch({
+                          type: "EDIT_REPORT",
+                          payload: { selectedReport: reportMetaData },
+                        })
+                      }
+                    >
                       Edit Report Details
                     </Dropdown.Item>
                   ),
@@ -129,58 +113,21 @@ const ReportCard = ({ reportMetaData, allReports, getAllReports }) => {
                           content: "Proceed",
                           negative: reportIsActive,
                           positive: !reportIsActive,
-                          onClick: () => handleVisibilityToggle(),
+                          onClick: () =>
+                            reportsModalDispatch({
+                              type: "TOGGLE_REPORT_VISIBILITY",
+                              payload: { selectedReport: reportMetaData },
+                            }),
                         },
                       ]}
                     />
                   ),
                 },
-                // {
-                //   key: "toggle visibility",
-                //   value: "toggle visibility",
-                //   text: (
-                //     <Modal
-                //       size="tiny"
-                //       trigger={
-                //         <Dropdown.Item>
-                //           Mark as {reportIsActive ? "Hidden" : "Visible"}
-                //         </Dropdown.Item>
-                //       }
-                //       header={`Toggle Report Visibility (${
-                //         reportIsActive ? "Hidden" : "Visible"
-                //       })`}
-                //       content={`${
-                //         reportIsActive
-                //           ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
-                //           : "Setting the report visibility status to visible will allow visitors to view the content of the report."
-                //       } Do you wish to proceed?`}
-                //       actions={[
-                //         "Cancel",
-                //         { key: "delete", content: "Delete", negative: true },
-                //       ]}
-                //     />
-                //   ),
-                // },
               ]}
             />
           )}
         </Card.Content>
       </Card>
-      <Modal
-        open={editReportModalOpen}
-        onOpen={() => setEditReportModalOpen(true)}
-        onClose={() => setEditReportModalOpen(false)}
-        header="Edit Report"
-        size="tiny"
-        content={
-          <UploadReportForm
-            report={reportMetaData}
-            onClose={() => setEditReportModalOpen(false)}
-            allReports={allReports}
-            getAllReports={getAllReports}
-          />
-        }
-      />
     </>
   )
 }
