@@ -1,11 +1,16 @@
 import React, { useState, useContext } from "react"
-import { ReportModalContext } from "../hooks/useReportModalContext"
+import { UserContext } from "../../gatsby-browser"
+import {
+  ReportModalContext,
+  toggleReportVisibility,
+} from "../hooks/useReportModalContext"
 import { Button, Icon, Pagination, Table, Modal } from "semantic-ui-react"
 import { removeNameFromString } from "../helpers/utils"
 import usePagination from "../hooks/usePagination"
 import { generateAuthorReportMap } from "../helpers/utils"
 
 const ReportsTable = ({ sortMethod }) => {
+  const { user } = useContext(UserContext) || {}
   const { state: reportsState, dispatch: reportsDispatch } =
     useContext(ReportModalContext)
   const reportsObject = generateAuthorReportMap(
@@ -48,10 +53,13 @@ const ReportsTable = ({ sortMethod }) => {
     })
   }
 
-  const toggleReportVisibility = (report) => {
+  const toggleReportVisibilityHandler = async (report) => {
+    const allReports = await toggleReportVisibility(report, user)
     reportsDispatch({
       type: "TOGGLE_REPORT_VISIBILITY",
-      payload: { selectedReport: report },
+      payload: {
+        allReports,
+      },
     })
   }
 
@@ -115,8 +123,12 @@ const ReportsTable = ({ sortMethod }) => {
                             <Table.HeaderCell>Location</Table.HeaderCell>
                             <Table.HeaderCell>Co-Authors</Table.HeaderCell>
                             <Table.HeaderCell>Category</Table.HeaderCell>
-                            <Table.HeaderCell>Edit</Table.HeaderCell>
-                            <Table.HeaderCell>Visibility</Table.HeaderCell>
+                            {user && Object.keys(user).length && (
+                              <Table.HeaderCell>Edit</Table.HeaderCell>
+                            )}
+                            {user && Object.keys(user).length && (
+                              <Table.HeaderCell>Visibility</Table.HeaderCell>
+                            )}
                           </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -157,50 +169,58 @@ const ReportsTable = ({ sortMethod }) => {
                                   {removeNameFromString(author, authors)}
                                 </Table.Cell>
                                 <Table.Cell>{type}</Table.Cell>
-                                <Table.Cell>
-                                  <Button
-                                    icon
-                                    onClick={() =>
-                                      editButtonClickHandler(report)
-                                    }
-                                  >
-                                    <Icon name="edit" />
-                                  </Button>
-                                </Table.Cell>
-                                <Table.Cell>
-                                  <Modal
-                                    size="tiny"
-                                    trigger={
-                                      <Button icon>
-                                        <Icon
-                                          name={
-                                            reportIsActive ? "unhide" : "hide"
-                                          }
-                                        />
-                                        {reportIsActive ? "Visible" : "Hidden"}
-                                      </Button>
-                                    }
-                                    header={`Toggle Report Visibility (${
-                                      reportIsActive ? "Hidden" : "Visible"
-                                    })`}
-                                    content={`${
-                                      reportIsActive
-                                        ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
-                                        : "Setting the report visibility status to visible will allow visitors to view the content of the report."
-                                    } Do you wish to proceed?`}
-                                    actions={[
-                                      "Cancel",
-                                      {
-                                        key: "proceed",
-                                        content: "Proceed",
-                                        negative: reportIsActive,
-                                        positive: !reportIsActive,
-                                        onClick: () =>
-                                          toggleReportVisibility(report),
-                                      },
-                                    ]}
-                                  />
-                                </Table.Cell>
+                                {user && Object.keys(user).length && (
+                                  <Table.Cell>
+                                    <Button
+                                      icon
+                                      onClick={() =>
+                                        editButtonClickHandler(report)
+                                      }
+                                    >
+                                      <Icon name="edit" />
+                                    </Button>
+                                  </Table.Cell>
+                                )}
+                                {user && Object.keys(user).length && (
+                                  <Table.Cell>
+                                    <Modal
+                                      size="tiny"
+                                      trigger={
+                                        <Button icon>
+                                          <Icon
+                                            name={
+                                              reportIsActive ? "unhide" : "hide"
+                                            }
+                                          />
+                                          {reportIsActive
+                                            ? "Visible"
+                                            : "Hidden"}
+                                        </Button>
+                                      }
+                                      header={`Toggle Report Visibility (${
+                                        reportIsActive ? "Hidden" : "Visible"
+                                      })`}
+                                      content={`${
+                                        reportIsActive
+                                          ? "Setting the report visibility status to hidden will only allow users with administrator access to view the content of the report."
+                                          : "Setting the report visibility status to visible will allow visitors to view the content of the report."
+                                      } Do you wish to proceed?`}
+                                      actions={[
+                                        "Cancel",
+                                        {
+                                          key: "proceed",
+                                          content: "Proceed",
+                                          negative: reportIsActive,
+                                          positive: !reportIsActive,
+                                          onClick: () =>
+                                            toggleReportVisibilityHandler(
+                                              report
+                                            ),
+                                        },
+                                      ]}
+                                    />
+                                  </Table.Cell>
+                                )}
                               </Table.Row>
                             )
                           })}
