@@ -15,6 +15,7 @@
     "chart.js": "^4.3.3",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "dayjs": "^1.11.9",
+    "file-saver": "^2.0.5",
     "gatsby": "^5.11.0",
     "gatsby-background-image": "^1.6.0",
     "gatsby-image": "^2.11.0",
