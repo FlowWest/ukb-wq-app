@@ -18,6 +18,7 @@ import LineChart from "../components/LineChart"
 import SEO from "../components/Seo"
 import axios from "axios"
 import Papa from "papaparse"
+import { saveAs } from "file-saver"
 
 export const DataPage = ({ data }) => {
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
@@ -74,6 +75,14 @@ export const DataPage = ({ data }) => {
   const [map, setMap] = useState(null)
   const markerRef = useRef([])
 
+  const downloadData = () => {
+    const csvContent = Papa.unparse(JSON.stringify(filteredKlamathData))
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    })
+    saveAs(blob, `klamath_data_export.csv`)
+  }
+
   return (
     <Layout pageInfo={{ pageName: "data" }}>
       <SEO title="Water Quality Monitoring Data" />
@@ -122,9 +131,9 @@ export const DataPage = ({ data }) => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{ flexDirection: "column" }}>
-          <Button style={{ marginLeft: "auto" }}>
-            <Icon name="refresh" />
-            Get Updated Data
+          <Button style={{ marginLeft: "auto" }} onClick={downloadData}>
+            <Icon name="download" />
+            Download Data
           </Button>
           <DataPageTable
             data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
