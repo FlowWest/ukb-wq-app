@@ -34,7 +34,6 @@ function generateYearLabels(startDate, endDate) {
   for (let year = startYear; year <= endYear; year++) {
     years.push(year)
   }
-  console.log("🚀 ~ generateYearLabels ~ years:", years)
   return years
 }
 
@@ -74,8 +73,9 @@ const LineChart = ({ selectedFilters, data }) => {
     const filteredData = data.filter(
       (data) =>
         data.monitoring_location_identifier ===
-        selectedFilters?.monitoringLocation
+          selectedFilters?.monitoringLocation && data.activity_start_date
     )
+
     // if (Boolean(filteredData.length)) {
     const transformedDataset = [
       {
@@ -88,7 +88,14 @@ const LineChart = ({ selectedFilters, data }) => {
     ]
 
     setChartData({
-      labels: filteredData.map((data) => data.activity_start_date),
+      labels: filteredData.map(
+        (data) =>
+          `${data.activity_start_date} ${
+            data.activity_start_time_time === "NA"
+              ? "12:00:00"
+              : data.activity_start_time_time
+          }`
+      ),
       datasets: transformedDataset,
     })
     // }
