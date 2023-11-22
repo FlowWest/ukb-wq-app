@@ -17,7 +17,7 @@ const DataPageTable = ({ data }) => {
     handlePaginationPageChange,
     numberOfPages,
     paginatedItems,
-  } = usePagination({ tableData: data, itemsPerPage: 9 })
+  } = usePagination({ tableData: data, itemsPerPage: 20 })
 
   const generateKey = (monitoringLocationIdentifier, index) =>
     `${monitoringLocationIdentifier}${Math.ceil(Math.random() + index)}`
