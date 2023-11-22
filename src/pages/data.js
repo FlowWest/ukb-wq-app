@@ -142,7 +142,7 @@ export const DataPage = ({ data }) => {
               }}
             >
               <Icon name="download" />
-              Download Displayed Data
+              Download Filtered Data
             </Button>
             <Button
               style={{ marginLeft: "auto" }}
@@ -155,7 +155,11 @@ export const DataPage = ({ data }) => {
             </Button>
           </Grid.Row>
           <DataPageTable
-            data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
+            data={
+              selectedFilters.monitoringLocation
+                ? filteredKlamathData
+                : allKlamathData
+            }
           />
         </Grid.Row>
 
