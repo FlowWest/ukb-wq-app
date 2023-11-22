@@ -24,6 +24,15 @@ export const DataPage = ({ data }) => {
   const monitoringLocations = data.allMonitoringStationsLocationsCsv.nodes
   const [allKlamathData, setAllKlamathData] = useState([])
   const [filteredKlamathData, setFilteredKlamathData] = useState(allKlamathData)
+  const [selectedFilters, setSelectedFilters] = useState({
+    monitoringLocation: null,
+    characteristicName: "",
+    startYear: "",
+    endYear: "",
+  })
+
+  const [map, setMap] = useState(null)
+  const markerRef = useRef([])
 
   useEffect(() => {
     ;(async () => {
@@ -64,23 +73,17 @@ export const DataPage = ({ data }) => {
     })()
   }, [data])
 
-  useState(null)
-  const [selectedFilters, setSelectedFilters] = useState({
-    monitoringLocation: null,
-    characteristicName: "",
-    startYear: "",
-    endYear: "",
-  })
-
-  const [map, setMap] = useState(null)
-  const markerRef = useRef([])
-
-  const downloadData = () => {
-    const csvContent = Papa.unparse(JSON.stringify(filteredKlamathData))
+  const downloadData = (dataset, allData) => {
+    const csvContent = Papa.unparse(JSON.stringify(dataset))
     const blob = new Blob([csvContent], {
       type: "text/csv;charset=utf-8;",
     })
-    saveAs(blob, `klamath_data_export.csv`)
+    saveAs(
+      blob,
+      allData
+        ? `all_klamath_wqx_data.csv`
+        : `klamath_wqx_data_${selectedFilters.monitoringLocation}_${selectedFilters.characteristicName}.csv`
+    )
   }
 
   return (
@@ -131,10 +134,26 @@ export const DataPage = ({ data }) => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{ flexDirection: "column" }}>
-          <Button style={{ marginLeft: "auto" }} onClick={downloadData}>
-            <Icon name="download" />
-            Download Data
-          </Button>
+          <Grid.Row style={{ marginLeft: "auto" }}>
+            <Button
+              style={{ marginLeft: "auto", marginRight: "15px" }}
+              onClick={() => {
+                downloadData(filteredKlamathData, false)
+              }}
+            >
+              <Icon name="download" />
+              Download Displayed Data
+            </Button>
+            <Button
+              style={{ marginLeft: "auto" }}
+              onClick={() => {
+                downloadData(allKlamathData, true)
+              }}
+            >
+              <Icon name="download" />
+              Download All Data
+            </Button>
+          </Grid.Row>
           <DataPageTable
             data={selectedFilters.monitoringLocation ? filteredKlamathData : []}
           />
