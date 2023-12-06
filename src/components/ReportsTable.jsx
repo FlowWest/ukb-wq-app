@@ -123,10 +123,10 @@ const ReportsTable = ({ sortMethod }) => {
                             <Table.HeaderCell>Location</Table.HeaderCell>
                             <Table.HeaderCell>Co-Authors</Table.HeaderCell>
                             <Table.HeaderCell>Category</Table.HeaderCell>
-                            {user && Object.keys(user).length && (
+                            {user && Object.keys(user).length >= 1 && (
                               <Table.HeaderCell>Edit</Table.HeaderCell>
                             )}
-                            {user && Object.keys(user).length && (
+                            {user && Object.keys(user).length >= 1 && (
                               <Table.HeaderCell>Visibility</Table.HeaderCell>
                             )}
                           </Table.Row>
@@ -169,7 +169,7 @@ const ReportsTable = ({ sortMethod }) => {
                                   {removeNameFromString(author, authors)}
                                 </Table.Cell>
                                 <Table.Cell>{type}</Table.Cell>
-                                {user && Object.keys(user).length && (
+                                {user && Object.keys(user).length >= 1 && (
                                   <Table.Cell>
                                     <Button
                                       icon
@@ -181,7 +181,7 @@ const ReportsTable = ({ sortMethod }) => {
                                     </Button>
                                   </Table.Cell>
                                 )}
-                                {user && Object.keys(user).length && (
+                                {user && Object.keys(user).length >= 1 && (
                                   <Table.Cell>
                                     <Modal
                                       size="tiny"
