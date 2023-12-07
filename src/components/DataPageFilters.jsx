@@ -127,20 +127,24 @@ const DataPageFilters = ({
       .split(",")
       .map((item) => item.trim())
 
-    const fieldOptions = characteristicNames.map((name) => {
+    const fieldOptions = characteristicNames.reduce((acc, curName) => {
       const itemWithCharacteristicName = allKlamathData.find(
         (data) =>
           monitoringLocationValue === data.monitoring_location_identifier &&
-          data.characteristic_name === name
+          data.characteristic_name === curName
       )
 
-      return {
-        key: name,
-        text: name,
-        value: name,
-        disabled: !itemWithCharacteristicName,
-      }
-    })
+      if (itemWithCharacteristicName)
+        acc.push({
+          key: curName,
+          text: curName,
+          value: curName,
+          disabled: !itemWithCharacteristicName,
+        })
+
+      return acc
+    }, [])
+
     setCharacteristicNameOptions(fieldOptions)
   }
 
